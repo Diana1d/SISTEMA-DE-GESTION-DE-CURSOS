@@ -1,0 +1,131 @@
+{% extends 'admi/dashboard.html' %}
+{% block title %}Usuarios{% endblock %}
+{% block content %}
+
+<main class="content px-3 py-4">
+    <div class="container-fluid">
+        <h3 class="fw-bold fs-4 my-3">Lista de usuarios
+        </h3>
+        <div class="mb-3">
+            <a data-bs-toggle="modal" data-bs-target="#modalNuevoUsuario" class="btn btn-primary">
+                + Nuevo Usuario
+            </a>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <div class="table-responsive">
+
+                    <table id="mi-tabla" class="table table-striped display nowrap" style="width:100%">
+
+                        <thead>
+                            <tr class="highlight">
+                                <th>#</th>
+                                <th>Nombres</th>
+                                <th>Estado</th>
+                                <th>Username</th>
+                                <th>Rol</th>
+                                <th>Operaciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {%for item in usuarios%}
+                            <tr>
+                                <td>{{item.id}}</td>
+                                <td>{{item.nombre}}</td>
+                                <td class="text-center">
+                                    {% if item.activo %}
+                                    <i class="bi bi-check-circle-fill text-success"></i>
+                                    {% else %}
+                                    <i class="bi bi-x-circle-fill text-danger"></i>
+                                    {% endif %}
+                                </td>
+                                <td>{{item.username}}</td>
+                                <td>{{item.rol.nombre}}</td>
+                                <td class="text-center">
+                                    <a data-bs-toggle="modal" data-bs-target="#modalVistaUsuario{{ item.id }}"
+                                        class="btn btn-primary btn-sm"><i class=" bi bi-eye"></i></a>
+
+                                    <a data-bs-toggle="modal" data-bs-target="#modalEditarUsuario{{ item.id }}"
+                                        class="btn btn-warning btn-sm"><i class="bi bi-pencil-square"></i></a>
+
+                                    <a class="btn btn-danger btn-sm" data-bs-toggle="modal"
+                                        data-bs-target="#modalConfirmarEliminar"
+                                        data-url="{{ url_for('usuario.delete', id=item.id) }}">
+                                        <i class="bi bi-trash3"></i>
+                                    </a>
+                                </td>
+                            </tr>
+
+
+
+                            {%endfor%}
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+</main>
+
+<!-- Modal de edición -->
+{% for item in usuarios %}
+
+<div class="modal fade" id="modalEditarUsuario{{ item.id }}" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header justify-content-between">
+                <h5 class="modal-title">Editar Usuario</h5>
+                <button type="button" class="btn btn-sm text-white" data-bs-dismiss="modal" aria-label="Cerrar">
+                    <i class="bi bi-x-lg"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                {% set usuario = item%}
+                {% include 'admi/usuarios/edit.html' %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endfor %}
+
+
+<!-- Modal de vista -->
+{% for item in usuarios %}
+
+<div class="modal fade" id="modalVistaUsuario{{ item.id }}" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header justify-content-between">
+                <h5 class="modal-title">Inf. Completa del Usuario</h5>
+                <button type="button" class="btn btn-sm text-white" data-bs-dismiss="modal" aria-label="Cerrar">
+                    <i class="bi bi-x-lg"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                {% set usuario = item %}
+                {% include 'admi/usuarios/vista.html' %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endfor %}
+
+<div class="modal fade" id="modalNuevoUsuario" tabindex="-1" aria-labelledby="modalNuevoUsuarioLabel">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header justify-content-between ">
+                <h5 class="modal-title" id="modalNuevoUsuarioLabel">Agregar Usuario</h5>
+                <button type="button" class="btn btn-sm text-white" data-bs-dismiss="modal" aria-label="Cerrar">
+                    <i class="bi bi-x-lg"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+
+                {% include 'admi/usuarios/create.html' %}
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}

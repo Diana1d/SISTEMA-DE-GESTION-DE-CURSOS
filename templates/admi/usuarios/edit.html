@@ -1,0 +1,47 @@
+<form method="POST" action="{{ url_for('usuario.edit', id=item.id) }}">
+    <div class="mb-3">
+        <label for="nombre" class="form-label">Nombre</label>
+        <input type="text" class="form-control" name="nombre" value="{{usuario.nombre}}" required>
+    </div>
+
+    <div class="mb-3">
+        <label for="apellido" class="form-label">Apellido</label>
+        <input type="text" class="form-control" name="apellido" value="{{usuario.apellido}}" required>
+    </div>
+
+    <div class="mb-3">
+        <label for="email" class="form-label">Email</label>
+        <input type="email" class="form-control" name="email" value="{{usuario.email}}" required>
+    </div>
+
+    <div class="mb-3">
+        <label for="namus" class="form-label">Nombre de Usuario</label>
+        <input type="text" class="form-control" name="username" value="{{usuario.username}}" required>
+    </div>
+
+    <div class="mb-3">
+        <label for="pass" class="form-label">Contraseña</label>
+        <input type="password" class="form-control" name="password" required>
+    </div>
+
+    <div class="form-check mb-3">
+        <input class="form-check-input" type="checkbox" name="activo" {% if usuario.activo %} checked {% endif %}>
+        <label class="form-check-label" for="activo">¿Está activo?</label>
+    </div>
+
+    <div class="mb-3">
+        <label for="rol" class="form-label">Rol</label>
+        <select name="rol_id" class="form-select " required>
+            <option value="1" {% if usuario.rol_id==1 %}selected{% endif %}>Administrador</option>
+            <option value="2" {% if usuario.rol_id==2 %}selected{% endif %}>Docente</option>
+            <option value="3" {% if usuario.rol_id==3 %}selected{% endif %}>Estudiante</option>
+        </select>
+    </div>
+
+
+    <!-- Más campos aquí -->
+    <div class="text-end">
+        <button type="submit" class="btn btn-success">Guardar</button>
+    </div>
+
+</form>

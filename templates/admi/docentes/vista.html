@@ -1,0 +1,30 @@
+<table class="table table-bordered">
+    <tr>
+        <th>ID:</th>
+        <td>{{ docente.id }}</td>
+    </tr>
+    <tr>
+        <th>Nombre Completo:</th>
+        <td>{{ docente.nombre }} {{ docente.apellido }}</td>
+    </tr>
+    <tr>
+        <th>Email:</th>
+        <td>{{ docente.email }}</td>
+    </tr>
+    <tr>
+        <th>Fecha de nacimiento:</th>
+        <td>{{docente.fecha_nac.strftime('%d/%m/%Y')}}</td>
+    </tr>
+    <tr>
+        <th>Contacto:</th>
+        <td>{{ docente.telefono }}</td>
+    </tr>
+    <tr>
+        <th>CI:</th>
+        <td>{{ docente.ci }}</td>
+    </tr>
+    <tr>
+        <th>Especialidad:</th>
+        <td>{{ docente.especialidad }}</td>
+    </tr>
+</table>

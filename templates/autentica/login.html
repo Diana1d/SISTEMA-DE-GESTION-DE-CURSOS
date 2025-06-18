@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% block title %}Login{% endblock %}
+{% block content %}
+
+<div class="container d-flex justify-content-center
+align-items-center min-vh-100">
+
+    <div class="row border bg-white shadow box-area p-3 rounded-5 ">
+
+        <div class="col-md-6 p-0 rounded-4 d-flex justify-content-center align-items-center flex-column left-box">
+            <img src="{{ url_for('static', filename='img/img-1.jpg') }}" class="w-100 h-100 object-fit-cover"
+                alt="Imagen">
+        </div>
+
+        <div class="col-md-6 right-box">
+            <div class="row align-items-center">
+                <h2 class=" header-text text-center mb-4 fw-bold " >Bienvenido</h2>
+
+                <!-- LOGIN -->
+                <form action="{{url_for('usuario.login')}}" method="post">
+                    <div class="input-group mb-3">
+                        <input type="text" name="username" class="form-control form-control-lg bg-light fs-6"
+                            placeholder="Nombre de usuario" required>
+                    </div>
+                    <div class="input-group mb-3">
+                        <input type="password" name="password" class="form-control form-control-lg bg-light fs-6"
+                            placeholder="Contraseña" required>
+                    </div>
+                    <div class="input-group mb-3">
+                        <button class="btn btn-lg w-100 fs-6 btn-primary">Ingresar</button>
+                    </div>
+
+                    <!-- RECUPERAR CONTRASEÑA -->
+                    <div class="my-3 text-center">
+                        <a class="text-decoration-none cursor-subrayado fs-6" href="#">¿Olvido la contraseña?</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
