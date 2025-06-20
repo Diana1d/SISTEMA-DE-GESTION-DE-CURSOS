@@ -1,20 +1,18 @@
-
-
 <form method="POST" action="{{ url_for('usuario.create') }}">
     <div class="mb-3">
-        <label for="nombre" class="form-label">Nombre</label>
+        <label for="nombre" class="form-label">Nombre:</label>
         <input type="text" class="form-control" name="nombre" required>
     </div>
     <div class="mb-3">
-        <label for="apellido" class="form-label">Apellido</label>
+        <label for="apellido" class="form-label">Apellido:</label>
         <input type="text" class="form-control" name="apellido" required>
     </div>
     <div class="mb-3">
-        <label for="email" class="form-label">Email</label>
+        <label for="email" class="form-label">Email:</label>
         <input type="email" class="form-control" name="email" required>
     </div>
     <div class="mb-3">
-        <label for="namus" class="form-label">Nombre de Usuario</label>
+        <label for="namus" class="form-label">Nombre de Usuario:</label>
         <input type="text" class="form-control" name="username" id="namus" required>
     </div>
     <div class="mb-3">
@@ -26,14 +24,15 @@
         <label class="form-check-label" for="activo">¿Está activo?</label>
     </div>
     <div class="mb-3">
-        <label for="role" class="form-label">Rol: </label>
-        <select name="rol_id" class="form-select">
-            <option value="1">Administrador</option>
-            <option value="2">Docente</option>
-            <option value="3">Estudiante</option>
+        <label for="rol_id" class="form-label">Rol</label>
+        <select name="rol_id" class="form-select" required>
+            <option value="">Seleccione un rol</option>
+            {% for rol in roles %}
+            <option value="{{ rol.id }}">{{ rol.nombre }}</option>
+            {% endfor %}
         </select>
     </div>
-    <!-- Más campos aquí -->
+
     <div class="text-end">
         <button type="submit" class="btn btn-success">Guardar</button>
     </div>

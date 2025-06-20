@@ -7,18 +7,24 @@ from controllers.admi import usuario_controller
 from controllers.admi import docente_controller
 from controllers.admi import estudiante_controller
 from controllers.admi import curso_controller
+from controllers.admi import inscripcion_controller
+from controllers.admi import paralelo_controller
+from controllers.admi import semestre_controller
+from controllers.admi import turno_controller
 from database import db
 
 app = Flask(__name__)
 
+app.config['SECRET_KEY'] = 'claveSecreta'
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///cursos.db"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
 db.init_app(app)
 
 #CONFIGURAR FLASK-LOGIN
-app.secret_key = 'claveSecreta'
 login_manager = LoginManager()
+login_manager.login_message = "Por favor, inicia sesión para acceder a esta página."
+login_manager.login_message_category = "warning"
 login_manager.login_view = 'usuario.login'
 login_manager.init_app(app)
 
@@ -40,7 +46,10 @@ app.register_blueprint(usuario_controller.usuario_bp)
 app.register_blueprint(docente_controller.docente_bp)
 app.register_blueprint(estudiante_controller.estudiante_bp)
 app.register_blueprint(curso_controller.curso_bp)
-
+app.register_blueprint(inscripcion_controller.inscripcion_bp)
+app.register_blueprint(paralelo_controller.paralelo_bp)
+app.register_blueprint(semestre_controller.semestre_bp)
+app.register_blueprint(turno_controller.turno_bp)
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -53,6 +62,7 @@ def home():
 
 # PUNTO DE ENTRADA
 if __name__ == "__main__":
+    # init_db()
     with app.app_context():
         db.create_all()
     app.run(debug=True)

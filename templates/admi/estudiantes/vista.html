@@ -1,0 +1,26 @@
+<table class="table table-bordered">
+    <tr>
+        <th>ID:</th>
+        <td>{{ estudiante.id }}</td>
+    </tr>
+    <tr>
+        <th>Nombre Completo:</th>
+        <td>{{ estudiante.usuario.nombre }} {{ estudiante.usuario.apellido }}</td>
+    </tr>
+    <tr>
+        <th>Email:</th>
+        <td>{{ estudiante.usuario.email }}</td>
+    </tr>
+    <tr>
+        <th>Fecha de nacimiento:</th>
+        <td>{{estudiante.fecha_nac.strftime('%d/%m/%Y')}}</td>
+    </tr>
+    <tr>
+        <th>Contacto:</th>
+        <td>{{ estudiante.telefono }}</td>
+    </tr>
+    <tr>
+        <th>CI:</th>
+        <td>{{ estudiante.ci }}</td>
+    </tr>
+</table>

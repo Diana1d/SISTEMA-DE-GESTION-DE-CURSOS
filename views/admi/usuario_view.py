@@ -1,12 +1,12 @@
 from flask import render_template
 
 
-def list(usuarios):
+def list(usuarios,roles):
     
-    return render_template('admi/usuarios/index.html',usuarios= usuarios)
+    return render_template('admi/usuarios/index.html',usuarios= usuarios,roles=roles)
 
-def create():
-    return render_template('admi/usuarios/create.html')
+def create(roles):
+    return render_template('admi/usuarios/create.html',roles=roles)
 
 def edit(usuario):
     return render_template('admi/usuarios/edit.html',usuario= usuario)

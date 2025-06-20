@@ -24,6 +24,7 @@ def vista(id):
 def create():
     if request.method == 'POST':
         
+        matricula = request.form['matricula']
         fecha_str = request.form['fecha_nac']
         
         fecha = datetime.strptime(fecha_str,'%Y-%m-%d').date()
@@ -33,7 +34,7 @@ def create():
         usuario_id = request.form['usuario_id']
         
         
-        estudiante = Estudiante(fecha_nac=fecha,genero=genero,telefono=telefono,ci=ci,usuario_id=usuario_id)
+        estudiante = Estudiante(matricula=matricula,fecha_nac=fecha,genero=genero,telefono=telefono,ci=ci,usuario_id=usuario_id)
         estudiante.save()
         return redirect(url_for('estudiante.index'))
     # Este bloque debe estar fuera del if (para cuando es GET)
@@ -46,15 +47,22 @@ def create():
 def edit(id):
     estudiante = Estudiante.get_by_id(id)
     if request.method == 'POST':
-        fecha_nac = request.form['fecha_nac']
+        
+        matricula = request.form['matricula']
+        fecha_str = request.form['fecha_nac']
+        
+        fecha = datetime.strptime(fecha_str,'%Y-%m-%d').date()
         genero = request.form['genero']
         telefono = request.form['telefono']
         ci = request.form['ci']
         usuario_id = request.form['usuario_id']
         #actualizar
-        estudiante.update(fecha_nac=fecha_nac,genero=genero,telefono=telefono,ci=ci,usuario_id=usuario_id)
+        estudiante.update(matricula=matricula,fecha_nac=fecha,genero=genero,telefono=telefono,ci=ci,usuario_id=usuario_id)
         return redirect(url_for('estudiante.index'))
-    return estudiante_view.edit(estudiante)
+    
+    rol_estudiante = Rol.query.filter_by(nombre='Estudiante').first()
+    usuarios = Usuario.query.filter_by(rol_id=rol_estudiante.id).all() if rol_estudiante else []
+    return estudiante_view.edit(estudiante,usuarios)
 
     
 @estudiante_bp.route("/delete/<int:id>")

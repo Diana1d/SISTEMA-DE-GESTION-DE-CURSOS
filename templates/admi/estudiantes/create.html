@@ -1,0 +1,42 @@
+<form method="POST" action="{{ url_for('estudiante.create') }}">
+    <div class="mb-3">
+        <label for="mat" class="form-label">Matricula:</label>
+        <input type="text" class="form-control" name="matricula" required>
+    </div>
+
+    <div class="mb-3">
+        <label for="fecha" class="form-label">Fecha de Nacimiento:</label>
+        <input type="date" class="form-control" name="fecha_nac" required>
+    </div>
+    <div class="mb-3">
+        <label for="genero" class="form-label">Género:</label>
+        <select name="genero" class="form-select" required>
+            <option value="">Seleccione un género</option>
+            <option value="Masculino">Masculino</option>
+            <option value="Femenino">Femenino</option>
+            <option value="Otro">Otro</option>
+        </select>
+    </div>
+    <div class="mb-3">
+        <label for="telefono" class="form-label">Telefono:</label>
+        <input type="text" class="form-control" name="telefono" required>
+    </div>
+    <div class="mb-3">
+        <label for="ci" class="form-label">CI:</label>
+        <input type="text" class="form-control" name="ci" required>
+    </div>
+
+    <div class="mb-3">
+        <label for="usuario" class="form-label">Estudiante: </label>
+        <select name="usuario_id" class="form-select" required>
+            <option value="">Seleccione un estudiante </option>
+            {%for usuario in usuarios%}
+            <option value="{{usuario.id}}"> {{usuario.nombre}} {{usuario.apellido}}</option>
+            {%endfor%}
+        </select>
+    </div>
+
+    <div class="text-end">
+        <button type="submit" class="btn btn-success">Guardar</button>
+    </div>
+</form>

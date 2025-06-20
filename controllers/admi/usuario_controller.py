@@ -1,25 +1,36 @@
 from flask import request, redirect,url_for,Blueprint,flash
 from flask_login import login_user, logout_user, login_required, current_user
 from models.usuario_model import Usuario
+from models.rol_model import Rol
 from views.admi import usuario_view
-from werkzeug.security import check_password_hash
+from werkzeug.security import check_password_hash,generate_password_hash
 
 
 usuario_bp=Blueprint('usuario',__name__ ,url_prefix="/admi/usuarios")
 
 @usuario_bp.route("/")
+
 def index():
     #Recupera tosos los registros de usuarios
     usuarios = Usuario.get_all()
-    return usuario_view.list(usuarios)
+    roles = Rol.get_all() 
+    return usuario_view.list(usuarios,roles)
 
 @usuario_bp.route("/vista/<int:id>")
+
 def vista(id):
     usuario = Usuario.get_by_id(id)
     return usuario_view.vista(usuario)
 
 @usuario_bp.route("/create", methods=['GET','POST'])
+
 def create():
+    roles = Rol.get_all() 
+
+    if not roles:
+        flash("Primero debes crear al menos un rol en el sistema.", "danger")
+        return redirect(url_for("rol.index"))  # Redirige a la gestión de roles
+    
     if request.method == 'POST':
         nombre = request.form['nombre']
         apellido = request.form['apellido']
@@ -38,11 +49,14 @@ def create():
         usuario = Usuario(nombre,apellido,email,username,password,activo,rol_id)
         usuario.save()
         return redirect(url_for('usuario.index'))
-    return usuario_view.create()
+    return usuario_view.create(roles)
 
 @usuario_bp.route("/edit/<int:id>",methods=['GET','POST'])
+
 def edit(id):
     usuario = Usuario.get_by_id(id)
+    roles = Rol.get_all()
+    
     if request.method == 'POST':
         nombre = request.form['nombre']
         apellido = request.form['apellido']
@@ -51,13 +65,17 @@ def edit(id):
         password = request.form['password']
         activo = 'activo' in request.form
         rol_id = request.form['rol_id']
+        
+        # Si el campo password está vacío, pasamos None para no cambiar
+        password_cambio = password if password else None
         #actualizar
-        usuario.update(nombre=nombre,apellido=apellido,email=email,username=username,password=password,activo=activo,rol_id=rol_id)
+        usuario.update(nombre=nombre,apellido=apellido,email=email,username=username,password=password_cambio,activo=activo,rol_id=rol_id)
         return redirect(url_for('usuario.index'))
-    return usuario_view.edit(usuario)
+    return usuario_view.edit(usuario, roles)
 
     
 @usuario_bp.route("/delete/<int:id>")
+
 def delete(id):
     usuario = Usuario.get_by_id(id)
     usuario.delete()
@@ -68,11 +86,12 @@ def login():
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
-        user = Usuario.get_by_username(username)
-        print("Usuario encontrado:", user)
+        user = Usuario.get_by_username(username)    
+        
         if user and check_password_hash(user.password, password):
             login_user(user)
             flash('Inicio de sección exitosa','success')
+    
             # Redirige según el rol
             if user.rol.nombre == "Administrador":
                 return redirect(url_for("usuario.dashboard"))
@@ -81,22 +100,23 @@ def login():
             elif user.rol.nombre == "Estudiante":
                 return redirect(url_for("usuario.dashboard_estudiante"))
             else:
-                flash("Rol no reconocido", "warning")
+                logout_user()
+                flash("Rol desconocido.", "danger")             
                 return redirect(url_for("usuario.login"))
 
         else:
             flash('Credenciales inválidas', 'danger')
-
     return usuario_view.login()
 
 @usuario_bp.route("/logout")
-@login_required
+
 def logout():
     logout_user()
+    flash("Sesión cerrada.", "info")
     return redirect(url_for("usuario.login"))
 
 @usuario_bp.route("/dashboard")
-@login_required
+
 def dashboard():
     return usuario_view.dashboard(current_user)
 
