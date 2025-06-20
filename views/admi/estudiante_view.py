@@ -6,8 +6,8 @@ def list(estudiantes,usuarios):
 def create(usuarios):
     return render_template('admi/estudiantes/create.html',usuarios=usuarios)
 
-def edit(estudiante):
-    return render_template('admi/estudiantes/edit.html',estudiante= estudiante)
+def edit(estudiante,usuarios):
+    return render_template('admi/estudiantes/edit.html',estudiante = estudiante,usuarios=usuarios)
 
 def vista(estudiante):
     return render_template('admi/estudiantes/vista.html',estudiante=estudiante)

@@ -1,0 +1,22 @@
+<table class="table table-bordered">
+    <tr>
+        <th>ID:</th>
+        <td>{{ curso.id }}</td>
+    </tr>
+    <tr>
+        <th>Nombre del curso:</th>
+        <td>{{ curso.nombre }}</td>
+    </tr>
+    <tr>
+        <th>Descripcion:</th>
+        <td>{{ curso.descripcion }}</td>
+    </tr>
+    <tr>
+        <th>Activo:</th>
+        <td>{{ 'Sí' if curso.activo else 'No' }}</td>
+    </tr>
+    <tr>
+        <th>Docente de la clase:</th>
+        <td>{{curso.docente.usuario.nombre }} {{ curso.docente.usuario.apellido }}</td>
+    </tr>
+</table>

@@ -1,14 +1,14 @@
 {% extends 'admi/dashboard.html' %}
-{% block title %}Cursos{% endblock %}
+{% block title %}Inscripciones{% endblock %}
 {% block content %}
 
 <main class="content px-3 py-4">
     <div class="container-fluid">
-        <h3 class="fw-bold fs-4 my-3">Lista de Cursos
+        <h3 class="fw-bold fs-4 my-3">Lista de Incripciones
         </h3>
         <div class="mb-3">
-            <a data-bs-toggle="modal" data-bs-target="#modalNuevoCurso" class="btn btn-primary">
-                + Nuevo Curso
+            <a data-bs-toggle="modal" data-bs-target="#modalNuevoInscripcion" class="btn btn-primary">
+                + Nuevo Inscripcion
             </a>
         </div>
         <div class="row">
@@ -18,37 +18,28 @@
                         <thead>
                             <tr class="highlight">
                                 <th>#</th>
-                                <th>Nombre del Curso</th>
-                                <th>Estado</th>
-                                <th>Descripcion</th>
+                                <th>Paralelo</th>
+                                <th>Estudiante</th>
                                 <th>Operaciones</th>
                             </tr>
                         </thead>
                         <tbody>
-                            {%for item in cursos%}
+                            {%for item in inscripciones%}
                             <tr>
                                 <td>{{item.id}}</td>
-                                <td>{{item.nombre}}</td>
+                                <td>{{item.paralelo_id}}</td>
+                                <td>{{item.estudiante_id}}</td>
+                            
                                 <td class="text-center">
-                                    {% if item.activo %}
-                                    <i class="bi bi-check-circle-fill text-success"></i>
-                                    {% else %}
-                                    <i class="bi bi-x-circle-fill text-danger"></i>
-                                    {% endif %}
-                                </td>
-                                <td>{{item.descripcion}}</td>
-
-
-                                <td class="text-center">
-                                    <a data-bs-toggle="modal" data-bs-target="#modalVistaCurso{{ item.id }}"
+                                    <a data-bs-toggle="modal" data-bs-target="#modalVistaInscripcion{{ item.id }}"
                                         class="btn btn-primary btn-sm"><i class=" bi bi-eye"></i></a>
 
-                                    <a data-bs-toggle="modal" data-bs-target="#modalEditarCurso{{ item.id }}"
+                                    <a data-bs-toggle="modal" data-bs-target="#modalEditarInscripcion{{ item.id }}"
                                         class="btn btn-warning btn-sm"><i class="bi bi-pencil-square"></i></a>
 
                                     <a class="btn btn-danger btn-sm" data-bs-toggle="modal"
                                         data-bs-target="#modalConfirmarEliminar"
-                                        data-url="{{ url_for('curso.delete', id=item.id) }}">
+                                        data-url="{{ url_for('docente.delete', id=item.id) }}">
                                         <i class="bi bi-trash3"></i>
                                     </a>
                                 </td>
@@ -63,19 +54,19 @@
 </main>
 
 <!-- Modal de Edición -->
-{% for item in cursos %}
-<div class="modal fade" id="modalEditarCurso{{ item.id }}" tabindex="-1">
+{% for item in incripciones %}
+<div class="modal fade" id="modalEditarInscripcion{{ item.id }}" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header justify-content-between">
-                <h5 class="modal-title">Editar Curso</h5>
+                <h5 class="modal-title">Editar incripcion</h5>
                 <button type="button" class="btn btn-sm text-white" data-bs-dismiss="modal" aria-label="Cerrar">
                     <i class="bi bi-x-lg"></i>
                 </button>
             </div>
             <div class="modal-body">
-                {% set curso = item %}
-                {% include 'admi/cursos/edit.html' %}
+                {% set inscripcion = item %}
+                {% include 'admi/inscripciones/edit.html' %}
             </div>
         </div>
     </div>
@@ -83,19 +74,19 @@
 {% endfor %}
 
 <!-- Modal de Vista -->
-{% for item in cursos %}
-<div class="modal fade" id="modalVistaCurso{{ item.id }}" tabindex="-1">
+{% for item in incripciones %}
+<div class="modal fade" id="modalVistaInscripcion{{ item.id }}" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header justify-content-between">
-                <h5 class="modal-title">Inf. Completa del Curso</h5>
+                <h5 class="modal-title">Inf. Completa de la Incripcion</h5>
                 <button type="button" class="btn btn-sm text-white" data-bs-dismiss="modal" aria-label="Cerrar">
                     <i class="bi bi-x-lg"></i>
                 </button>
             </div>
             <div class="modal-body">
-                {% set curso = item %}
-                {% include 'admi/cursos/vista.html' %}
+                {% set inscripcion = item %}
+                {% include 'admi/inscripciones/vista.html' %}
             </div>
         </div>
     </div>
@@ -103,18 +94,18 @@
 {% endfor %}
 
 
-<div class="modal fade" id="modalNuevoCurso" tabindex="-1" aria-labelledby="modalNuevoCursoLabel">
+<div class="modal fade" id="modalNuevoInscripcion" tabindex="-1" aria-labelledby="modalNuevoInscripcionLabel">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header justify-content-between ">
-                <h5 class="modal-title" id="modalNuevoCursoLabel">Agregar Curso</h5>
+                <h5 class="modal-title" id="modalNuevoInscripcionLabel">Agregar Docente</h5>
                 <button type="button" class="btn btn-sm text-white" data-bs-dismiss="modal" aria-label="Cerrar">
                     <i class="bi bi-x-lg"></i>
                 </button>
             </div>
             <div class="modal-body">
 
-                {% include 'admi/cursos/create.html' %}
+                {% include 'admi/inscripciones/create.html' %}
             </div>
         </div>
     </div>

@@ -2,7 +2,7 @@ from database import db
 
 
 class Docente(db.Model):
-    __tablename__="docentes"
+    __tablename__='docentes'
     
     id = db.Column(db.Integer, primary_key=True)
     
@@ -14,8 +14,8 @@ class Docente(db.Model):
     usuario_id = db.Column(db.Integer, db.ForeignKey('usuarios.id'),nullable=False)
     
     #relacion con la tabla usuario,cursos
-    usuario = db.relationship("Usuario", back_populates="docentes")
-    cursos = db.relationship("Curso", back_populates="docente")
+    usuario = db.relationship('Usuario', back_populates='docentes')
+    cursos = db.relationship('Curso', back_populates='docente')
     
     #Pasar los parametros 
     def __init__(self,fecha_nac, genero, telefono,ci,especialidad,usuario_id):

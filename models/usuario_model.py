@@ -3,7 +3,7 @@ from flask_login import UserMixin
 from werkzeug.security import generate_password_hash,check_password_hash
 
 class Usuario(db.Model, UserMixin):
-    __tablename__="usuarios"
+    __tablename__='usuarios'
     
     id = db.Column(db.Integer,primary_key=True)
     nombre = db.Column(db.String(80),nullable=False)
@@ -11,13 +11,13 @@ class Usuario(db.Model, UserMixin):
     email = db.Column(db.String(120), unique=True)
     username = db.Column(db.String(20),nullable=False)
     password = db.Column(db.String,nullable=False)
-    activo = db.Column(db.Boolean, default=True)
-    rol_id = db.Column(db.Integer, db.ForeignKey("rol.id"), nullable=False)
+    activo = db.Column(db.Boolean, default=True,nullable=False)
+    rol_id = db.Column(db.Integer, db.ForeignKey('rol.id'), nullable=False)
     
     #relacion con la tabla rol
-    rol = db.relationship("Rol", back_populates="usuarios")
-    docentes = db.relationship("Docente", back_populates="usuario")
-    estudiantes = db.relationship("Estudiante", back_populates="usuario")
+    rol = db.relationship('Rol', back_populates='usuarios')
+    docentes = db.relationship('Docente', back_populates='usuario')
+    estudiantes = db.relationship('Estudiante', back_populates='usuario')
     
     #Pasar los parametros 
     def __init__(self, nombre, apellido, email, username, password, activo,rol_id):
