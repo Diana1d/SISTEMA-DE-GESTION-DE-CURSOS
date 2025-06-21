@@ -1,0 +1,7 @@
+# Ignorar carpetas de archivos compilados de Python
+__pycache__/
+*.pyc
+
+# Ignorar base de datos SQLite y la carpeta instance
+*.db
+instance/
