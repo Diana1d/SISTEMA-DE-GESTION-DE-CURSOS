@@ -5,20 +5,29 @@
     </div>
     <div class="mb-3">
         <label for="desc" class="form-label">Descripcion</label>
-        <textarea class="form-control" name="descripcion" rows="4">{{curso.descripcion}}"</textarea>
+        <textarea class="form-control" name="descripcion" rows="4">{{curso.descripcion}}</textarea>
     </div>
-
-    <div class="form-check mb-3">
-        <input class="form-check-input" type="checkbox" name="activo" id="activo" checked>
-        <label class="form-check-label" for="activo">¿Está activo el curso?</label>
+    <div class="mb-3">
+        <label for="sigla" class="form-label">Sigla</label>
+        <input type="text" class="form-control" name="sigla" id="sigla" value="{{curso.sigla}}" required
+            placeholder="Ej: INF101">
     </div>
 
     <div class="mb-3">
+        <label for="carga_horaria" class="form-label">Carga Horaria (horas)</label>
+        <input type="number" class="form-control" name="carga_horaria" id="carga_horaria" min="1"
+            value="{{curso.carga_horaria}}" required placeholder="Ej: 64">
+    </div>
+    <div class="form-check mb-3">
+        <input class="form-check-input" type="checkbox" name="activo" {% if curso.activo %} checked {% endif %}>
+        <label class="form-check-label" for="activo">¿Está activo el curso?</label>
+    </div>
+    <div class="mb-3">
         <label for="docente" class="form-label">Docente</label>
-        <select name="docente_id" class="form-select" required>
-            <option value="">Seleccione un docente</option>
+        <select name="docente_id" class="form-select">
+            <option value="">-- Sin asignar --</option>
             {% for docente in docentes %}
-            <option value="{{ docente.id }}" {% if docente.id==curso.docente_id %}selected{% endif %}>
+            <option value="{{ docente.id }}" {% if  curso and curso.docente_id==docente.id %}selected{% endif %}>
                 {{ docente.usuario.nombre }} {{ docente.usuario.apellido }}
             </option>
             {% endfor %}

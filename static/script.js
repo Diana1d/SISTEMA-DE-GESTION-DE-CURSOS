@@ -18,10 +18,16 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     // 3. Mostrar modal si hay alertas
-    if (alerts.length > 0) {
-        const myModal = new bootstrap.Modal(document.getElementById('modalNuevoUsuario'));
-        myModal.show();
-    }
+    // Encuentra todos los elementos con clase 'modal-auto-show'
+    const modales = document.querySelectorAll('.modal-auto-show');
+
+    modales.forEach(function (modalElement) {
+        // Solo mostrar si tiene atributo data-show="true"
+        if (modalElement.dataset.show === "true") {
+            const modal = new bootstrap.Modal(modalElement);
+            modal.show();
+        }
+    });
 
     // 4. Inicializar DataTable (usa jQuery)
     $('#mi-tabla').DataTable({
@@ -30,7 +36,7 @@ document.addEventListener("DOMContentLoaded", function () {
         language: {
             url: 'https://cdn.datatables.net/plug-ins/2.3.2/i18n/es-ES.json'
         },
-    })
+    });
 
     // 5. Mensaje al quere eliminar
 

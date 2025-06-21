@@ -12,11 +12,26 @@
         <td>{{ curso.descripcion }}</td>
     </tr>
     <tr>
+        <th>Sigla:</th>
+        <td>{{ curso.sigla }}</td>
+    </tr>
+    <tr>
+        <th>Carga Horaria:</th>
+        <td>{{ curso.carga_horaria }}</td>
+    </tr>
+    <tr>
         <th>Activo:</th>
         <td>{{ 'Sí' if curso.activo else 'No' }}</td>
     </tr>
     <tr>
-        <th>Docente de la clase:</th>
-        <td>{{curso.docente.usuario.nombre }} {{ curso.docente.usuario.apellido }}</td>
+        <th>Docente:</th>
+        <td>
+            {% if curso.docente %}
+            {{ curso.docente.usuario.nombre }} {{ curso.docente.usuario.apellido }}
+            {% else %}
+            <span class="text-muted fst-italic">No asignado</span>
+            {% endif %}
+        </td>
     </tr>
+
 </table>

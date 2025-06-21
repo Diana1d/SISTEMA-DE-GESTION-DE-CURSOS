@@ -1,6 +1,5 @@
 from flask import render_template
 
-
 def list(usuarios,roles):
     
     return render_template('admi/usuarios/index.html',usuarios= usuarios,roles=roles)

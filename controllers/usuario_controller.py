@@ -2,11 +2,11 @@ from flask import request, redirect,url_for,Blueprint,flash
 from flask_login import login_user, logout_user, login_required, current_user
 from models.usuario_model import Usuario
 from models.rol_model import Rol
-from views.admi import usuario_view
-from werkzeug.security import check_password_hash,generate_password_hash
+from views import usuario_view
+from werkzeug.security import check_password_hash
 
 
-usuario_bp=Blueprint('usuario',__name__ ,url_prefix="/admi/usuarios")
+usuario_bp=Blueprint('usuario',__name__ ,url_prefix="/usuarios")
 
 @usuario_bp.route("/")
 

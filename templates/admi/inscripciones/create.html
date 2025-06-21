@@ -1,0 +1,55 @@
+<form method="post" action="{{ url_for('inscripcion.create') }}">
+    <div class="mb-3">
+        <label for="estudiante_id">Estudiante</label>
+        <select name="estudiante_id" class="form-select" required>
+            <option value="">-- Selecciona --</option>
+            {% for est in estudiantes %}
+            <option value="{{ est.id }}">{{ est.usuario.nombre }} {{ est.usuario.apellido }}</option>
+            {% endfor %}
+        </select>
+    </div>
+
+    <div class="mb-3">
+        <label for="curso_id">Curso</label>
+        <select name="curso_id" class="form-select" required>
+            <option value="">-- Selecciona --</option>
+            {% for curso in cursos %}
+            <option value="{{ curso.id }}">{{ curso.nombre }} | {{ curso.sigla }}</option>
+            {% endfor %}
+        </select>
+    </div>
+
+    <div class="mb-3">
+        <label for="paralelo_id">Paralelo</label>
+        <select name="paralelo_id" class="form-select" required>
+            <option value="">-- Selecciona --</option>
+            {% for par in paralelos %}
+            <option value="{{ par.id }}">{{ par.paralelo }}</option>
+            {% endfor %}
+        </select>
+    </div>
+
+    <div class="mb-3">
+        <label for="semestre_id">Semestre</label>
+        <select name="semestre_id" class="form-select" required>
+            <option value="">-- Selecciona --</option>
+            {% for sem in semestres %}
+            <option value="{{ sem.id }}">{{ sem.semestre_num }}  | {{ sem.gestion }}</option>
+            {% endfor %}
+        </select>
+    </div>
+
+    <div class="mb-3">
+        <label for="turno_id">Turno</label>
+        <select name="turno_id" class="form-select" required>
+            <option value="">-- Selecciona --</option>
+            {% for turno in turnos %}
+            <option value="{{ turno.id }}">{{ turno.tipo_turno }}</option>
+            {% endfor %}
+        </select>
+    </div>
+
+    <div class="text-end">
+        <button type="submit" class="btn btn-success">Guardar</button>
+    </div>
+</form>

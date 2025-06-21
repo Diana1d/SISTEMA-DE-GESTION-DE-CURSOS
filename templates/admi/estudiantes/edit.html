@@ -1,5 +1,8 @@
 <form method="POST" action="{{ url_for('estudiante.edit', id=item.id) }}">
-
+    <div class="mb-3">
+        <label for="mat" class="form-label">Matricula:</label>
+        <input type="text" class="form-control" name="matricula" required>
+    </div>
     <div class="mb-3">
         <label for="fecha" class="form-label">Fecha de Nacimiento:</label>
         <input type="date" class="form-control" name="fecha_nac"

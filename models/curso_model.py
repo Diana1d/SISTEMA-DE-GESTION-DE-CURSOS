@@ -6,19 +6,23 @@ class Curso(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     nombre = db.Column(db.String(100), nullable=False)
     descripcion = db.Column(db.Text)
+    sigla = db.Column(db.String(10), unique=True, nullable=False)
+    carga_horaria = db.Column(db.Integer, nullable=False)
     activo = db.Column(db.Boolean, default=True, nullable=False)
-    docente_id = db.Column(db.Integer, db.ForeignKey('docentes.id'),nullable=False)
+    docente_id = db.Column(db.Integer, db.ForeignKey('docentes.id'),nullable=True)
 
     #relacion
     docente = db.relationship('Docente', back_populates='cursos')
-    paralelos = db.relationship('Paralelo',back_populates='curso') 
+    inscripciones = db.relationship('Inscripcion',back_populates='curso') 
     
     #Pasar los parametros 
-    def __init__(self,nombre,descripcion,activo,docente_id):
+    def __init__(self,nombre,descripcion,sigla,carga_horaria,activo,docente_id):
         self.nombre = nombre
         self.descripcion = descripcion
+        self.sigla=sigla
+        self.carga_horaria=carga_horaria
         self.activo = activo
-        self.docente_id = docente_id
+        self.docente_id = docente_id  
         
        
     def save(self):
@@ -33,12 +37,15 @@ class Curso(db.Model):
     def get_by_id(id):
         return Curso.query.get(id)
     
-    def update(self, nombre=None,descripcion=None,activo=None,docente_id=None):
-        if  nombre and descripcion and docente_id:
+    def update(self, nombre=None,descripcion=None,sigla=None,carga_horaria=None,activo=None,docente_id=None):
+        if  nombre and descripcion and sigla and carga_horaria:
             self.nombre = nombre
             self.descripcion = descripcion
-            self.activo=activo
-            self.docente_id = docente_id      
+            self.sigla=sigla
+            self.carga_horaria=carga_horaria
+        
+        self.activo = activo 
+        self.docente_id = docente_id       
         db.session.commit()
         
     def delete(self):

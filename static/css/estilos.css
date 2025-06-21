@@ -64,8 +64,21 @@ li {
 }
 
 .wrapper {
-  min-height: 100vh;
+  
   display: flex;
+}
+
+
+
+.main {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  width: 100%;
+  overflow: hidden;
+  transition: all 0.35s ease-in-out;
+  background-color: #fff;
+  min-width: 0;
 }
 
 
@@ -79,32 +92,21 @@ li {
   flex-direction: column;
 }
 
-.main {
-  display: flex;
-  flex-direction: column;
-  min-width: 100vh;
-  width: 100%;
-  overflow: hidden;
-  transition: all 0.35s ease-in-out;
-  background-color: #fff;
-  min-width: 0;
-}
-
 #sidebar.expand {
   width: 260px;
   min-width: 260px;
 }
 
-#toggle-btn {
+.toggle-btn {
   background-color: transparent;
   cursor: pointer;
   border: 0;
   padding: 1rem 1.5rem;
 }
 
-#toggle-btn i {
+.toggle-btn i {
   font-size: 1.5rem;
-  color: #fff;
+  color: #FFF;
 }
 
 .sidebar-logo {
@@ -112,7 +114,7 @@ li {
 }
 
 .sidebar-logo a {
-  color: #fff;
+  color: #FFF;
   font-size: 1.15rem;
   font-weight: 600;
 }
@@ -122,7 +124,6 @@ li {
   display: none;
 }
 
-/* Cuando sidebar está expandido mostramos el texto */
 #sidebar.expand .sidebar-logo,
 #sidebar.expand a.sidebar-link span {
   animation: fadeIn .25s ease;
@@ -147,22 +148,24 @@ a.sidebar-link {
   padding: .625rem 1.625rem;
   color: #FFF;
   display: block;
-  font-size: 1.05rem;
+  font-size: 0.9rem;
   white-space: nowrap;
-  border-left: 2px solid transparent;
-}
-
-
-
-a.sidebar-link:hover {
-  background-color: rgba(255, 255, 255, .075);
-  border-left: 3px solid #3b7ddd;
+  border-left: 3px solid transparent;
 }
 
 .sidebar-link i,
 .dropdown-item i {
   font-size: 1.1rem;
   margin-right: .75rem;
+}
+
+a.sidebar-link:hover {
+  background-color: rgba(255, 255, 255, .075);
+  border-left: 3px solid #3b7ddd;
+}
+
+.sidebar-item {
+  position: relative;
 }
 
 #sidebar:not(.expand) .sidebar-item .sidebar-dropdown {
@@ -214,7 +217,7 @@ a.sidebar-link:hover {
   width: 40px;
 }
 
-th {
+.table>thead tr{
   color: #FFF;
   text-align: left;
 }
@@ -236,9 +239,10 @@ tr.highlight th {
   }
 
   .navbar-expand .navbar-nav .dropdown-menu {
-    box-sizing: 0.1rem .2rem rgba(0, 0, 0, .05);
+    box-sizing: 0 .1rem .2rem rgba(0, 0, 0, .05);
   }
-
+  
+ 
 
 }
 

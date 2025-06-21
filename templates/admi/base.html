@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="es">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}Cursos{% endblock %}</title>
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
+
+    <!-- css -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/estilos.css') }}">
+
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+
+    <link href="https://cdn.datatables.net/v/bs5/dt-2.3.2/datatables.min.css" rel="stylesheet"
+        integrity="sha384-nt2TuLL4RlRQ9x6VTFgp009QD7QLRCYX17dKj9bj51w2jtWUGFMVTveRXfdgrUdx" crossorigin="anonymous">
+
+
+
+</head>
+
+<body>
+    <div class="position-absolute top-0 start-50 translate-middle-x mt-3" style="z-index: 9999;">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        {% for category, msg in messages %}
+        <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+            {{ msg }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
+        </div>
+        {% endfor %}
+        {% endif %}
+        {% endwith %}
+    </div>
+
+    <div class="wrapper">
+        <aside id="sidebar">
+            <div class="d-flex">
+                <button id="toggle-btn" class="toggle-btn" type="button">
+                    <i class="bi bi-grid"></i>
+                </button>
+                <div class="sidebar-logo">
+                    <a href="/admi/">DashBoard</a>
+                </div>
+            </div>
+
+            <ul class="sidebar-nav">
+                <li class="sidebar-item">
+                    <a href="/usuarios/" class="sidebar-link">
+                        <i class="bi bi-people"></i>
+                        <span>Usuarios</span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a href="/admi/cursos/" class="sidebar-link">
+                        <i class="bi bi-book-half"></i>
+                        <span>Cursos</span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a href="/admi/docentes/" class="sidebar-link">
+                        <i class="bi bi-easel"></i>
+                        <span>Docentes</span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a href="/admi/estudiantes/" class="sidebar-link">
+                        <i class="bi bi-mortarboard"></i>
+                        <span>Estudiantes</span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a href="#" class="sidebar-link collapsed has-dropdown" data-bs-toggle="collapse"
+                        data-bs-target="#ins" aria-expanded="false" aria-controls="ins">
+                        <i class="bi bi-card-checklist"></i>
+                        <span>Asignación</span>
+                    </a>
+                    <ul id="ins" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
+                        <li class="sidebar-item">
+                            <a href="/admi/inscripciones/" class="sidebar-link">Inscripciones</a>
+                        </li>
+                        <li class="sidebar-item">
+                            <a href="/admi/semestres/" class="sidebar-link">Semestres</a>
+                        </li>
+                    </ul>
+                </li>
+
+
+            </ul>
+
+            <div class="sidebar-footer">
+                <a href="/admi/usuarios/logout" class="sidebar-link">
+                    <span>Salir</span>
+                    <i class="bi bi-box-arrow-right"></i>
+                </a>
+            </div>
+        </aside>
+
+        <div class="main">
+            <nav class="navbar navbar-expand px-4 py-3">
+
+                <div class="navbar-collapse collapse">
+                    <ul class="navbar-nav ms-auto">
+                        <li class="nav-item dropdown">
+                            <a href="#" class="nav-icon pe-md-0" data-bs-toggle="dropdown">
+                                <img src="{{ url_for('static', filename='img/account.png') }}" class="avatar img-fluid"
+                                    alt="account">
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-end rounded">
+                                <a href="" class="dropdown-item">
+                                    <i class="bi bi-gear"></i>
+                                    <span>Reportes</span>
+                                </a>
+                                <a href="" class="dropdown-item">
+                                    <i class="bi bi-box-arrow-right"></i>
+                                    <span>Salir</span>
+                                </a>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+            </nav>
+            <main class="content px-3 py-4">
+                <div class="container-fluid">
+                    <div class="mb-3">
+
+                        {% block content %}
+
+                        {% endblock %}
+                    </div>
+                </div>
+            </main>
+
+        </div>
+
+    </div>
+    <div class="modal fade" id="modalConfirmarEliminar" tabindex="-1" aria-labelledby="modalEliminarLabel">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header justify-content-between">
+                    <h5 class="modal-title" id="modalEliminarLabel">¿Confirmar Eliminación?</h5>
+                    <button type="button" class="btn btn-sm text-white" data-bs-dismiss="modal" aria-label="Cerrar">
+                        <i class="bi bi-x-lg"></i>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    Esta acción no se puede deshacer. ¿Deseas continuar?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <a id="btnEliminar" class="btn btn-danger">Eliminar</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+
+    <!-- Bootstrap JS Bundle con Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q"
+        crossorigin="anonymous"></script>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+        integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+
+    <script src="https://cdn.datatables.net/v/bs5/dt-2.3.2/datatables.min.js"
+        integrity="sha384-rL0MBj9uZEDNQEfrmF51TAYo90+AinpwWp2+duU1VDW/RG7flzbPjbqEI3hlSRUv"
+        crossorigin="anonymous"></script>
+
+
+</body>
+
+</html>

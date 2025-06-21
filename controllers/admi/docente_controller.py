@@ -66,7 +66,22 @@ def edit(id):
 @docente_bp.route("/delete/<int:id>")
 def delete(id):
     docente = Docente.get_by_id(id)
-    docente.delete()
+    if not docente:
+        flash("Docente no encontrado", "warning")
+        return redirect(url_for('docente.index'))
+    
+    # Actualizar estado en Usuario asociado
+    usuario = docente.usuario  # Asumiendo relación docente.usuario
+    if usuario:
+        usuario.activo = False  # Marcar usuario como inactivo
+     # Opcional, si quieres quitar el rol
+    
+    # Actualizar estado en Docente
+    docente.activo = False  # Marcar docente como inactivo
+    
+    # Guardar cambios (depende de cómo guardas en tu ORM)
+    from database import db  # o tu objeto de sesión
+    db.session.commit()
     return redirect(url_for('docente.index'))
 
 

@@ -1,0 +1,109 @@
+{% extends 'admi/base.html' %}
+{% block title %}Semestres{% endblock %}
+{% block content %}
+
+<h3 class="fw-bold fs-4 my-3">Lista de Semestres
+</h3>
+<div class="mb-3">
+    <a data-bs-toggle="modal" data-bs-target="#modalNuevoSemestre" class="btn btn-primary">
+        + Nuevo Semestre
+    </a>
+</div>
+<div class="row">
+    <div class="col-12">
+        <div class="table-responsive">
+            <table id="mi-tabla" class="table table-striped  display nowrap" style="width:100%">
+                <thead>
+                    <tr class="highlight">
+                        <th>#</th>
+                        <th>Semestre</th>
+                        <th>Fecha de inicio</th>
+                        <th>Fecha de fin</th>
+                        <th>Operaciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {%for item in semestres%}
+                    <tr>
+                        <td>{{item.id}}</td>
+                        <td>
+                            <div>{{ item.semestre_num}}</div>
+                            {% if item.gestion %}
+                            <div class="text-muted small">{{ item.gestion }}</div>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if item.fecha_inicio %}
+                            {{ item.fecha_inicio }}
+                            {% else %}
+                            <span class="text-muted fst-italic text-center">No definido</span>
+                            {% endif %}
+                        </td>
+
+                        <td>
+                            {% if item.fecha_fin%}
+                            {{ item.fecha_fin }}
+                            {% else %}
+                            <span class="text-muted fst-italic text-center">No definido</span>
+                            {% endif %}
+                        </td>
+
+
+                        <td class="text-center">
+                            <a data-bs-toggle="modal" data-bs-target="#modalEditarSemestre{{ item.id }}"
+                                class="btn btn-warning btn-sm"><i class="bi bi-pencil-square"></i></a>
+
+                            <a class="btn btn-danger btn-sm" data-bs-toggle="modal"
+                                data-bs-target="#modalConfirmarEliminar"
+                                data-url="{{ url_for('curso.delete', id=item.id) }}">
+                                <i class="bi bi-trash3"></i>
+                            </a>
+                        </td>
+                    </tr>
+                    {%endfor%}
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Modal de Edición -->
+{% for item in semestres %}
+<div class="modal fade" id="modalEditarSemestre{{ item.id }}" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header justify-content-between">
+                <h5 class="modal-title">Editar Semestre</h5>
+                <button type="button" class="btn btn-sm text-white" data-bs-dismiss="modal" aria-label="Cerrar">
+                    <i class="bi bi-x-lg"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                {% set semestre = item %}
+                {% include 'admi/semestres/edit.html' %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endfor %}
+
+<div class="modal fade" id="modalNuevoSemestre" tabindex="-1" aria-labelledby="modalNuevoSemestreLabel">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header justify-content-between ">
+                <h5 class="modal-title" id="modalNuevoSemestreLabel">Agregar Semestre</h5>
+                <button type="button" class="btn btn-sm text-white" data-bs-dismiss="modal" aria-label="Cerrar">
+                    <i class="bi bi-x-lg"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+
+                {% include 'admi/semestres/create.html' %}
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}

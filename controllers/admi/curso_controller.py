@@ -10,7 +10,7 @@ curso_bp=Blueprint('curso',__name__ ,url_prefix="/admi/cursos")
 @curso_bp.route("/")
 def index():
     cursos = Curso.get_all()
-    docentes = get_docentes()
+    docentes = Docente.query.join(Usuario).filter(Usuario.activo == True).filter(Docente.usuario != None).all()
     return curso_view.list(cursos, docentes)
 
 @curso_bp.route("/vista/<int:id>")
@@ -24,29 +24,36 @@ def create():
      
         nombre =request.form['nombre']
         descripcion =request.form['descripcion']
+        sigla = request.form['sigla']
+        carga_horaria = request.form['carga_horaria']
         activo ='activo' in request.form
         docente_id =  request.form['docente_id']
         
-        curso = Curso(nombre=nombre,descripcion=descripcion,activo=activo,docente_id=docente_id)
+        curso = Curso(nombre=nombre,descripcion=descripcion,sigla=sigla,carga_horaria=carga_horaria,activo=activo,docente_id=docente_id)
         curso.save()
         return redirect(url_for('curso.index'))
     
-    docentes = get_docentes()
+    docentes = Docente.query.join(Usuario).filter(Usuario.activo == True).filter(Docente.usuario != None).all()
+
     return curso_view.create(docentes)
 
 @curso_bp.route("/edit/<int:id>",methods=['GET','POST'])
 def edit(id):
     curso = Curso.get_by_id(id)
     if request.method == 'POST':
+        
         nombre =request.form['nombre']
         descripcion =request.form['descripcion']
+        sigla = request.form['sigla']
+        carga_horaria = request.form['carga_horaria']
         activo ='activo' in request.form
         docente_id =  request.form['docente_id']
         #actualizar
-        curso.update(nombre=nombre,descripcion=descripcion,activo=activo,docente_id=docente_id)
+        curso.update(nombre=nombre,descripcion=descripcion,sigla=sigla,carga_horaria=carga_horaria,activo=activo,docente_id=docente_id)
         return redirect(url_for('curso.index'))
     
-    docentes = get_docentes()
+    docentes = Docente.query.join(Usuario).filter(Usuario.activo == True).filter(Docente.usuario != None).all()
+
     return curso_view.edit(curso,docentes)
 
     
@@ -56,9 +63,7 @@ def delete(id):
     curso.delete()
     return redirect(url_for('curso.index'))
 
-# Este método obtiene todos los usuarios activos con rol de Docente.
-def get_docentes():
-    return Docente.query.join(Docente.usuario).filter(Usuario.activo == True).all()
+ 
 
 
 

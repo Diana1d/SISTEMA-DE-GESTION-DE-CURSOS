@@ -1,6 +1,5 @@
 from flask import request, redirect,url_for,Blueprint,flash
 from models.semestre_modal import Semestre 
-from models.inscripcion_model import Inscripcion
 from views.admi import  semestre_view
 
 semestre_bp=Blueprint('semestre',__name__ ,url_prefix="/admi/semestres")
@@ -25,8 +24,6 @@ def create():
         fecha_inicio = request.form['fecha_inicio']
         fecha_fin = request.form['fecha_inicio']
     
-        
-        
         semestre = Semestre(gestion,semestre_num,fecha_inicio,fecha_fin)
         semestre.save()
         return redirect(url_for('semestre.index'))
@@ -42,6 +39,8 @@ def edit(id):
         semestre_num = request.form['semestre_num']
         fecha_inicio = request.form['fecha_inicio']
         fecha_fin = request.form['fecha_inicio']
+        # Si las fechas están vacías, se dejan como None
+    
         
         #actualizar
         semestre.update(gestion=gestion,semestre_num=semestre_num,fecha_inicio=fecha_inicio,fecha_fin=fecha_fin)

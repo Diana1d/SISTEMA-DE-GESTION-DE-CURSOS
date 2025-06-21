@@ -1,60 +1,69 @@
-{% extends 'admi/dashboard.html' %}
+{% extends 'admi/base.html' %}
 {% block title %}Inscripciones{% endblock %}
 {% block content %}
 
-<main class="content px-3 py-4">
-    <div class="container-fluid">
-        <h3 class="fw-bold fs-4 my-3">Lista de Incripciones
-        </h3>
-        <div class="mb-3">
-            <a data-bs-toggle="modal" data-bs-target="#modalNuevoInscripcion" class="btn btn-primary">
-                + Nuevo Inscripcion
-            </a>
+
+<h3 class="fw-bold fs-4 my-3">Lista de Incripciones
+</h3>
+<div class="mb-3">
+    <a data-bs-toggle="modal" data-bs-target="#modalNuevoInscripcion" class="btn btn-primary">
+        + Nuevo Inscripcion
+    </a>
+</div>
+<div class="row">
+    <div class="col-12">
+        <div class="table-responsive">
+            <table id="mi-tabla" class="table table-striped  display nowrap" style="width:100%">
+                <thead>
+                    <tr class="highlight">
+                        <th>#</th>
+                        <th>Estudiante</th>
+                        <th>Curso</th>
+                        <th>Semestre</th>
+                        <th>Operaciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {%for item in inscripciones%}
+                    <tr>
+                        <td>{{item.id}}</td>
+                        <td>
+                            {{ item.estudiante.usuario.nombre }} {{ item.estudiante.usuario.apellido }}
+                        </td>
+                        <td>
+                            {{ item.curso.nombre }}
+                            <div class="text-muted small">{{ item.curso.sigla }}</div>
+                        </td>
+                        <td>
+                            {{ item.semestre.semestre_num }}
+                            <div class="text-muted small">{{ item.semestre.gestion }}</div>
+                        </td>
+
+                        <td class="text-center">
+                            <a data-bs-toggle="modal" data-bs-target="#modalVistaInscripcion{{ item.id }}"
+                                class="btn btn-primary btn-sm"><i class=" bi bi-eye"></i></a>
+
+                            <a data-bs-toggle="modal" data-bs-target="#modalEditarInscripcion{{ item.id }}"
+                                class="btn btn-warning btn-sm"><i class="bi bi-pencil-square"></i></a>
+
+                            <a class="btn btn-danger btn-sm" data-bs-toggle="modal"
+                                data-bs-target="#modalConfirmarEliminar"
+                                data-url="{{ url_for('docente.delete', id=item.id) }}">
+                                <i class="bi bi-trash3"></i>
+                            </a>
+                        </td>
+                    </tr>
+                    {%endfor%}
+
+                </tbody>
+            </table>
         </div>
-        <div class="row">
-            <div class="col-12">
-                <div class="table-responsive">
-                    <table id="mi-tabla" class="table table-striped  display nowrap" style="width:100%">
-                        <thead>
-                            <tr class="highlight">
-                                <th>#</th>
-                                <th>Paralelo</th>
-                                <th>Estudiante</th>
-                                <th>Operaciones</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {%for item in inscripciones%}
-                            <tr>
-                                <td>{{item.id}}</td>
-                                <td>{{item.paralelo_id}}</td>
-                                <td>{{item.estudiante_id}}</td>
-                            
-                                <td class="text-center">
-                                    <a data-bs-toggle="modal" data-bs-target="#modalVistaInscripcion{{ item.id }}"
-                                        class="btn btn-primary btn-sm"><i class=" bi bi-eye"></i></a>
+    </div>
+</div>
 
-                                    <a data-bs-toggle="modal" data-bs-target="#modalEditarInscripcion{{ item.id }}"
-                                        class="btn btn-warning btn-sm"><i class="bi bi-pencil-square"></i></a>
-
-                                    <a class="btn btn-danger btn-sm" data-bs-toggle="modal"
-                                        data-bs-target="#modalConfirmarEliminar"
-                                        data-url="{{ url_for('docente.delete', id=item.id) }}">
-                                        <i class="bi bi-trash3"></i>
-                                    </a>
-                                </td>
-                            </tr>
-                            {%endfor%}
-
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-</main>
 
 <!-- Modal de Edición -->
-{% for item in incripciones %}
+{% for item in inscripciones %}
 <div class="modal fade" id="modalEditarInscripcion{{ item.id }}" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -74,7 +83,7 @@
 {% endfor %}
 
 <!-- Modal de Vista -->
-{% for item in incripciones %}
+{% for item in inscripciones %}
 <div class="modal fade" id="modalVistaInscripcion{{ item.id }}" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -98,7 +107,7 @@
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header justify-content-between ">
-                <h5 class="modal-title" id="modalNuevoInscripcionLabel">Agregar Docente</h5>
+                <h5 class="modal-title" id="modalNuevoInscripcionLabel">Agregar Inscripcion</h5>
                 <button type="button" class="btn btn-sm text-white" data-bs-dismiss="modal" aria-label="Cerrar">
                     <i class="bi bi-x-lg"></i>
                 </button>
