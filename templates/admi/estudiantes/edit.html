@@ -1,7 +1,7 @@
 <form method="POST" action="{{ url_for('estudiante.edit', id=item.id) }}">
     <div class="mb-3">
         <label for="mat" class="form-label">Matricula:</label>
-        <input type="text" class="form-control" name="matricula" required>
+        <input type="text" class="form-control" name="matricula" value="{{estudiante.matricula}}" required>
     </div>
     <div class="mb-3">
         <label for="fecha" class="form-label">Fecha de Nacimiento:</label>
@@ -27,6 +27,11 @@
     <div class="mb-3">
         <label for="ci" class="form-label">CI:</label>
         <input type="text" class="form-control" name="ci" value="{{estudiante.ci}}" required>
+    </div>
+
+    <div class="form-check mb-3">
+        <input class="form-check-input" type="checkbox" name="activo" {% if estudiante.usuario.activo %} checked {% endif %}>
+        <label class="form-check-label" for="activo">¿Está activo?</label>
     </div>
 
     <div class="mb-3">

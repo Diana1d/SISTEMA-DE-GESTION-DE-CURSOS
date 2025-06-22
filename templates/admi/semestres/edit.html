@@ -1,0 +1,21 @@
+<form method="POST" action="{{ url_for('semestre.edit' , id=item.id) }}">
+    <div class="mb-3">
+        <label for="semestre_num" class="form-label">Semestre:</label>
+        <input type="text" name="semestre_num" class="form-control" value="{{semestre.semestre_num}}" required>
+    </div >
+    <div class="mb-3">
+        <label for="gestion" class="form-label">Gestión:</label>
+        <input type="text" name="gestion" class="form-control" value="{{semestre.gestion}}" required>
+    </div>
+    <div class="mb-3">
+        <label for="fecha_inicio" class="form-label">Fecha de inicio:</label>
+        <input type="date" name="fecha_inicio" class="form-control" value="{{ item.fecha_inicio.strftime('%Y-%m-%d') if item.fecha_inicio else '' }}">
+    </div>
+    <div class="mb-3">
+        <label for="fecha_fin" class="form-label">Fecha de fin:</label>
+        <input type="date" name="fecha_fin" class="form-control" value="{{ item.fecha_fin.strftime('%Y-%m-%d') if item.fecha_fin else '' }}">
+    </div>
+    <div class="text-end">
+        <button type="submit" class="btn btn-success">Guardar</button>
+    </div>
+</form>

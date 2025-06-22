@@ -33,7 +33,11 @@ def create():
         ci = request.form['ci']
         usuario_id = request.form['usuario_id']
         
-        
+        existe = Estudiante.query.filter_by(usuario_id=usuario_id).first()
+        if existe:
+            flash("El estudiante ya está en la lista.", "warning")
+            return redirect(url_for('estudiante.index', show_modal='true'))
+
         estudiante = Estudiante(matricula=matricula,fecha_nac=fecha,genero=genero,telefono=telefono,ci=ci,usuario_id=usuario_id)
         estudiante.save()
         return redirect(url_for('estudiante.index'))
@@ -56,6 +60,21 @@ def edit(id):
         telefono = request.form['telefono']
         ci = request.form['ci']
         usuario_id = request.form['usuario_id']
+        
+        # Actualiza el estado del usuario relacionado
+        nuevo_estado = 'activo' in request.form
+        estado_anterior = estudiante.usuario.activo
+        estudiante.usuario.activo = nuevo_estado
+        
+        # Si el usuario pasó de activo a inactivo, desactiva sus inscripciones
+        if estado_anterior and not nuevo_estado:
+            estudiante.desactivar_inscripciones()  # Método que debes definir en modelo Estudiante
+            flash("El estudiante fue desactivado y sus inscripciones también.", "warning")
+        elif not estado_anterior and nuevo_estado:
+            flash("El estudiante fue activado. Revise sus inscripciones si desea reactivarlas.", "info")
+                
+        # Actualiza el estado del usuario relacionado
+        estudiante.usuario.activo = 'activo' in request.form
         #actualizar
         estudiante.update(matricula=matricula,fecha_nac=fecha,genero=genero,telefono=telefono,ci=ci,usuario_id=usuario_id)
         return redirect(url_for('estudiante.index'))

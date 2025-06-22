@@ -1,0 +1,16 @@
+hola chicas ya hice lo de registro            
+ todo el crud solo falta el dashboard  y recuperar contraseña que haber si lo hago.
+
+es un crud siempre al crear un usuario, lo deben registrar en su respectivo crud como docente y estudiante, tambien se puede poner inactivo mediante el crud usrio o el de estudiante y docente.
+
+
+si el usuario estuidnate se inactiva por cualoquiera de los dos si es por el crud usario o estudiante la inscripcion se desactiva y hay que reactivarlas manualmente. 
+ 
+
+se que esta simple pero hasta ahi nomas pude :'v
+ mientras voy estar haciendo lo que me falta dashboard y para recuperar contraseña       
+
+
+las rutas para ingresar sin el login 
+/usuarios/dashboard -> eso ingresa al dashboard y ya podran ver el sistema                                                                                                                       
+y si tiene alguna duda me preguntan nomas                                                                                                                                                                                                                                   

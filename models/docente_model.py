@@ -52,6 +52,13 @@ class Docente(db.Model):
     def delete(self):
         db.session.delete(self)
         db.session.commit()
+        
+    @staticmethod
+    def contar_activos():
+        from models.usuario_model import Usuario
+        return Docente.query.join(Docente.usuario).filter(Usuario.activo == True).count()
+
+
     
      
 

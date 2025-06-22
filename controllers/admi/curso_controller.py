@@ -29,6 +29,14 @@ def create():
         activo ='activo' in request.form
         docente_id =  request.form['docente_id']
         
+        existe = Curso.query.filter(
+            (Curso.nombre == nombre) | (Curso.sigla == sigla)
+        ).first()
+        
+        if existe:
+            flash("Ya existe un curso con ese nombre o sigla.", "warning")
+            return redirect(url_for('curso.index', show_modal='true'))
+        
         curso = Curso(nombre=nombre,descripcion=descripcion,sigla=sigla,carga_horaria=carga_horaria,activo=activo,docente_id=docente_id)
         curso.save()
         return redirect(url_for('curso.index'))

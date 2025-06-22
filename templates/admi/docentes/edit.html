@@ -31,10 +31,15 @@
         <input type="text" class="form-control" name="especialidad" value="{{docente.especialidad}}" required>
     </div>
 
+    <div class="form-check mb-3">
+        <input class="form-check-input" type="checkbox" name="activo" {% if docente.usuario.activo %} checked {% endif %}>
+        <label class="form-check-label" for="activo">¿Está activo?</label>
+    </div>
+
     <div class="mb-3">
-        <label for="usuario" class="form-label">Usuario</label>
+        <label for="usuario" class="form-label">Docente</label>
         <select name="usuario_id" class="form-select " required>
-            <option value="">Seleccione un usuario</option>
+            <option value="">Seleccione un docente</option>
             {% for usuario in usuarios %}
             <option value="{{ usuario.id }}" {% if usuario.id==docente.usuario_id %}selected{% endif %}>
                 {{ usuario.nombre }} {{ usuario.apellido }}

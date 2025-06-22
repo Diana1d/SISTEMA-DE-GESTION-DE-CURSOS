@@ -15,10 +15,8 @@ class Semestre(db.Model):
     def __init__(self,gestion,semestre_num,fecha_inicio,fecha_fin):
         self.gestion = gestion
         self.semestre_num = semestre_num
-        
-        # Convertir string vacío a None o parsear fecha
-        self.fecha_inicio = date.fromisoformat(fecha_inicio) if fecha_inicio.strip() else None
-        self.fecha_fin = date.fromisoformat(fecha_fin) if fecha_fin.strip() else None
+        self.fecha_inicio = fecha_inicio
+        self.fecha_fin = fecha_fin
        
     def save(self):
         db.session.add(self)

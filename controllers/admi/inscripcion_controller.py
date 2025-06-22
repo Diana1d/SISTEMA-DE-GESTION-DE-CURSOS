@@ -30,8 +30,18 @@ def create():
         semestre_id = request.form['semestre_id']
         paralelo_id = request.form['paralelo_id']
         turno_id = request.form['turno_id']
+        activo = 'activo' in request.form
         
-        inscripcion = Inscripcion(curso_id,estudiante_id,semestre_id,paralelo_id,turno_id)
+        estudiante = Estudiante.query.get(estudiante_id)
+        if not estudiante or not estudiante.usuario.activo:
+            flash("No se puede inscribir al estudiante porque está inactivo.", "warning")
+            return redirect(url_for('inscripcion.index', show_modal='true'))
+        
+        if Inscripcion.existe_inscripcion(estudiante_id, curso_id):
+            flash("Este estudiante ya está inscrito en este curso.", "warning")
+            return redirect(url_for('inscripcion.index', show_modal='true'))
+        
+        inscripcion = Inscripcion(curso_id,estudiante_id,semestre_id,paralelo_id,turno_id,activo)
         inscripcion.save()
         return redirect(url_for('inscripcion.index'))
     data = cargar_datos()
@@ -47,9 +57,10 @@ def edit(id):
         semestre_id = request.form['semestre_id']
         paralelo_id = request.form['paralelo_id']
         turno_id = request.form['turno_id']
+        activo = 'activo' in request.form
         
         #actualizar
-        inscripcion.update(curso_id=curso_id,estudiante_id=estudiante_id,semestre_id=semestre_id,paralelo_id=paralelo_id,turno_id=turno_id)
+        inscripcion.update(curso_id=curso_id,estudiante_id=estudiante_id,semestre_id=semestre_id,paralelo_id=paralelo_id,turno_id=turno_id,activo=activo)
         return redirect(url_for('inscripcion.index'))
     data = cargar_datos()
     return inscripcion_view.edit(inscripcion,**data)

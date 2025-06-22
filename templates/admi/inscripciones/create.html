@@ -14,7 +14,7 @@
         <select name="curso_id" class="form-select" required>
             <option value="">-- Selecciona --</option>
             {% for curso in cursos %}
-            <option value="{{ curso.id }}">{{ curso.nombre }} | {{ curso.sigla }}</option>
+            <option value="{{ curso.id }}">{{ curso.nombre }}</option>
             {% endfor %}
         </select>
     </div>
@@ -34,7 +34,7 @@
         <select name="semestre_id" class="form-select" required>
             <option value="">-- Selecciona --</option>
             {% for sem in semestres %}
-            <option value="{{ sem.id }}">{{ sem.semestre_num }}  | {{ sem.gestion }}</option>
+            <option value="{{ sem.id }}">{{ sem.semestre_num }}</option>
             {% endfor %}
         </select>
     </div>
@@ -47,6 +47,10 @@
             <option value="{{ turno.id }}">{{ turno.tipo_turno }}</option>
             {% endfor %}
         </select>
+    </div>
+    <div class="form-check mb-3">
+        <input class="form-check-input" type="checkbox" name="activo" id="activo" checked>
+        <label class="form-check-label" for="activo">¿Está activo?</label>
     </div>
 
     <div class="text-end">

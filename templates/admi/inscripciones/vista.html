@@ -1,0 +1,27 @@
+<table class="table table-bordered">
+    <tr>
+        <th>Estudiante:</th>
+        <td>{{ ins.estudiante.usuario.nombre }} {{ ins.estudiante.usuario.apellido }}</td>
+    </tr>
+    <tr>
+        <th>Curso:</th>
+        <td>{{ ins.curso.nombre }}</td>
+    </tr>
+
+    <tr>
+        <th>Paralelo:</th>
+        <td>{{ ins.paralelo.paralelo }}</td>
+    </tr>
+    <tr>
+        <th>Semestre:</th>
+        <td>{{ins.semestre.semestre_num}}</td>
+    </tr>
+    <tr>
+        <th>Turno:</th>
+        <td>{{ ins.turno.tipo_turno }}</td>
+    </tr>
+    <tr>
+        <th>Activo:</th>
+        <td>{{ 'Sí' if ins.activo else 'No' }}</td>
+    </tr>
+</table>

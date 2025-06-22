@@ -2,7 +2,11 @@ from flask import request, redirect,url_for,Blueprint,flash
 from flask_login import login_user, logout_user, login_required, current_user
 from models.usuario_model import Usuario
 from models.rol_model import Rol
+from models.curso_model import Curso
+from models.docente_model import Docente
+from models.estudiante_model import Estudiante
 from views import usuario_view
+from database import db
 from werkzeug.security import check_password_hash
 
 
@@ -44,7 +48,7 @@ def create():
         existente = Usuario.query.filter_by(email=email).first()
         if existente:
             flash('Ya existe un usuario con ese correo.', 'danger')
-            return redirect(url_for('usuario.index'))
+            return redirect(url_for('usuario.index',show_modal='true'))
         
         usuario = Usuario(nombre,apellido,email,username,password,activo,rol_id)
         usuario.save()
@@ -66,6 +70,18 @@ def edit(id):
         activo = 'activo' in request.form
         rol_id = request.form['rol_id']
         
+        # Verificar si el usuario tiene un estudiante asociado
+        if usuario.rol and usuario.rol.nombre == 'Estudiante':
+            estudiante = Estudiante.query.filter_by(usuario_id=usuario.id).first()
+            if estudiante:
+                if not activo:  # Si se está desactivando al usuario
+                    for ins in estudiante.inscripciones:
+                        ins.activo = False
+                    db.session.commit()
+                    flash("Usuario desactivado. Las inscripciones del estudiante también han sido desactivadas.", "warning")
+                else:
+                    flash("Usuario desactivado. Por favor, revisa las inscripciones del estudiante.", "info")
+            
         # Si el campo password está vacío, pasamos None para no cambiar
         password_cambio = password if password else None
         #actualizar
@@ -118,6 +134,9 @@ def logout():
 @usuario_bp.route("/dashboard")
 
 def dashboard():
-    return usuario_view.dashboard(current_user)
+    total_cursos = Curso.query.count()
+    total_docentes = Docente.contar_activos()
+    total_estudiantes = Estudiante.query.count()
+    return usuario_view.dashboard(current_user,total_cursos,total_docentes,total_estudiantes)
 
 

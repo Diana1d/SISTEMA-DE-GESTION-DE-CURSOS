@@ -1,4 +1,4 @@
-{% extends 'admi/base.html' %}
+{% extends 'admi/baseAdmi.html' %}
 {% block title %}Cursos{% endblock %}
 {% block content %}
 
@@ -16,8 +16,9 @@
                 <thead>
                     <tr class="highlight">
                         <th>#</th>
-                        <th>Nombre del Curso</th>
+                        <th>Curso</th>
                         <th>Estado</th>
+                        <th>Docente</th>
                         <th>Operaciones</th>
                     </tr>
                 </thead>
@@ -38,7 +39,14 @@
                             <i class="bi bi-x-circle-fill text-danger"></i>
                             {% endif %}
                         </td>
-
+                        <td>
+                            {% if item.docente and item.docente.usuario.activo %}
+                            {{ item.docente.usuario.nombre }} {{ item.docente.usuario.apellido }}
+                            {% else %}
+                            <span class="text-muted fst-italic">No asignado</span>
+                            {% endif %}
+                        </td>
+                        
                         <td class="text-center">
                             <a data-bs-toggle="modal" data-bs-target="#modalVistaCurso{{ item.id }}"
                                 class="btn btn-primary btn-sm"><i class=" bi bi-eye"></i></a>
@@ -102,7 +110,7 @@
 {% endfor %}
 
 
-<div class="modal fade" id="modalNuevoCurso" tabindex="-1" aria-labelledby="modalNuevoCursoLabel">
+<div class="modal fade  modal-auto-show" id="modalNuevoCurso" tabindex="-1" aria-labelledby="modalNuevoCursoLabel">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header justify-content-between ">
