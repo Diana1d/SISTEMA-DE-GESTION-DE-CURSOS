@@ -8,7 +8,7 @@ class Inscripcion(db.Model):
     semestre_id = db.Column(db.Integer, db.ForeignKey('semestres.id'), nullable=False)
     paralelo_id = db.Column(db.Integer, db.ForeignKey('paralelos.id'), nullable=False)
     turno_id = db.Column(db.Integer, db.ForeignKey('turnos.id'), nullable=False)
-    activo = db.Column(db.Boolean, default=True,nullable=False)
+    #activo = db.Column(db.Boolean, default=True,nullable=False)
    
     curso = db.relationship('Curso', back_populates='inscripciones')
     estudiante = db.relationship('Estudiante', back_populates='inscripciones')
@@ -37,7 +37,7 @@ class Inscripcion(db.Model):
         return Inscripcion.query.get(id)
     
     def update(self, curso_id=None, estudiante_id=None, semestre_id=None, paralelo_id=None, turno_id=None,activo=None):
-        if curso_id and estudiante_idand semestre_id and paralelo_id and turno_id :
+        if curso_id and estudiante_id and semestre_id and paralelo_id and turno_id :
             self.curso_id =curso_id
             self.estudiante_id = estudiante_id
             self.semestre_id =semestre_id

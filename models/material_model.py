@@ -1,6 +1,6 @@
 from database import db
 from datetime import datetime
-#from flask_login import current_app  # Importar current_user y login_required
+from flask import current_app  # Esto es correcto
 import os
 
 class Material(db.Model):
