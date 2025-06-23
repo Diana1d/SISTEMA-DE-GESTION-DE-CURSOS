@@ -1,0 +1,64 @@
+<form method="post" action="{{ url_for('inscripcion.edit',id=item.id) }}">
+    <div class="mb-3">
+        <label for="estudiante_id">Estudiante</label>
+        <select name="estudiante_id" class="form-select" required>
+            <option value="">-- Selecciona --</option>
+            {% for est in estudiantes %}
+            <option value="{{ est.id }}" {% if inscripcion.estudiante_id==est.id %}selected{% endif %}>
+                {{ est.usuario.nombre }} {{ est.usuario.apellido }}</option>
+            {% endfor %}
+        </select>
+    </div>
+
+    <div class="mb-3">
+        <label for="curso_id">Curso</label>
+        <select name="curso_id" class="form-select" required>
+            <option value="">-- Selecciona --</option>
+            {% for curso in cursos %}
+            <option value="{{ curso.id }}" {% if inscripcion.curso_id==curso.id %}selected{% endif %}>
+                {{ curso.nombre}}</option>
+            {% endfor %}
+        </select>
+    </div>
+
+    <div class="mb-3">
+        <label for="paralelo_id">Paralelo</label>
+        <select name="paralelo_id" class="form-select" required>
+            <option value="">-- Selecciona --</option>
+            {% for par in paralelos %}
+            <option value="{{ par.id }}" {% if inscripcion.paralelo_id==par.id %}selected{% endif %}>
+                {{ par.paralelo }}
+            </option>
+            {% endfor %}
+        </select>
+    </div>
+
+    <div class="mb-3">
+        <label for="semestre_id">Semestre</label>
+        <select name="semestre_id" class="form-select" required>
+            <option value="">-- Selecciona --</option>
+            {% for sem in semestres %}
+            <option value="{{ sem.id }}" {% if inscripcion.semestre_id==sem.id %}selected{% endif %}>
+                {{ sem.semestre_num}}</option>
+            {% endfor %}
+        </select>
+    </div>
+
+    <div class="mb-3">
+        <label for="turno_id">Turno</label>
+        <select name="turno_id" class="form-select" required>
+            <option value="">-- Selecciona --</option>
+            {% for turno in turnos %}
+            <option value="{{ turno.id }}" {% if inscripcion.turno_id==turno.id %}selected{% endif %}>
+                {{ turno.tipo_turno}}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <div class="form-check mb-3">
+        <input class="form-check-input" type="checkbox" name="activo" {% if inscripcion.activo %} checked {% endif %}>
+        <label class="form-check-label" for="activo">¿Está activo?</label>
+    </div>
+    <div class="text-end">
+        <button type="submit" class="btn btn-success">Guardar</button>
+    </div>
+</form>

@@ -7,9 +7,12 @@ align-items-center min-vh-100">
 
     <div class="row border bg-white shadow box-area p-3 rounded-5 ">
 
-        <div class="col-md-6 p-0 rounded-4 d-flex justify-content-center align-items-center flex-column left-box">
-            <img src="{{ url_for('static', filename='img/img-1.jpg') }}" class="w-100 h-100 object-fit-cover"
+        <div class="col-md-6 p-0 rounded-4 d-flex justify-content-center align-items-center flex-column left-box ">
+            <div class="featured-image mb-3">
+                <img src="{{ url_for('static', filename='img/img-1.jpg') }}" class="img-fluid w-100 h-100 object-fit-cover  position-absolute top-0 start-0" 
                 alt="Imagen">
+            </div>
+            
         </div>
 
         <div class="col-md-6 right-box">

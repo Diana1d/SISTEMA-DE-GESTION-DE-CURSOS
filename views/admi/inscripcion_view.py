@@ -6,8 +6,8 @@ def list(inscripciones,**kwargs):
 def create(**kwargs):
     return render_template('admi/docentes/create.html',**kwargs)
 
-def edit(inscripciones,data):
-    return render_template('admi/docentes/edit.html',inscripciones=inscripciones,**data)
+def edit(inscripciones,**kwargs):
+    return render_template('admi/docentes/edit.html',inscripciones=inscripciones,**kwargs)
 
 def vista(inscripcion):
     return render_template('admi/docentes/vista.html',inscripcion=inscripcion)

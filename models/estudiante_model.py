@@ -50,6 +50,11 @@ class Estudiante(db.Model):
     def delete(self):
         db.session.delete(self)
         db.session.commit()
+    
+    def desactivar_inscripciones(self):
+        for inscripcion in self.inscripciones:
+            inscripcion.activo = False
+        db.session.commit()
 
 # Modificado
     

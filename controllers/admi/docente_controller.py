@@ -11,7 +11,7 @@ docente_bp=Blueprint('docente',__name__ ,url_prefix="/admi/docentes")
 def index():
     docentes = Docente.get_all()
     rol_docente = Rol.query.filter_by(nombre='Docente').first()
-    usuarios = Usuario.query.filter_by(rol_id=rol_docente.id, activo=True).all() if rol_docente else []
+    usuarios = Usuario.query.filter_by(rol_id=rol_docente.id).all() if rol_docente else []
     return docente_view.list(docentes, usuarios)
 
 @docente_bp.route("/vista/<int:id>")
@@ -31,14 +31,19 @@ def create():
         ci = request.form['ci']
         especialidad = request.form['especialidad']
         usuario_id = request.form['usuario_id']
-    
+
+        existe = Docente.query.filter_by(usuario_id=usuario_id).first()
+        if existe:
+            flash("El docente ya está en la lista.", "warning")
+            return redirect(url_for('docente.index', show_modal='true'))
+                            
         docente = Docente(fecha_nac=fecha, genero=genero, telefono=telefono, ci=ci, especialidad=especialidad, usuario_id=usuario_id)
         docente.save()
         return redirect(url_for('docente.index'))
     
     # Este bloque debe estar fuera del if (para cuando es GET)
     rol_docente = Rol.query.filter_by(nombre='Docente').first()
-    usuarios = Usuario.query.filter_by(rol_id=rol_docente.id, activo=True).all() if rol_docente else []
+    usuarios = Usuario.query.filter_by(rol_id=rol_docente.id).all() if rol_docente else []
     return docente_view.create(usuarios)
 
 @docente_bp.route("/edit/<int:id>",methods=['GET','POST'])
@@ -53,13 +58,16 @@ def edit(id):
         ci = request.form['ci']
         especialidad = request.form['especialidad']
         usuario_id = request.form['usuario_id']
+        
+        # Actualiza el estado del usuario relacionado
+        docente.usuario.activo = 'activo' in request.form
         #actualizar
         docente.update(fecha_nac=fecha,genero=genero,telefono=telefono,ci=ci,especialidad=especialidad,usuario_id=usuario_id)
         return redirect(url_for('docente.index'))
     
      # Este bloque debe estar fuera del if (para cuando es GET)
     rol_docente = Rol.query.filter_by(nombre='Docente').first()
-    usuarios = Usuario.query.filter_by(rol_id=rol_docente.id, activo=True).all() if rol_docente else []
+    usuarios = Usuario.query.filter_by(rol_id=rol_docente.id).all() if rol_docente else []
     return docente_view.edit(docente,usuarios)
 
     

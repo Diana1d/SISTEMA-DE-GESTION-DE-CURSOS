@@ -18,24 +18,36 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     // 3. Mostrar modal si hay alertas
-    // Encuentra todos los elementos con clase 'modal-auto-show'
-    const modales = document.querySelectorAll('.modal-auto-show');
+    // Obtiene los parámetros de la URL (por ejemplo: ?show_modal=true)
+    const urlParams = new URLSearchParams(window.location.search);
 
-    modales.forEach(function (modalElement) {
-        // Solo mostrar si tiene atributo data-show="true"
-        if (modalElement.dataset.show === "true") {
+    // Verifica si el parámetro show_modal está presente y es igual a "true"
+    const showModal = urlParams.get("show_modal");
+
+    // Si la condición se cumple, procede a mostrar los modales
+    if (showModal === "true") {
+
+        // Busca todos los elementos con la clase "modal-auto-show"
+        const modales = document.querySelectorAll('.modal-auto-show');
+
+        // Recorre cada modal encontrado y lo muestra
+        modales.forEach(function (modalElement) {
+            // Crea una nueva instancia del modal usando Bootstrap
             const modal = new bootstrap.Modal(modalElement);
-            modal.show();
-        }
-    });
 
+            // Muestra el modal
+            modal.show();
+        });
+    }
     // 4. Inicializar DataTable (usa jQuery)
-    $('#mi-tabla').DataTable({
-        pagingType: 'simple',
-        responsive: true,
-        language: {
-            url: 'https://cdn.datatables.net/plug-ins/2.3.2/i18n/es-ES.json'
-        },
+    $(document).ready(function () {
+        $('#mi-tabla').DataTable({
+            pagingType: 'simple',
+            responsive: true,
+            language: {
+                url: 'https://cdn.datatables.net/plug-ins/2.3.2/i18n/es-ES.json'
+            },
+        });
     });
 
     // 5. Mensaje al quere eliminar
