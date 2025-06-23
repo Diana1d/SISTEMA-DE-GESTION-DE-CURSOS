@@ -1,0 +1,85 @@
+{% extends "estudiante/base.html" %}
+{% block title %}Mis Tareas - Estudiante{% endblock %}
+{% block header %}Mis Tareas{% endblock %}
+
+{% block content %}
+<div class="row mb-3">
+    <div class="col-md-6">
+        <div class="btn-group" role="group">
+            <a href="{{ url_for('estudiante_tarea.index', estado='pendientes') }}" 
+               class="btn {% if estado == 'pendientes' %}btn-primary{% else %}btn-outline-primary{% endif %}">
+                Pendientes
+            </a>
+            <a href="{{ url_for('estudiante_tarea.index', estado='completadas') }}" 
+               class="btn {% if estado == 'completadas' %}btn-primary{% else %}btn-outline-primary{% endif %}">
+                Completadas
+            </a>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <select class="form-select" onchange="window.location.href=this.value">
+            <option value="{{ url_for('estudiante_tarea.index', estado=estado) }}">Todos los cursos</option>
+            {% for curso in cursos %}
+            <option value="{{ url_for('estudiante_tarea.index', estado=estado, curso_id=curso.id) }}"
+                    {% if curso_seleccionado == curso.id|string %}selected{% endif %}>
+                {{ curso.nombre }}
+            </option>
+            {% endfor %}
+        </select>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                {% if tareas %}
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Título</th>
+                                <th>Curso</th>
+                                <th>Fecha Entrega</th>
+                                <th>Estado</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for tarea in tareas %}
+                            <tr>
+                                <td>{{ tarea.titulo }}</td>
+                                <td>{{ tarea.curso.nombre }}</td>
+                                <td>{{ tarea.fecha_entrega.strftime('%d/%m/%Y') }}</td>
+                                <td>
+                                    {% if estado == 'completadas' %}
+                                    <span class="badge bg-success">Entregada</span>
+                                    {% else %}
+                                    <span class="badge bg-warning text-dark">Pendiente</span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    <a href="{{ url_for('estudiante_tarea.view', id=tarea.id) }}" class="btn btn-sm btn-primary">
+                                        <i class="bi bi-eye"></i> Ver
+                                    </a>
+                                    {% if estado == 'pendientes' %}
+                                    <a href="{{ url_for('estudiante_tarea.entregar', id=tarea.id) }}" class="btn btn-sm btn-success">
+                                        <i class="bi bi-upload"></i> Entregar
+                                    </a>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <div class="alert alert-info">
+                    No hay tareas {{ 'completadas' if estado == 'completadas' else 'pendientes' }}.
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

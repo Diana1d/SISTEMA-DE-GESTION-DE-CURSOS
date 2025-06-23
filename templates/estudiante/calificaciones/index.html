@@ -1,0 +1,89 @@
+{% extends "estudiante/base.html" %}
+{% block title %}Mis Calificaciones - Estudiante{% endblock %}
+{% block header %}Mis Calificaciones{% endblock %}
+
+{% block content %}
+<div class="row mb-3">
+    <div class="col-md-6">
+        <select class="form-select" onchange="window.location.href=this.value">
+            <option value="{{ url_for('estudiante_calificacion.index') }}">Todos los cursos</option>
+            {% for curso in cursos %}
+            <option value="{{ url_for('estudiante_calificacion.index', curso_id=curso.id) }}"
+                    {% if curso_seleccionado == curso.id|string %}selected{% endif %}>
+                {{ curso.nombre }}
+            </option>
+            {% endfor %}
+        </select>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                {% if calificaciones %}
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Evaluación</th>
+                                <th>Curso</th>
+                                <th>Tipo</th>
+                                <th>Fecha</th>
+                                <th>Nota</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for calificacion in calificaciones %}
+                            <tr>
+                                <td>{{ calificacion.evaluacion.nombre }}</td>
+                                <td>{{ calificacion.evaluacion.curso.nombre }}</td>
+                                <td>{{ calificacion.evaluacion.tipo }}</td>
+                                <td>{{ calificacion.fecha_registro.strftime('%d/%m/%Y') }}</td>
+                                <td>
+                                    <span class="badge {% if calificacion.nota >= 6 %}bg-success{% else %}bg-danger{% endif %}">
+                                        {{ calificacion.nota }}
+                                    </span>
+                                </td>
+                                <td>
+                                    <a href="{{ url_for('estudiante_calificacion.view', id=calificacion.id) }}" class="btn btn-sm btn-primary">
+                                        <i class="bi bi-eye"></i> Detalles
+                                    </a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div class="mt-4">
+                    <h5>Promedios por Curso</h5>
+                    <div class="row">
+                        {% for curso, promedio in promedios.items() %}
+                        <div class="col-md-4 mb-3">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h6 class="card-title">{{ curso.nombre }}</h6>
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <span>Promedio:</span>
+                                        <span class="badge {% if promedio >= 6 %}bg-success{% else %}bg-danger{% endif %}">
+                                            {{ "%.2f"|format(promedio) }}
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% else %}
+                <div class="alert alert-info">
+                    No hay calificaciones registradas.
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

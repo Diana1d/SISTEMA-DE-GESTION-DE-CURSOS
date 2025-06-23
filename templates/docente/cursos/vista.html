@@ -1,0 +1,103 @@
+<div class="row">
+    <div class="col-md-4">
+        <div class="card mb-4">
+            <div class="card-header bg-primary text-white">
+                <h5>Información del Curso</h5>
+            </div>
+            <div class="card-body">
+                <div class="text-center mb-3">
+                    <img src="/static/img/cursos/{{ curso.imagen|default('default-course.png') }}" 
+                         class="img-fluid rounded" alt="Imagen del curso">
+                </div>
+                <dl class="row">
+                    <dt class="col-sm-5">Código:</dt>
+                    <dd class="col-sm-7">{{ curso.codigo }}</dd>
+                    
+                    <dt class="col-sm-5">Créditos:</dt>
+                    <dd class="col-sm-7">{{ curso.creditos }}</dd>
+                    
+                    <dt class="col-sm-5">Horario:</dt>
+                    <dd class="col-sm-7">{{ curso.horario }}</dd>
+                    
+                    <dt class="col-sm-5">Aula:</dt>
+                    <dd class="col-sm-7">{{ curso.aula }}</dd>
+                </dl>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h5>Acciones Rápidas</h5>
+            </div>
+            <div class="card-body">
+                <div class="d-grid gap-2">
+                    <a href="/docente/cursos/{{ curso.id }}/estudiantes" class="btn btn-outline-primary">
+                        <i class="bi bi-people-fill"></i> Lista de Estudiantes
+                    </a>
+                    <a href="/docente/cursos/{{ curso.id }}/asistencias" class="btn btn-outline-success">
+                        <i class="bi bi-calendar-check"></i> Registrar Asistencia
+                    </a>
+                    <a href="/docente/cursos/{{ curso.id }}/calificaciones" class="btn btn-outline-info">
+                        <i class="bi bi-journal-check"></i> Calificaciones
+                    </a>
+                    <a href="/docente/cursos/{{ curso.id }}/material" class="btn btn-outline-warning">
+                        <i class="bi bi-folder"></i> Material del Curso
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-8">
+        <div class="card mb-4">
+            <div class="card-header bg-primary text-white">
+                <h5>Descripción Completa</h5>
+            </div>
+            <div class="card-body">
+                {{ curso.descripcion|safe }}
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h5>Estadísticas del Curso</h5>
+            </div>
+            <div class="card-body">
+                <div class="row text-center">
+                    <div class="col-md-3 mb-3">
+                        <div class="card bg-light">
+                            <div class="card-body">
+                                <h2 class="text-primary">{{ curso.num_estudiantes }}</h2>
+                                <small>Estudiantes</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <div class="card bg-light">
+                            <div class="card-body">
+                                <h2 class="text-success">85%</h2>
+                                <small>Asistencia</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <div class="card bg-light">
+                            <div class="card-body">
+                                <h2 class="text-info">16.5</h2>
+                                <small>Promedio</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <div class="card bg-light">
+                            <div class="card-body">
+                                <h2 class="text-warning">{{ curso.materiales|length }}</h2>
+                                <small>Materiales</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

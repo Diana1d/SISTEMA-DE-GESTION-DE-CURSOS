@@ -1,0 +1,127 @@
+{% extends "estudiante/base.html" %}
+{% block title %}Actividades Recientes - Estudiante{% endblock %}
+{% block header %}Actividades Recientes{% endblock %}
+
+{% block content %}
+<div class="row">
+    <!-- Últimas tareas -->
+    <div class="col-md-6 mb-4">
+        <div class="card h-100">
+            <div class="card-header">
+                <h5 class="card-title mb-0">Tareas Recientes</h5>
+            </div>
+            <div class="card-body">
+                {% if tareas_recientes %}
+                <ul class="list-group list-group-flush">
+                    {% for tarea in tareas_recientes %}
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <div>
+                            <a href="{{ url_for('estudiante_tarea.view', id=tarea.id) }}" class="text-decoration-none">
+                                {{ tarea.titulo }}
+                            </a>
+                            <br>
+                            <small class="text-muted">{{ tarea.curso.nombre }}</small>
+                        </div>
+                        <span class="badge {% if tarea.fecha_entrega > now %}bg-warning text-dark{% else %}bg-secondary{% endif %}">
+                            {{ tarea.fecha_entrega.strftime('%d/%m') }}
+                        </span>
+                    </li>
+                    {% endfor %}
+                </ul>
+                {% else %}
+                <p class="text-muted">No hay tareas recientes.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Últimos materiales -->
+    <div class="col-md-6 mb-4">
+        <div class="card h-100">
+            <div class="card-header">
+                <h5 class="card-title mb-0">Materiales Recientes</h5>
+            </div>
+            <div class="card-body">
+                {% if materiales_recientes %}
+                <ul class="list-group list-group-flush">
+                    {% for material in materiales_recientes %}
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <div>
+                            <a href="{{ url_for('estudiante_material.view', id=material.id) }}" class="text-decoration-none">
+                                {{ material.titulo }}
+                            </a>
+                            <br>
+                            <small class="text-muted">{{ material.curso.nombre }}</small>
+                        </div>
+                        <span class="badge bg-primary rounded-pill">{{ material.get_file_size() }}</span>
+                    </li>
+                    {% endfor %}
+                </ul>
+                {% else %}
+                <p class="text-muted">No hay materiales recientes.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <!-- Últimas calificaciones -->
+    <div class="col-md-6 mb-4">
+        <div class="card h-100">
+            <div class="card-header">
+                <h5 class="card-title mb-0">Calificaciones Recientes</h5>
+            </div>
+            <div class="card-body">
+                {% if calificaciones_recientes %}
+                <ul class="list-group list-group-flush">
+                    {% for calificacion in calificaciones_recientes %}
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <div>
+                            <strong>{{ calificacion.evaluacion.nombre }}</strong>
+                            <br>
+                            <small class="text-muted">{{ calificacion.evaluacion.curso.nombre }}</small>
+                        </div>
+                        <span class="badge {% if calificacion.nota >= 6 %}bg-success{% else %}bg-danger{% endif %}">
+                            {{ calificacion.nota }}
+                        </span>
+                    </li>
+                    {% endfor %}
+                </ul>
+                {% else %}
+                <p class="text-muted">No hay calificaciones recientes.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Últimas asistencias -->
+    <div class="col-md-6 mb-4">
+        <div class="card h-100">
+            <div class="card-header">
+                <h5 class="card-title mb-0">Asistencias Recientes</h5>
+            </div>
+            <div class="card-body">
+                {% if asistencias_recientes %}
+                <ul class="list-group list-group-flush">
+                    {% for asistencia in asistencias_recientes %}
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <div>
+                            <strong>{{ asistencia.curso.nombre }}</strong>
+                            <br>
+                            <small class="text-muted">{{ asistencia.fecha.strftime('%d/%m/%Y') }}</small>
+                        </div>
+                        <span class="badge {% if asistencia.presente %}bg-success{% else %}bg-danger{% endif %}">
+                            {% if asistencia.presente %}Presente{% else %}Ausente{% endif %}
+                        </span>
+                    </li>
+                    {% endfor %}
+                </ul>
+                {% else %}
+                <p class="text-muted">No hay asistencias recientes.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

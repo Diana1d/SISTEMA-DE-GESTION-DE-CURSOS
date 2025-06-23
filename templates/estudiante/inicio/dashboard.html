@@ -1,0 +1,117 @@
+{% extends "estudiante/base.html" %}
+{% block title %}Inicio - Estudiante{% endblock %}
+{% block header %}Resumen General{% endblock %}
+
+{% block content %}
+<div class="row">
+    <!-- Resumen de cursos -->
+    <div class="col-md-6 mb-4">
+        <div class="card h-100">
+            <div class="card-header">
+                <h5 class="card-title mb-0">Mis Cursos</h5>
+            </div>
+            <div class="card-body">
+                {% if cursos %}
+                <ul class="list-group list-group-flush">
+                    {% for curso in cursos %}
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <a href="{{ url_for('estudiante_curso.view', id=curso.id) }}" class="text-decoration-none">
+                            {{ curso.nombre }} ({{ curso.sigla }})
+                        </a>
+                        <span class="badge bg-primary rounded-pill">{{ curso.carga_horaria }} hrs</span>
+                    </li>
+                    {% endfor %}
+                </ul>
+                {% else %}
+                <p class="text-muted">No estás inscrito en ningún curso actualmente.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Tareas pendientes -->
+    <div class="col-md-6 mb-4">
+        <div class="card h-100">
+            <div class="card-header">
+                <h5 class="card-title mb-0">Tareas Pendientes</h5>
+            </div>
+            <div class="card-body">
+                {% if tareas_pendientes %}
+                <ul class="list-group list-group-flush">
+                    {% for tarea in tareas_pendientes %}
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <a href="{{ url_for('estudiante_tarea.view', id=tarea.id) }}" class="text-decoration-none">
+                            {{ tarea.titulo }} - {{ tarea.curso.nombre }}
+                        </a>
+                        <small class="text-muted">Entrega: {{ tarea.fecha_entrega.strftime('%d/%m/%Y') }}</small>
+                    </li>
+                    {% endfor %}
+                </ul>
+                {% else %}
+                <p class="text-muted">No tienes tareas pendientes.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <!-- Últimas calificaciones -->
+    <div class="col-md-6 mb-4">
+        <div class="card h-100">
+            <div class="card-header">
+                <h5 class="card-title mb-0">Últimas Calificaciones</h5>
+            </div>
+            <div class="card-body">
+                {% if calificaciones %}
+                <ul class="list-group list-group-flush">
+                    {% for calificacion in calificaciones %}
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <div>
+                            <strong>{{ calificacion.evaluacion.nombre }}</strong> - {{ calificacion.evaluacion.curso.nombre }}
+                            <br>
+                            <small class="text-muted">{{ calificacion.fecha_registro.strftime('%d/%m/%Y') }}</small>
+                        </div>
+                        <span class="badge {% if calificacion.nota >= 6 %}bg-success{% else %}bg-danger{% endif %} rounded-pill">
+                            {{ calificacion.nota }}
+                        </span>
+                    </li>
+                    {% endfor %}
+                </ul>
+                {% else %}
+                <p class="text-muted">No hay calificaciones registradas.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Últimas asistencias -->
+    <div class="col-md-6 mb-4">
+        <div class="card h-100">
+            <div class="card-header">
+                <h5 class="card-title mb-0">Últimas Asistencias</h5>
+            </div>
+            <div class="card-body">
+                {% if asistencias %}
+                <ul class="list-group list-group-flush">
+                    {% for asistencia in asistencias %}
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <div>
+                            <strong>{{ asistencia.curso.nombre }}</strong>
+                            <br>
+                            <small class="text-muted">{{ asistencia.fecha.strftime('%d/%m/%Y') }}</small>
+                        </div>
+                        <span class="badge {% if asistencia.presente %}bg-success{% else %}bg-danger{% endif %} rounded-pill">
+                            {% if asistencia.presente %}Presente{% else %}Ausente{% endif %}
+                        </span>
+                    </li>
+                    {% endfor %}
+                </ul>
+                {% else %}
+                <p class="text-muted">No hay registros de asistencia.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

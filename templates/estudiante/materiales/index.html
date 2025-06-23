@@ -1,0 +1,57 @@
+{% extends "estudiante/base.html" %}
+{% block title %}Materiales - Estudiante{% endblock %}
+{% block header %}Materiales de Estudio{% endblock %}
+
+{% block content %}
+<div class="row mb-3">
+    <div class="col-md-6">
+        <select class="form-select" onchange="window.location.href=this.value">
+            <option value="{{ url_for('estudiante_material.index') }}">Todos los cursos</option>
+            {% for curso in cursos %}
+            <option value="{{ url_for('estudiante_material.index', curso_id=curso.id) }}"
+                    {% if curso_seleccionado == curso.id|string %}selected{% endif %}>
+                {{ curso.nombre }}
+            </option>
+            {% endfor %}
+        </select>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12">
+        {% if materiales %}
+        <div class="row">
+            {% for material in materiales %}
+            <div class="col-md-4 mb-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ material.titulo }}</h5>
+                        <h6 class="card-subtitle mb-2 text-muted">{{ material.curso.nombre }}</h6>
+                        <p class="card-text">{{ material.descripcion|truncate(100) }}</p>
+                        
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span class="badge bg-secondary">{{ material.tipo_archivo }}</span>
+                            <span class="text-muted">{{ material.get_file_size() }}</span>
+                        </div>
+                    </div>
+                    <div class="card-footer bg-transparent">
+                        <a href="{{ url_for('estudiante_material.view', id=material.id) }}" class="btn btn-sm btn-primary">
+                            <i class="bi bi-eye"></i> Ver
+                        </a>
+                        <a href="{{ url_for('estudiante_material.descargar', nombre_archivo=material.nombre_archivo) }}" 
+                           class="btn btn-sm btn-success">
+                            <i class="bi bi-download"></i> Descargar
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="alert alert-info">
+            No hay materiales disponibles.
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

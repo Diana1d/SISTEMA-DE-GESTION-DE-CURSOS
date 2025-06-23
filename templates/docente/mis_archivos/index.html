@@ -1,0 +1,86 @@
+{% extends 'docente/base.html' %}
+{% block title %}Mis Archivos{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <h2 class="fw-bold mb-4">Mis Archivos</h2>
+    
+    <!-- Pestañas para Materiales/Tareas -->
+    <ul class="nav nav-tabs mb-4">
+        <li class="nav-item">
+            <a class="nav-link active" href="#materiales" data-bs-toggle="tab">Materiales</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="#tareas" data-bs-toggle="tab">Tareas</a>
+        </li>
+    </ul>
+
+    <!-- Contenido de pestañas -->
+    <div class="tab-content">
+        <!-- Materiales -->
+        <div class="tab-pane fade show active" id="materiales">
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span>Materiales Subidos</span>
+                        <a href="{{ url_for('docente_mis_archivos.subir') }}" class="btn btn-sm btn-light">
+                            <i class="bi bi-upload"></i> Subir Material
+                        </a>
+                    </div>
+                </div>
+                <div class="card-body">
+                    {% if materiales %}
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Nombre</th>
+                                        <th>Tipo</th>
+                                        <th>Curso</th>
+                                        <th>Fecha</th>
+                                        <th>Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for material in materiales %}
+                                        <tr>
+                                            <td>{{ material.titulo }}</td>
+                                            <td>{{ material.tipo_archivo|upper }}</td>
+                                            <td>{{ material.curso.nombre }}</td>
+                                            <td>{{ material.fecha_subida.strftime('%d/%m/%Y') }}</td>
+                                            <td>
+                                                <a href="{{ url_for('docente_mis_archivos.detalles', archivo_id=material.id, tipo='material') }}" 
+                                                   class="btn btn-sm btn-info">
+                                                    <i class="bi bi-eye"></i>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    {% else %}
+                        <p class="text-muted">No hay materiales subidos.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Tareas -->
+        <div class="tab-pane fade" id="tareas">
+            <div class="card shadow-sm">
+                <div class="card-header bg-success text-white">
+                    Tareas Asignadas
+                </div>
+                <div class="card-body">
+                    {% if tareas %}
+                        <!-- Tabla similar a la de materiales -->
+                    {% else %}
+                        <p class="text-muted">No hay tareas asignadas.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

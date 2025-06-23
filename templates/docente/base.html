@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="es">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}Panel Docente{% endblock %}</title>
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
+
+    <!-- css -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/docente.css') }}">
+
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
+
+
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+
+    <link href="https://cdn.datatables.net/v/bs5/dt-2.3.2/datatables.min.css" rel="stylesheet"
+        integrity="sha384-nt2TuLL4RlRQ9x6VTFgp009QD7QLRCYX17dKj9bj51w2jtWUGFMVTveRXfdgrUdx" crossorigin="anonymous">
+</head>
+
+<body>
+    <div class="position-absolute top-0 start-50 translate-middle-x mt-3" style="z-index: 9999;">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        {% for category, msg in messages %}
+        <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+            {{ msg }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
+        </div>
+        {% endfor %}
+        {% endif %}
+        {% endwith %}
+    </div>
+
+    <div class="wrapper">
+        <aside id="sidebar">
+            <div class="d-flex">
+                <button id="toggle-btn" class="toggle-btn" type="button">
+                    <i class="bi bi-grid"></i>
+                </button>
+                <div class="sidebar-logo">
+                    <a href="/docente/">Panel Docente</a>
+                </div>
+            </div>
+
+            <ul class="sidebar-nav">
+                <li class="sidebar-item">
+                    <a href="/docente/inicio" class="sidebar-link">
+                        <i class="bi bi-speedometer2"></i>
+                        <span>Inicio</span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a href="/docente/cursos/" class="sidebar-link">
+                        <i class="bi bi-journal-bookmark"></i>
+                        <span>Mis Cursos</span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a href="/docente/estudiantes/" class="sidebar-link">
+                        <i class="bi bi-people-fill"></i>
+                        <span>Mis Estudiantes</span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a href="/docente/calificaciones/" class="sidebar-link">
+                        <i class="bi bi-clipboard-data"></i>
+                        <span>Calificaciones</span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a href="#" class="sidebar-link collapsed has-dropdown" data-bs-toggle="collapse"
+                        data-bs-target="#material" aria-expanded="false" aria-controls="material">
+                        <i class="bi bi-folder"></i>
+                        <span>Materiales</span>
+                    </a>
+                    <ul id="material" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
+                        <li class="sidebar-item">
+                            <a href="/docente/materiales/" class="sidebar-link">Subir Material</a>
+                        </li>
+                        <li class="sidebar-item">
+                            <a href="/docente/mis_archivos" class="sidebar-link">Mis Archivos</a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="sidebar-item">
+                    <a href="/docente/asistencias/" class="sidebar-link">
+                        <i class="bi bi-calendar-check"></i>
+                        <span>Asistencias</span>
+                    </a>
+                </li>
+            </ul>
+
+            <div class="sidebar-footer">
+                <a href="/docente/logout" class="sidebar-link">
+                    <span>Cerrar Sesión</span>
+                    <i class="bi bi-box-arrow-right"></i>
+                </a>
+            </div>
+        </aside>
+
+        <div class="main">
+            <nav class="navbar navbar-expand px-4 py-3">
+                <div class="navbar-collapse collapse">
+                    <ul class="navbar-nav ms-auto">
+                        <li class="nav-item dropdown">
+                            <a href="#" class="nav-icon pe-md-0" data-bs-toggle="dropdown">
+                                <img src="{{ url_for('static', filename='img/teacher-avatar.png') }}" class="avatar img-fluid rounded-circle"
+                                    alt="docente">
+                                <span class="ms-2 d-none d-md-inline">{{ current_user.nombre }}</span>
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-end rounded">
+                                <a href="/docente/perfil" class="dropdown-item">
+                                    <i class="bi bi-person"></i>
+                                    <span>Mi Perfil</span>
+                                </a>
+                                <a href="/docente/ajustes" class="dropdown-item">
+                                    <i class="bi bi-gear"></i>
+                                    <span>Ajustes</span>
+                                </a>
+                                <div class="dropdown-divider"></div>
+                                <a href="/docente/logout" class="dropdown-item">
+                                    <i class="bi bi-box-arrow-right"></i>
+                                    <span>Cerrar Sesión</span>
+                                </a>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+            
+            <main class="content px-3 py-4">
+                <div class="container-fluid">
+                    <div class="mb-3">
+                        <h3 class="fw-bold fs-4 mb-3">{% block header %}{% endblock %}</h3>
+                        
+                        {% block content %}
+                        {% endblock %}
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Modal para confirmaciones -->
+    <div class="modal fade" id="modalConfirmarEliminar" tabindex="-1" aria-labelledby="modalEliminarLabel">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header justify-content-between">
+                    <h5 class="modal-title" id="modalEliminarLabel">¿Confirmar Eliminación?</h5>
+                    <button type="button" class="btn btn-sm text-white" data-bs-dismiss="modal" aria-label="Cerrar">
+                        <i class="bi bi-x-lg"></i>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    Esta acción no se puede deshacer. ¿Deseas continuar?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <a id="btnEliminar" class="btn btn-danger">Eliminar</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/docente.js') }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q"
+        crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+        integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <script src="https://cdn.datatables.net/v/bs5/dt-2.3.2/datatables.min.js"
+        integrity="sha384-rL0MBj9uZEDNQEfrmF51TAYo90+AinpwWp2+duU1VDW/RG7flzbPjbqEI3hlSRUv"
+        crossorigin="anonymous"></script>
+</body>
+</html>

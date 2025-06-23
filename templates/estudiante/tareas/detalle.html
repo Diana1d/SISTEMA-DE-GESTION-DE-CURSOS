@@ -1,0 +1,92 @@
+{% extends "estudiante/base.html" %}
+{% block title %}{{ tarea.titulo }} - Estudiante{% endblock %}
+{% block header %}{{ tarea.titulo }}{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8">
+        <div class="card mb-4">
+            <div class="card-body">
+                <h5 class="card-title">Detalles de la Tarea</h5>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">
+                        <strong>Curso:</strong> {{ tarea.curso.nombre }}
+                    </li>
+                    <li class="list-group-item">
+                        <strong>Fecha de entrega:</strong> 
+                        <span class="{% if tarea.fecha_entrega < now %}text-danger{% endif %}">
+                            {{ tarea.fecha_entrega.strftime('%d/%m/%Y %H:%M') }}
+                        </span>
+                    </li>
+                    <li class="list-group-item">
+                        <strong>Estado:</strong> 
+                        {% if entrega %}
+                            <span class="badge bg-success">Entregada</span>
+                        {% else %}
+                            <span class="badge bg-warning text-dark">Pendiente</span>
+                        {% endif %}
+                    </li>
+                    {% if entrega %}
+                    <li class="list-group-item">
+                        <strong>Fecha de entrega:</strong> {{ entrega.fecha_entrega.strftime('%d/%m/%Y %H:%M') }}
+                    </li>
+                    {% endif %}
+                </ul>
+                
+                <div class="mt-3">
+                    <h6>Descripción:</h6>
+                    <p>{{ tarea.descripcion or "No hay descripción disponible." }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-body">
+                {% if entrega %}
+                <h5 class="card-title">Tu Entrega</h5>
+                <div class="mb-3">
+                    <p><strong>Archivo:</strong> {{ entrega.archivo_entregado }}</p>
+                    <a href="{{ url_for('estudiante_material.descargar', nombre_archivo=entrega.archivo_entregado) }}" 
+                       class="btn btn-sm btn-primary">
+                        <i class="bi bi-download"></i> Descargar
+                    </a>
+                </div>
+                
+                {% if entrega.calificacion is not none %}
+                <div class="alert {% if entrega.calificacion >= 6 %}alert-success{% else %}alert-danger{% endif %}">
+                    <h6>Calificación: {{ entrega.calificacion }}</h6>
+                    {% if entrega.comentarios_docente %}
+                    <p class="mb-0"><strong>Comentarios:</strong> {{ entrega.comentarios_docente }}</p>
+                    {% endif %}
+                </div>
+                {% else %}
+                <div class="alert alert-info">
+                    <p class="mb-0">Tu entrega aún no ha sido calificada.</p>
+                </div>
+                {% endif %}
+                
+                <a href="{{ url_for('estudiante_tarea.entregar', id=tarea.id) }}" class="btn btn-warning w-100">
+                    <i class="bi bi-arrow-repeat"></i> Reentregar
+                </a>
+                
+                {% else %}
+                <h5 class="card-title">Entregar Tarea</h5>
+                <div class="alert alert-warning">
+                    <p class="mb-0">No has entregado esta tarea aún.</p>
+                </div>
+                
+                <a href="{{ url_for('estudiante_tarea.entregar', id=tarea.id) }}" class="btn btn-primary w-100">
+                    <i class="bi bi-upload"></i> Entregar Ahora
+                </a>
+                {% endif %}
+                
+                <a href="{{ url_for('estudiante_tarea.index') }}" class="btn btn-outline-secondary w-100 mt-2">
+                    <i class="bi bi-arrow-left"></i> Volver
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
