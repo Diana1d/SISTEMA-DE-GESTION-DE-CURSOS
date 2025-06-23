@@ -39,14 +39,6 @@ from controllers.docente import mis_estudiantes_controller
 from controllers.docente import material_controller
 from controllers.docente import mis_archivos_controller
 from database import db
-# --- ADICIONES PARA ESTUDIANTES (COMIENZO) --- #
-from controllers.estudiante import (
-    inicio_controller as estudiante_inicio_controller,
-    asistencia_controller as estudiante_asistencia_controller,
-    cursos_controller as estudiante_cursos_controller,
-    calificaciones_controller as estudiante_calificaciones_controller,
-    tareas_controller as estudiante_tareas_controller
-)
 
 # ESTUDIANTE
 from controllers.estudiante import mi_asistencia_controller
@@ -155,19 +147,6 @@ def load_user(user_id):
 @app.route('/')
 def home():
     return render_template('autentica/index.html')
-
-# --- MODIFICACIÓN EN LA RUTA HOME PARA ESTUDIANTES  --- #
-@app.route('/')
-def home():
-    if current_user.is_authenticated:
-        if current_user.tiene_rol('Administrador'):
-            return redirect(url_for('admin.dashboard'))
-        elif current_user.tiene_rol('Docente'):
-            return redirect(url_for('docente.inicio'))
-        elif current_user.tiene_rol('Estudiante'):  # Redirección añadida para estudiantes
-            return redirect(url_for('estudiante.inicio'))
-    return render_template('autentica/index.html')
-# --- MODIFICACIÓN EN LA RUTA HOME PARA ESTUDIANTES (FIN) --- 
 
 # PUNTO DE ENTRADA
 if __name__ == "__main__":
