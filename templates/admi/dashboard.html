@@ -6,18 +6,18 @@
 <div class="row">
     <div class="col-12 col-md-4 ">
         <div class="card card-1 border-0">
-            <div class="card-body py-4">
+            <div class="card-body py-3">
                 <div class="d-flex justify-content-between align-items-center">
                     <div class="d-flex align-items-center">
                         <i class="bi bi-journal-bookmark-fill display-4 mb-3 me-1"></i>
-                        <h5 class="mb-0 fw-bold">Cursos</h5> 
+                        <h5 class="mb-0 fw-bold">Cursos</h5>
                     </div>
-                    <p class="fs-3 fw-semibold mb-0">{{ total_docentes }}</p> 
+                    <p class="fs-3 fw-semibold mb-0">{{ total_cursos }}</p>
                 </div>
                 <div class="mb-0">
-                    <span class="badge text-success me-2">
-                        +
-                    </span>
+                    <a href="/admi/cursos/?abrir_modal=modalNuevoCurso" class="btn btn-sm">
+                        <i class="bi bi-plus-lg display-8 "></i>
+                    </a>
                     <span class=" fw-bold">
                         Agregar un curso
                     </span>
@@ -27,20 +27,20 @@
     </div>
     <div class="col-12 col-md-4 ">
         <div class="card  card-2 border-0">
-            <div class="card-body py-4">
+            <div class="card-body py-3">
                 <div class="d-flex justify-content-between align-items-center">
                     <div class="d-flex align-items-center">
                         <i class="bi bi-people-fill display-4 mb-3 me-2"></i>
                         <h5 class="mb-0 fw-bold">Estudiantes</h5> <!-- Título -->
                     </div>
-                    <p class="fs-3 fw-semibold mb-0">{{ total_docentes }}</p> <!-- Cantidad -->
+                    <p class="fs-3 fw-semibold mb-0">{{ total_estudiantes }}</p> <!-- Cantidad -->
                 </div>
                 <div class="mb-0">
-                    <span class="badge text-success me-2">
-                        +
-                    </span>
-                    <span class="fw-bold">
-                        Agregar un curso
+                    <a href="/admi/estudiantes/?abrir_modal=modalNuevoEstudiante" class="btn btn-sm">
+                        <i class="bi bi-plus-lg display-8 "></i>
+                    </a>
+                    <span class=" fw-bold">
+                        Agregar un estudiantes
                     </span>
                 </div>
             </div>
@@ -48,25 +48,64 @@
     </div>
     <div class="col-12 col-md-4  ">
         <div class="card card-3 border-0 ">
-            <div class="card-body py-4">
-                <div class="d-flex justify-content-between align-items-center">
+            <div class="card-body py-3 ">
+                <div class="d-flex justify-content-between align-items-center ">
                     <div class="d-flex align-items-center">
                         <i class="bi bi-person-badge-fill display-4 mb-3"></i>
                         <h5 class="mb-0 fw-bold">Docentes</h5> <!-- Título -->
                     </div>
                     <p class="fs-3 fw-semibold mb-0">{{ total_docentes }}</p> <!-- Cantidad -->
                 </div>
-                <span class="badge text-success me-2">
-                    +
-                </span>
-                <span class="fw-bold">
-                    Agregar un curso
-                </span>
+
+                <div class="mb-0 ">
+                    <a href="/admi/docentes/?abrir_modal=modalNuevoDocente" class="btn btn-sm">
+                        <i class="bi bi-plus-lg display-8 "></i>
+                    </a>
+                    <span class=" fw-bold">
+                        Agregar un docente
+                    </span>
+                </div>
             </div>
         </div>
     </div>
 </div>
-</div>
+<div class="row ">
+    <div class="col-12 col-md-7">
+        <h3 class="fw-bold fs-4 my-3">Resumen de Faltantes</h3>
+        <table class="table table-striped">
+            <thead>
+                <tr class="highlight">
+                    <th>Entidad</th>
+                    <th>Faltantes</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Docentes no registrados</td>
+                    <td>{{ docentes_faltantes }}</td>
+                </tr>
+                <tr>
+                    <td>Estudiantes no registrados</td>
+                    <td>{{ estudiantes_faltantes }}</td>
+                </tr>
+                <tr>
+                    <td>Estudiantes no inscritos</td>
+                    <td>{{ estudiantes_faltantes }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
 
+    <!-- Gráfico centrado -->
+    <div class="col-12 col-md-5 d-flex flex-column align-items-center justify-content-center">
+        <div id="grafico-datos" data-labels='{{ labels | tojson | safe }}' data-valores='{{ valores | tojson | safe }}'>
+        </div>
+        <h3 class="fw-bold fs-4 my-3">Gráfico</h3>
+        <div style="width: 260px; height: 260px;">
+            <canvas id="doughnut-chart"></canvas>
+        </div>
+    </div>
+
+</div>
 
 {%endblock%}

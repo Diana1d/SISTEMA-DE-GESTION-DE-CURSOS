@@ -5,10 +5,20 @@
 
 <h3 class="fw-bold fs-4 my-3">Lista de Incripciones
 </h3>
-<div class="mb-3">
+<div class="d-flex justify-content-between align-items-center mb-3" style="gap: 10px;">
     <a data-bs-toggle="modal" data-bs-target="#modalNuevoInscripcion" class="btn btn-primary">
         + Nuevo Inscripcion
     </a>
+
+    <!-- Filtro con etiqueta y select -->
+    <div class="d-flex align-items-center" style="gap: 5px;">
+        <label for="filtroEstado" class="form-label mb-0">Filtrar:</label>
+        <select id="filtroEsdtado" class="form-select form-select-sm" style="max-width: 150px;">
+            <option value="">Todos</option>
+            <option value="Activo">Activos</option>
+            <option value="Inactivo">Inactivos</option>
+        </select>
+    </div>
 </div>
 <div class="row">
     <div class="col-12">
@@ -31,11 +41,11 @@
                         <td>
                             {{ item.estudiante.usuario.nombre }} {{ item.estudiante.usuario.apellido }}
                         </td>
-                        <td class="text-center">
+                        <td class="text-center" data-search="{{ 'activo' if item.activo else 'inactivo' }}">
                             {% if item.activo %}
-                            <i class="bi bi-check-circle-fill text-success"></i>
+                            <i class="bi bi-check-circle-fill text-success"></i>                           
                             {% else %}
-                            <i class="bi bi-x-circle-fill text-danger"></i>
+                            <i class="bi bi-x-circle-fill text-danger"></i>                            
                             {% endif %}
                         </td>
                         <td>

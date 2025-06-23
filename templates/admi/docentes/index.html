@@ -5,10 +5,20 @@
 
 <h3 class="fw-bold fs-4 my-3">Lista de Docentes
 </h3>
-<div class="mb-3">
+<div class="d-flex justify-content-between align-items-center mb-3" style="gap: 10px;">
     <a data-bs-toggle="modal" data-bs-target="#modalNuevoDocente" class="btn btn-primary">
         + Nuevo Docente
     </a>
+
+    <!-- Filtro con etiqueta y select -->
+    <div class="d-flex align-items-center" style="gap: 5px;">
+        <label for="filtroEstado" class="form-label mb-0">Filtrar:</label>
+        <select id="filtroEstado" class="form-select form-select-sm" style="max-width: 150px;">
+            <option value="">Todos</option>
+            <option value="activo">Activos</option>
+            <option value="inactivo">Inactivos</option>
+        </select>
+    </div>
 </div>
 <div class="row">
     <div class="col-12">
@@ -29,7 +39,7 @@
                     <tr>
                         <td>{{item.id}}</td>
                         <td>{{item.usuario.nombre}} {{ item.usuario.apellido }}</td>
-                        <td class="text-center">
+                        <td class="text-center" data-search="{{ 'activo' if item.activo else 'inactivo' }}">
                             {% if item.usuario.activo %}
                             <i class="bi bi-check-circle-fill text-success"></i>
                             {% else %}

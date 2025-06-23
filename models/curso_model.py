@@ -53,7 +53,10 @@ class Curso(db.Model):
         db.session.delete(self)
         db.session.commit()
         
-    
+    @staticmethod
+    def contar_activos():
+        return Curso.query.filter_by(activo=True).count()
+
 
     
     

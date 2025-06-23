@@ -1,4 +1,5 @@
 from database import db
+from models.usuario_model import Usuario
 
 class Estudiante(db.Model):
     __tablename__ = 'estudiantes'
@@ -55,6 +56,28 @@ class Estudiante(db.Model):
         for inscripcion in self.inscripciones:
             inscripcion.activo = False
         db.session.commit()
+
+    
+    @staticmethod
+    def contar_activos():
+        from models.usuario_model import Usuario
+        return Estudiante.query.join(Estudiante.usuario).filter(Usuario.activo == True).count()
+    
+     
+    @staticmethod
+    def contar_faltantes_est():
+        registrados = db.session.query(Estudiante.usuario_id).all()
+        ids_registrados = [r[0] for r in registrados]
+
+        query = Usuario.query.filter(
+            Usuario.rol.has(nombre='Estudiante'),
+            Usuario.activo == True
+        )
+        
+        if ids_registrados:
+            query = query.filter(~Usuario.id.in_(ids_registrados))
+
+        return query.count()
 
 # Modificado
     

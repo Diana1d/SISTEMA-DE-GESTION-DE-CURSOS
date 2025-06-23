@@ -66,13 +66,16 @@ def edit(id):
         estado_anterior = estudiante.usuario.activo
         estudiante.usuario.activo = nuevo_estado
         
-        # Si el usuario pasó de activo a inactivo, desactiva sus inscripciones
         if estado_anterior and not nuevo_estado:
-            estudiante.desactivar_inscripciones()  # Método que debes definir en modelo Estudiante
-            flash("El estudiante fue desactivado y sus inscripciones también.", "warning")
-        elif not estado_anterior and nuevo_estado:
-            flash("El estudiante fue activado. Revise sus inscripciones si desea reactivarlas.", "info")
-                
+            # Solo si está inscrito a uno o más cursos
+            if estudiante.inscripciones:
+                estudiante.desactivar_inscripciones()
+                flash("El estudiante fue desactivado y sus inscripciones también.", "warning")
+            elif not estado_anterior and nuevo_estado:
+            # Solo si está inscrito a uno o más cursos
+                if estudiante.inscripciones:
+                    flash("El estudiante fue activado. Revise sus inscripciones si desea reactivarlas.", "info")
+                            
         # Actualiza el estado del usuario relacionado
         estudiante.usuario.activo = 'activo' in request.form
         #actualizar

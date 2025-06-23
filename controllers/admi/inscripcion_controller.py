@@ -6,6 +6,8 @@ from models.paralelo_modal import Paralelo
 from models.turno_modal import Turno
 from models.semestre_modal import Semestre
 from views.admi import inscripcion_view
+from database import db
+from sqlalchemy import func
 
 inscripcion_bp=Blueprint('inscripcion',__name__ ,url_prefix="/admi/inscripciones")
 
@@ -80,3 +82,6 @@ def cargar_datos():
         "turnos": Turno.get_all(),
         "semestres": Semestre.get_all()
     }
+    
+
+

@@ -11,3 +11,4 @@ def edit(inscripciones,**kwargs):
 
 def vista(inscripcion):
     return render_template('admi/docentes/vista.html',inscripcion=inscripcion)
+

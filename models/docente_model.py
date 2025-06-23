@@ -1,5 +1,5 @@
 from database import db
-
+from models.usuario_model import Usuario
 
 class Docente(db.Model):
     __tablename__='docentes'
@@ -57,6 +57,20 @@ class Docente(db.Model):
     def contar_activos():
         from models.usuario_model import Usuario
         return Docente.query.join(Docente.usuario).filter(Usuario.activo == True).count()
+    
+    @staticmethod
+    def contar_faltantes():
+        # Obtener todos los usuario_id que ya están registrados como docentes
+        registrados = db.session.query(Docente.usuario_id).all()
+        ids_registrados = [r[0] for r in registrados]
+
+        # Contar los usuarios con rol 'Docente' que no estén en la tabla Docente
+        return Usuario.query.filter(
+            Usuario.rol.has(nombre='Docente'),
+            Usuario.id.notin_(ids_registrados),
+            Usuario.activo == True
+        ).count()
+
 
 
     

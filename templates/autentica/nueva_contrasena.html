@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% block title %}Recuperar contraseña{% endblock %}
+{% block content %}
+<div class="form-container">
+  <h4 class="mb-4 text-center">Establecer nueva contraseña</h4>
+  <form method="POST">
+    <div class="mb-3">
+      <label for="pass" class="form-label">Contraseña:</label>
+      <input type="password" name="password" class="form-control" placeholder="Nueva contraseña" required>
+    </div>
+    <button type="submit" class="btn btn-primary w-100">Guardar</button>
+  </form>
+</div>
+{%endblock%}
