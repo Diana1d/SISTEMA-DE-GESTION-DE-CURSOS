@@ -1,0 +1,73 @@
+{% extends 'docente/base.html' %}
+{% block title %}Dashboard Docente{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <h2 class="fw-bold mb-4">Panel de Control</h2>
+    
+    <!-- Resumen de Cursos -->
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">Mis Cursos</h5>
+                </div>
+                <div class="card-body">
+                    {% include 'docente/inicio/resumen_cursos.html' %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Actividades Recientes -->
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card shadow-sm">
+                <div class="card-header bg-info text-white">
+                    <h5 class="mb-0">Materiales Recientes</h5>
+                </div>
+                <div class="card-body">
+                    {% if materiales_recientes %}
+                        <ul class="list-group">
+                            {% for material in materiales_recientes %}
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    <span>
+                                        <strong>{{ material.titulo }}</strong> - {{ material.curso.nombre }}
+                                    </span>
+                                    <small class="text-muted">{{ material.fecha_subida.strftime('%d/%m/%Y') }}</small>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    {% else %}
+                        <p class="text-muted">No hay materiales recientes.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card shadow-sm">
+                <div class="card-header bg-warning text-white">
+                    <h5 class="mb-0">Tareas Pendientes</h5>
+                </div>
+                <div class="card-body">
+                    {% if tareas_pendientes %}
+                        <ul class="list-group">
+                            {% for tarea in tareas_pendientes %}
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    <span>
+                                        <strong>{{ tarea.titulo }}</strong> - {{ tarea.curso.nombre }}
+                                    </span>
+                                    <small class="text-muted">Entrega: {{ tarea.fecha_entrega.strftime('%d/%m/%Y') }}</small>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    {% else %}
+                        <p class="text-muted">No hay tareas pendientes.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

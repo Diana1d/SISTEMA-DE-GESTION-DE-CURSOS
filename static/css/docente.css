@@ -1,6 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
 
-/* ESTILOS PARA EL LOGIN */
+/* ESTILOS PARA EL LOGIN (igual que admin) */
 body {
   font-family: 'Poppins', sans-serif;
   background: #ececec;
@@ -12,9 +12,7 @@ body {
 
 .box-area {
   max-width: 930px;
-
 }
-
 
 .left-box img {
   width: 100%;
@@ -35,18 +33,15 @@ body {
   .box-area {
     margin: 0 10px;
   }
-
   .left-box {
     border-radius: 20px 20px 0 0;
-    /* en móvil, bordes superiores redondeados */
   }
-
   .right-box {
     padding: 20px;
   }
 }
 
-/* ESTILOS PARA EL DASHBOARD DEL ADMI */
+/* ESTILOS PARA EL DASHBOARD DEL DOCENTE (idénticos al admin) */
 
 ::after,
 ::before {
@@ -64,11 +59,8 @@ li {
 }
 
 .wrapper {
-  
   display: flex;
 }
-
-
 
 .main {
   display: flex;
@@ -80,7 +72,6 @@ li {
   background-color: #fff;
   min-width: 0;
 }
-
 
 #sidebar {
   width: 70px;
@@ -133,7 +124,6 @@ li {
   0% {
     opacity: 0;
   }
-
   100% {
     opacity: 1;
   }
@@ -217,11 +207,10 @@ a.sidebar-link:hover {
   width: 40px;
 }
 
-.table>thead tr{
+.table>thead tr {
   color: #FFF;
   text-align: left;
 }
-
 
 tr.highlight th {
   background-color: #293b5f !important;
@@ -233,33 +222,87 @@ tr.highlight th {
 }
 
 @media (min-width: 768px) {
-
   .navbar form {
     max-width: 320px;
   }
-
   .navbar-expand .navbar-nav .dropdown-menu {
-    box-sizing: 0 .1rem .2rem rgba(0, 0, 0, .05);
+    box-shadow: 0 .1rem .2rem rgba(0, 0, 0, .05);
   }
-  
- 
-
 }
 
-
-/*estilos del index.html carpeta usuarios*/
-
-td button {
-  margin: 5px;
+/* Estilos para elementos específicos de docente (manteniendo consistencia) */
+.sidebar-link.has-dropdown {
+  position: relative;
 }
 
-td button i {
-  font-size: 20px;
+.sidebar-link.has-dropdown[aria-expanded="true"] {
+  background-color: rgba(255, 255, 255, .1);
 }
 
+.sidebar-dropdown {
+  padding-left: 2rem;
+}
+
+.sidebar-dropdown .sidebar-link {
+  padding: .5rem 1rem;
+  font-size: 0.85rem;
+}
+
+/* Tooltips */
+.tooltip-inner {
+  font-size: 0.8rem;
+  font-family: 'Poppins', sans-serif;
+}
+
+/* Modales */
 .modal-header {
   background-color: #293b5f;
   color: #FFF;
 }
 
-/* ESTILOS PARA EL DASHBOARD DEL DOCENTE */
+.modal-footer {
+  background-color: #f8f9fa;
+}
+
+/* Badges */
+.badge {
+  font-weight: 500;
+  padding: 0.35em 0.65em;
+  font-size: 0.75em;
+}
+
+/* Responsividad específica para docente */
+@media (max-width: 992px) {
+  #sidebar {
+    position: fixed;
+    z-index: 1050;
+  }
+  
+  .main {
+    margin-left: 70px;
+  }
+  
+  #sidebar.expand {
+    width: 260px;
+  }
+}
+
+/* Animaciones adicionales */
+.fade-in {
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Estilos para tablas DataTables */
+.dataTables_wrapper .dataTables_info, 
+.dataTables_wrapper .dataTables_filter input {
+  font-size: 0.85rem;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button {
+  padding: 0.3em 0.8em;
+}

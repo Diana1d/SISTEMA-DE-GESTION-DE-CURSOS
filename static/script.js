@@ -49,7 +49,8 @@ document.addEventListener("DOMContentLoaded", function () {
         const url = trigger.getAttribute('data-url');
         btnEliminar.setAttribute('href', url);
     });
-
-
 });
+
+/* DOCENTE */
+
 

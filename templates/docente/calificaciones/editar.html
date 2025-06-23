@@ -1,0 +1,45 @@
+<div class="card">
+    <div class="card-header bg-primary text-white">
+        <h5>Editar Calificación</h5>
+    </div>
+    <div class="card-body">
+        <form action="/docente/cursos/{{ curso.id }}/calificaciones/guardar/{{ estudiante.id }}/{{ evaluacion.id }}" method="POST">
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <label class="form-label">Estudiante</label>
+                    <input type="text" class="form-control" value="{{ estudiante.nombre_completo }}" readonly>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Evaluación</label>
+                    <input type="text" class="form-control" value="{{ evaluacion.nombre }}" readonly>
+                </div>
+            </div>
+            
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <label class="form-label">Porcentaje</label>
+                    <input type="text" class="form-control" value="{{ evaluacion.porcentaje }}%" readonly>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Nota</label>
+                    <input type="number" class="form-control" name="nota" 
+                           min="0" max="20" step="0.1" value="{{ nota|default('') }}" required>
+                </div>
+            </div>
+            
+            <div class="mb-3">
+                <label class="form-label">Observaciones</label>
+                <textarea class="form-control" name="observaciones" rows="3">{{ observaciones|default('') }}</textarea>
+            </div>
+            
+            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                <a href="/docente/cursos/{{ curso.id }}/calificaciones" class="btn btn-secondary">
+                    Cancelar
+                </a>
+                <button type="submit" class="btn btn-primary">
+                    <i class="bi bi-save"></i> Guardar Calificación
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

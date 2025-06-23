@@ -1,0 +1,28 @@
+{% extends 'docente/base.html' %}
+{% block title %}Subir Archivo{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="card shadow-sm">
+        <div class="card-header bg-primary text-white">
+            <h5 class="mb-0">Subir Nuevo Archivo</h5>
+        </div>
+        <div class="card-body">
+            <form method="POST" enctype="multipart/form-data" 
+                  action="{{ url_for('docente_mis_archivos.subir') }}">
+                <div class="mb-3">
+                    <label class="form-label">Tipo de Archivo</label>
+                    <select name="tipo" class="form-select" required>
+                        <option value="material">Material</option>
+                        <option value="tarea">Tarea</option>
+                    </select>
+                </div>
+                <!-- Resto del formulario -->
+                <button type="submit" class="btn btn-primary mt-3">
+                    <i class="bi bi-upload"></i> Subir
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

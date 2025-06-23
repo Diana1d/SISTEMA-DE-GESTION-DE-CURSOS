@@ -1,0 +1,68 @@
+{% extends 'docente/base.html' %}
+{% block title %}Materiales - {{ curso.nombre }}{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h3 class="fw-bold fs-4">Materiales - {{ curso.nombre }}</h3>
+    <div>
+        <a href="/docente/cursos/{{ curso.id }}" class="btn btn-secondary">
+            <i class="bi bi-arrow-left"></i> Volver
+        </a>
+        <a href="{{ url_for('docente_material.subir', curso_id=curso.id) }}" class="btn btn-primary">
+            <i class="bi bi-upload"></i> Subir Material
+        </a>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        {% if material %}
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Descripción</th>
+                        <th>Tipo</th>
+                        <th>Tamaño</th>
+                        <th>Fecha</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for material in material %}
+                    <tr>
+                        <td>{{ material.titulo }}</td>
+                        <td>{{ material.descripcion|truncate(50) }}</td>
+                        <td>
+                            <span class="badge bg-info text-dark">
+                                {{ material.tipo_archivo|upper }}
+                            </span>
+                        </td>
+                        <td>{{ material.get_file_size() }}</td>
+                        <td>{{ material.fecha_subida.strftime('%d/%m/%Y') }}</td>
+                        <td>
+                            <div class="btn-group btn-group-sm">
+                                <a href="{{ url_for('static', filename='uploads/' + material.nombre_archivo) }}" 
+                                   class="btn btn-primary" download>
+                                    <i class="bi bi-download"></i>
+                                </a>
+                                <form method="POST" action="/docente/materiales/eliminar/{{ material.id }}">
+                                    <button type="submit" class="btn btn-danger" 
+                                            onclick="return confirm('¿Eliminar este material?')">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div class="alert alert-info">No hay materiales subidos para este curso.</div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

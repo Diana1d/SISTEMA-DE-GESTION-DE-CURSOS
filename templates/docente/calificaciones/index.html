@@ -1,0 +1,92 @@
+{% extends 'docente/base.html' %}
+{% block title %}Calificaciones - {{ curso.nombre }}{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h3 class="fw-bold fs-4">Calificaciones - {{ curso.nombre }}</h3>
+    <div>
+        <a href="/docente/cursos/{{ curso.id }}" class="btn btn-secondary">
+            <i class="bi bi-arrow-left"></i> Volver
+        </a>
+        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalNuevaEvaluacion">
+            <i class="bi bi-plus-circle"></i> Nueva Evaluación
+        </button>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover">
+                <thead class="table-primary">
+                    <tr>
+                        <th rowspan="2">Estudiante</th>
+                        {% for evaluacion in evaluaciones %}
+                        <th colspan="2" class="text-center">{{ evaluacion.nombre }}</th>
+                        {% endfor %}
+                        <th rowspan="2" class="text-center">Promedio</th>
+                    </tr>
+                    <tr>
+                        {% for evaluacion in evaluaciones %}
+                        <th class="text-center">Nota</th>
+                        <th class="text-center">%</th>
+                        {% endfor %}
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for estudiante in estudiantes %}
+                    <tr>
+                        <td>
+                            <img src="/static/img/estudiantes/{{ estudiante.foto|default('default-user.png') }}" 
+                                 class="rounded-circle me-2" width="25" height="25">
+                            {{ estudiante.nombre_completo }}
+                        </td>
+                        {% for evaluacion in evaluaciones %}
+                        <td class="text-center">
+                            <a href="/docente/cursos/{{ curso.id }}/calificaciones/editar/{{ estudiante.id }}/{{ evaluacion.id }}">
+                                {{ estudiante.notas[evaluacion.id]|default('-') }}
+                            </a>
+                        </td>
+                        <td class="text-center">{{ evaluacion.porcentaje }}%</td>
+                        {% endfor %}
+                        <td class="text-center fw-bold">{{ estudiante.promedio }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Modal para nueva evaluación -->
+<div class="modal fade" id="modalNuevaEvaluacion" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Nueva Evaluación</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form action="/docente/cursos/{{ curso.id }}/evaluaciones" method="POST">
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label">Nombre de la Evaluación</label>
+                        <input type="text" class="form-control" name="nombre" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Porcentaje</label>
+                        <input type="number" class="form-control" name="porcentaje" min="1" max="100" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Fecha</label>
+                        <input type="date" class="form-control" name="fecha" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Guardar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

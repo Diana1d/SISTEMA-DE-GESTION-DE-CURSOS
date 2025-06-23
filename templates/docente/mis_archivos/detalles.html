@@ -1,0 +1,30 @@
+{% extends 'docente/base.html' %}
+{% block title %}Detalles de Archivo{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="card shadow-sm">
+        <div class="card-header bg-info text-white">
+            <h5 class="mb-0">Detalles del Archivo</h5>
+        </div>
+        <div class="card-body">
+            <dl class="row">
+                <dt class="col-sm-3">Título:</dt>
+                <dd class="col-sm-9">{{ archivo.titulo }}</dd>
+
+                <dt class="col-sm-3">Tipo:</dt>
+                <dd class="col-sm-9">{{ archivo.tipo_archivo|upper }}</dd>
+
+                <dt class="col-sm-3">Curso:</dt>
+                <dd class="col-sm-9">{{ archivo.curso.nombre }}</dd>
+
+                <dt class="col-sm-3">Fecha:</dt>
+                <dd class="col-sm-9">{{ archivo.fecha_subida.strftime('%d/%m/%Y %H:%M') }}</dd>
+            </dl>
+            <a href="{{ url_for('docente_mis_archivos.index') }}" class="btn btn-secondary">
+                <i class="bi bi-arrow-left"></i> Volver
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -12,6 +12,7 @@ class Estudiante(db.Model):
 
     usuario = db.relationship('Usuario', back_populates='estudiantes')
     inscripciones = db.relationship('Inscripcion',back_populates='estudiante')
+    inscripciones = db.relationship('Inscripcion', back_populates='estudiante')
     
     
     #Pasar los parametros 

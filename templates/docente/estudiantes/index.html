@@ -1,0 +1,103 @@
+{% extends 'docente/base.html' %}
+{% block title %}
+  {% if curso %}
+    Estudiantes - {{ curso.nombre }}
+  {% else %}
+    Todos los Estudiantes
+  {% endif %}
+{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h3 class="fw-bold fs-4">
+        {% if curso %}
+            Estudiantes de {{ curso.nombre }}
+        {% else %}
+            Todos los Estudiantes
+        {% endif %}
+    </h3>
+    <div>
+        {% if curso %}
+            <a href="/docente/cursos/{{ curso.id }}" class="btn btn-secondary">
+                <i class="bi bi-arrow-left"></i> Volver
+            </a>
+            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalEnviarMensaje">
+                <i class="bi bi-envelope"></i> Enviar Mensaje
+            </button>
+        {% endif %}
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Estudiante</th>
+                        <th>Código</th>
+                        <th>Correo</th>
+                        <th>Teléfono</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for estudiante in estudiantes %}
+                    <tr>
+                        <td>{{ loop.index }}</td>
+                        <td>
+                            <img src="/static/img/estudiantes/{{ estudiante.foto|default('default-user.png') }}" 
+                                 class="rounded-circle me-2" width="30" height="30">
+                            {{ estudiante.nombre_completo }}
+                        </td>
+                        <td>{{ estudiante.codigo }}</td>
+                        <td>{{ estudiante.correo }}</td>
+                        <td>{{ estudiante.telefono }}</td>
+                        <td>
+                            <div class="btn-group btn-group-sm">
+                                <a href="/docente/estudiantes/{{ estudiante.id }}" class="btn btn-primary">
+                                    <i class="bi bi-eye"></i>
+                                </a>
+                                <a href="/docente/cursos/{{ curso.id }}/calificaciones/{{ estudiante.id }}" 
+                                   class="btn btn-success">
+                                    <i class="bi bi-journal-check"></i>
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Modal para enviar mensaje -->
+<div class="modal fade" id="modalEnviarMensaje" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Enviar Mensaje a Estudiantes</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form action="/docente/cursos/{{ curso.id }}/mensaje" method="POST">
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label">Asunto</label>
+                        <input type="text" class="form-control" name="asunto" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Mensaje</label>
+                        <textarea class="form-control" name="mensaje" rows="5" required></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Enviar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
