@@ -1,0 +1,207 @@
+{% extends 'estudiantes/base.html' %}
+{% block title %}Mis Asistencias{% endblock %}
+
+{% block styles %}
+{{ super() }}
+<style>
+    .asistencia-icon {
+        font-size: 1.2rem;
+    }
+    .stats-card {
+        transition: all 0.3s ease;
+    }
+    .stats-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="fw-bold text-primary">
+            <i class="bi bi-calendar-check"></i> Mis Asistencias
+        </h2>
+        <div>
+            <a href="{{ url_for('estudiante.dashboard') }}" class="btn btn-secondary">
+                <i class="bi bi-arrow-left"></i> Volver
+            </a>
+            <a href="{{ url_for('estudiante.asistencia_reporte') }}" class="btn btn-success ms-2">
+                <i class="bi bi-file-earmark-pdf"></i> Reporte
+            </a>
+        </div>
+    </div>
+
+    <!-- Filtros simplificados para estudiante -->
+    <div class="card mb-4 shadow-sm">
+        <div class="card-body">
+            <form method="get" class="row g-3">
+                <div class="col-md-6">
+                    <label for="curso" class="form-label">Filtrar por curso:</label>
+                    <select name="curso_id" id="curso" class="form-select">
+                        <option value="">Todos mis cursos</option>
+                        {% for curso in cursos_inscritos %}
+                        <option value="{{ curso.id }}" {% if curso.id == curso_filtro %}selected{% endif %}>
+                            {{ curso.nombre }} - {{ curso.paralelo }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label for="mes" class="form-label">Filtrar por mes:</label>
+                    <select name="mes" id="mes" class="form-select">
+                        <option value="">Todos los meses</option>
+                        {% for num, mes in meses.items() %}
+                        <option value="{{ num }}" {% if num == mes_filtro %}selected{% endif %}>{{ mes }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-2 d-flex align-items-end">
+                    <button type="submit" class="btn btn-primary w-100">
+                        <i class="bi bi-funnel"></i> Filtrar
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Estadísticas personales -->
+    <div class="row mb-4">
+        <div class="col-md-4">
+            <div class="card stats-card border-primary h-100">
+                <div class="card-body text-center">
+                    <h5 class="card-title text-primary">
+                        <i class="bi bi-check-circle"></i> Asistencia Global
+                    </h5>
+                    <div class="display-3 fw-bold {% if porcentaje_asistencia >= 80 %}text-success{% else %}text-warning{% endif %}">
+                        {{ porcentaje_asistencia }}%
+                    </div>
+                    <div class="progress mt-3" style="height: 8px;">
+                        <div class="progress-bar {% if porcentaje_asistencia >= 80 %}bg-success{% else %}bg-warning{% endif %}" 
+                             role="progressbar" style="width: {{ porcentaje_asistencia }}%"></div>
+                    </div>
+                    <small class="text-muted">{{ total_presentes }} de {{ total_clases }} clases</small>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-8">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h5 class="card-title mb-3">
+                        <i class="bi bi-pie-chart"></i> Distribución de mis asistencias
+                    </h5>
+                    <canvas id="asistenciaChart" height="200"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tabla de asistencias personal -->
+    <div class="card shadow">
+        <div class="card-header bg-primary text-white">
+            <h5 class="mb-0">
+                <i class="bi bi-list-check"></i> Registro detallado
+            </h5>
+        </div>
+        <div class="card-body">
+            {% if asistencias %}
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Fecha</th>
+                            <th>Curso</th>
+                            <th class="text-center">Estado</th>
+                            <th>Docente</th>
+                            <th>Observaciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for asistencia in asistencias %}
+                        <tr>
+                            <td>{{ asistencia.fecha|date('%d/%m/%Y') }}</td>
+                            <td>
+                                <strong>{{ asistencia.inscripcion.curso.nombre }}</strong>
+                                <br>
+                                <small class="text-muted">Paralelo: {{ asistencia.inscripcion.paralelo.paralelo }}</small>
+                            </td>
+                            <td class="text-center">
+                                {% if asistencia.presente %}
+                                <i class="bi bi-check-circle-fill text-success asistencia-icon" title="Presente"></i>
+                                {% else %}
+                                <i class="bi bi-x-circle-fill text-danger asistencia-icon" title="Ausente"></i>
+                                {% endif %}
+                            </td>
+                            <td>{{ asistencia.inscripcion.paralelo.docente.usuario.nombre_completo() }}</td>
+                            <td>
+                                {% if asistencia.observaciones %}
+                                <span class="badge bg-info text-dark">{{ asistencia.observaciones }}</span>
+                                {% else %}
+                                -
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+            <div class="alert alert-info mb-0">
+                <i class="bi bi-info-circle"></i> No se encontraron registros de asistencia con los filtros seleccionados.
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const ctx = document.getElementById('asistenciaChart').getContext('2d');
+    
+    new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+            labels: ['Presente', 'Ausente'],
+            datasets: [{
+                data: [{{ total_presentes }}, {{ total_ausentes }}],
+                backgroundColor: [
+                    'rgba(40, 167, 69, 0.8)',
+                    'rgba(220, 53, 69, 0.8)'
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    position: 'bottom',
+                    labels: {
+                        boxWidth: 12,
+                        padding: 20
+                    }
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                            const value = context.raw;
+                            const percentage = Math.round((value / total) * 100);
+                            return `${context.label}: ${value} (${percentage}%)`;
+                        }
+                    }
+                }
+            },
+            cutout: '70%'
+        }
+    });
+});
+</script>
+{% endblock %}

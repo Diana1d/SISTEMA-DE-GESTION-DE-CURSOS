@@ -1,7 +1,83 @@
-{% extends 'base.html' %}
+{% extends 'estudiantes/base.html' %}
 
-{% block title %} Estudiante{% endblock %}
+{% block title %}Panel del Estudiante{% endblock %}
+
 {% block content %}
-<h1>inngresate como estudiante</h1>
-
+<div class="container mt-4">
+    <h2 class="mb-4">Bienvenido, {{ current_user.nombre }} {{ current_user.apellido }}</h2>
+    
+    <div class="row mb-4">
+        <div class="col-md-4 mb-3">
+            <div class="card bg-primary text-white">
+                <div class="card-body text-center">
+                    <i class="bi bi-calendar-check fs-1"></i>
+                    <h5 class="card-title mt-2">Mis Asistencias</h5>
+                    <a href="{{ url_for('estudiante_asistencia.index') }}" class="btn btn-light btn-sm">
+                        Ver detalles
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-3">
+            <div class="card bg-success text-white">
+                <div class="card-body text-center">
+                    <i class="bi bi-journal-bookmark fs-1"></i>
+                    <h5 class="card-title mt-2">Mis Cursos</h5>
+                    <a href="#" class="btn btn-light btn-sm">
+                        Ver cursos
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-3">
+            <div class="card bg-info text-white">
+                <div class="card-body text-center">
+                    <i class="bi bi-clipboard-data fs-1"></i>
+                    <h5 class="card-title mt-2">Mis Calificaciones</h5>
+                    <a href="#" class="btn btn-light btn-sm">
+                        Ver notas
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="card">
+        <div class="card-header bg-secondary text-white">
+            <h5 class="mb-0">Últimas Asistencias</h5>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Fecha</th>
+                            <th>Curso</th>
+                            <th>Estado</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for asistencia in ultimas_asistencias %}
+                        <tr>
+                            <td>{{ asistencia.fecha.strftime('%d/%m/%Y') }}</td>
+                            <td>{{ asistencia.inscripcion.curso.nombre }}</td>
+                            <td>
+                                {% if asistencia.presente %}
+                                <span class="badge bg-success">Presente</span>
+                                {% else %}
+                                <span class="badge bg-danger">Ausente</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% else %}
+                        <tr>
+                            <td colspan="3" class="text-center">No hay registros recientes</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}
