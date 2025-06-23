@@ -50,6 +50,10 @@ class Asistencia(db.Model):
                               fecha=fecha, presente=presente)
         asistencia.save()
         return asistencia
+    
+    @staticmethod
+    def get_by_estudiante_and_curso(estudiante_id, curso_id):
+        return Asistencia.query.filter_by(estudiante_id=estudiante_id, curso_id=curso_id).all()
 
     def update(self, presente=None):
         if presente is not None:

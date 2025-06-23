@@ -1,0 +1,46 @@
+{% extends "estudiante/base.html" %}
+{% block title %}Entregar Tarea - Estudiante{% endblock %}
+{% block header %}Entregar Tarea: {{ tarea.titulo }}{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8">
+        <div class="card mb-4">
+            <div class="card-body">
+                <h5 class="card-title">Instrucciones</h5>
+                <p>{{ tarea.descripcion or "No hay instrucciones específicas para esta tarea." }}</p>
+                
+                <div class="alert alert-info">
+                    <h6>Fecha límite: {{ tarea.fecha_entrega.strftime('%d/%m/%Y %H:%M') }}</h6>
+                    {% if tarea.fecha_entrega < now %}
+                    <p class="text-danger mb-0">¡Esta tarea ya ha pasado su fecha límite!</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Subir Archivo</h5>
+                <form method="POST" enctype="multipart/form-data" action="{{ url_for('estudiante_tarea.entregar', id=tarea.id) }}">
+                    <div class="mb-3">
+                        <label for="archivo" class="form-label">Selecciona el archivo a entregar:</label>
+                        <input class="form-control" type="file" id="archivo" name="archivo" required>
+                    </div>
+                    
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="bi bi-upload"></i> Entregar Tarea
+                        </button>
+                        <a href="{{ url_for('estudiante_tarea.view', id=tarea.id) }}" class="btn btn-outline-secondary">
+                            <i class="bi bi-arrow-left"></i> Cancelar
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

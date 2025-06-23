@@ -1,0 +1,68 @@
+{% extends "estudiante/base.html" %}
+{% block title %}Detalle de Calificación - Estudiante{% endblock %}
+{% block header %}Detalle de Calificación{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Información de la Evaluación</h5>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <span>Curso:</span>
+                        <span>{{ calificacion.evaluacion.curso.nombre }}</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <span>Evaluación:</span>
+                        <span>{{ calificacion.evaluacion.nombre }}</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <span>Tipo:</span>
+                        <span>{{ calificacion.evaluacion.tipo }}</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <span>Peso:</span>
+                        <span>{{ (calificacion.evaluacion.peso * 100)|int }}%</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <span>Fecha:</span>
+                        <span>{{ calificacion.evaluacion.fecha.strftime('%d/%m/%Y') }}</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Tu Calificación</h5>
+                <div class="text-center mb-3">
+                    <span class="display-4 {% if calificacion.nota >= 6 %}text-success{% else %}text-danger{% endif %}">
+                        {{ calificacion.nota }}
+                    </span>
+                    <p class="text-muted">de 10 puntos</p>
+                </div>
+                
+                {% if calificacion.comentarios %}
+                <div class="alert alert-info">
+                    <h6>Comentarios del docente:</h6>
+                    <p>{{ calificacion.comentarios }}</p>
+                </div>
+                {% endif %}
+                
+                <p class="card-text"><small class="text-muted">Registrada el: {{ calificacion.fecha_registro.strftime('%d/%m/%Y') }}</small></p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-3">
+    <div class="col-12">
+        <a href="{{ url_for('estudiante_calificacion.index') }}" class="btn btn-secondary">
+            <i class="bi bi-arrow-left"></i> Volver
+        </a>
+    </div>
+</div>
+{% endblock %}

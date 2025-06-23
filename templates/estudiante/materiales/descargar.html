@@ -1,0 +1,61 @@
+{% extends "estudiante/base.html" %}
+{% block title %}{{ material.titulo }} - Estudiante{% endblock %}
+{% block header %}{{ material.titulo }}{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8">
+        <div class="card mb-4">
+            <div class="card-body">
+                <h5 class="card-title">Detalles del Material</h5>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">
+                        <strong>Curso:</strong> {{ material.curso.nombre }}
+                    </li>
+                    <li class="list-group-item">
+                        <strong>Subido por:</strong> {{ material.docente.nombre }} {{ material.docente.apellido }}
+                    </li>
+                    <li class="list-group-item">
+                        <strong>Fecha de subida:</strong> {{ material.fecha_subida.strftime('%d/%m/%Y') }}
+                    </li>
+                    <li class="list-group-item">
+                        <strong>Tipo de archivo:</strong> {{ material.tipo_archivo }}
+                    </li>
+                    <li class="list-group-item">
+                        <strong>Tamaño:</strong> {{ material.get_file_size() }}
+                    </li>
+                </ul>
+                
+                {% if material.descripcion %}
+                <div class="mt-3">
+                    <h6>Descripción:</h6>
+                    <p>{{ material.descripcion }}</p>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-body text-center">
+                <div class="mb-4">
+                    <i class="bi bi-file-earmark-text display-1 text-primary"></i>
+                </div>
+                
+                <h5>{{ material.nombre_archivo }}</h5>
+                <p class="text-muted">{{ material.get_file_size() }}</p>
+                
+                <a href="{{ url_for('estudiante_material.descargar', nombre_archivo=material.nombre_archivo) }}" 
+                   class="btn btn-primary btn-lg w-100 mb-2">
+                    <i class="bi bi-download"></i> Descargar
+                </a>
+                
+                <a href="{{ url_for('estudiante_material.index') }}" class="btn btn-outline-secondary w-100">
+                    <i class="bi bi-arrow-left"></i> Volver
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

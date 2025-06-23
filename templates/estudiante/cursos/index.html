@@ -1,0 +1,54 @@
+{% extends "estudiante/base.html" %}
+{% block title %}Mis Cursos - Estudiante{% endblock %}
+{% block header %}Mis Cursos{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                {% if cursos %}
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Nombre</th>
+                                <th>Sigla</th>
+                                <th>Carga Horaria</th>
+                                <th>Docente</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for curso in cursos %}
+                            <tr>
+                                <td>{{ curso.nombre }}</td>
+                                <td>{{ curso.sigla }}</td>
+                                <td>{{ curso.carga_horaria }} horas</td>
+                                <td>
+                                    {% if curso.docente %}
+                                        {{ curso.docente.usuario.nombre }} {{ curso.docente.usuario.apellido }}
+                                    {% else %}
+                                        Sin asignar
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    <a href="{{ url_for('estudiante_curso.view', id=curso.id) }}" class="btn btn-sm btn-primary">
+                                        <i class="bi bi-eye"></i> Ver
+                                    </a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <div class="alert alert-info">
+                    No estás inscrito en ningún curso actualmente.
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

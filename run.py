@@ -3,6 +3,8 @@ from flask_login import current_user, login_required  # Importar current_user y 
 from datetime import datetime
 import os
 from flask_login import LoginManager
+
+# ADMIN
 from models.rol_model import Rol
 from models.turno_modal import Turno
 from models.paralelo_modal import Paralelo
@@ -16,7 +18,7 @@ from controllers.admi import inscripcion_controller
 from controllers.admi import semestre_controller
 from database import db
 
-
+# DOCENTE
 from models.asignacion_model import Asignacion
 from models.asistencia_model import Asistencia
 from models.calificacion_model import Calificacion
@@ -37,6 +39,14 @@ from controllers.docente import mis_estudiantes_controller
 from controllers.docente import material_controller
 from controllers.docente import mis_archivos_controller
 from database import db
+
+# ESTUDIANTE
+from controllers.estudiante import mi_asistencia_controller
+from controllers.estudiante import mi_calificacion_controller
+from controllers.estudiante import mi_curso_controller
+from controllers.estudiante import mi_inicio_controller
+from controllers.estudiante import mi_material_controller
+from controllers.estudiante import mi_tarea_controller
 
 app = Flask(__name__)
 
@@ -120,6 +130,14 @@ app.register_blueprint(mis_estudiantes_controller.estudiante_bp)
 app.register_blueprint(material_controller.material_bp) 
 app.register_blueprint(inicio_controller.inicio_bp)
 app.register_blueprint(mis_archivos_controller.mis_archivos_bp)
+
+# BLUEPRINTS ESTUDIANTE
+app.register_blueprint(mi_asistencia_controller.asistencia_bp)
+app.register_blueprint(mi_calificacion_controller.calificacion_bp)
+app.register_blueprint(mi_curso_controller.curso_bp)
+app.register_blueprint(mi_inicio_controller.inicio_bp)
+app.register_blueprint(mi_material_controller.material_bp)
+app.register_blueprint(mi_tarea_controller.tarea_bp)
 
 
 @login_manager.user_loader

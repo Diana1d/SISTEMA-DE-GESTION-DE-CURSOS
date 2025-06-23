@@ -38,6 +38,13 @@ class EntregaTarea(db.Model):
     @staticmethod
     def get_by_estudiante(estudiante_id):
         return EntregaTarea.query.filter_by(estudiante_id=estudiante_id).all()
+    
+    @staticmethod
+    def get_by_estudiante_and_tarea(estudiante_id, tarea_id):
+        return EntregaTarea.query.filter_by(
+            estudiante_id=estudiante_id,
+            tarea_id=tarea_id
+        ).first()
 
     def update(self, calificacion=None, comentarios_docente=None):
         if calificacion is not None:

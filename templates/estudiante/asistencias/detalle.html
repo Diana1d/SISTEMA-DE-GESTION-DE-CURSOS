@@ -1,0 +1,62 @@
+{% extends "estudiante/base.html" %}
+{% block title %}Detalle de Asistencia - Estudiante{% endblock %}
+{% block header %}Detalle de Asistencia{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Información de Asistencia</h5>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <span>Curso:</span>
+                        <span>{{ asistencia.curso.nombre }}</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <span>Fecha:</span>
+                        <span>{{ asistencia.fecha.strftime('%d/%m/%Y') }}</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <span>Estado:</span>
+                        <span class="badge {% if asistencia.presente %}bg-success{% else %}bg-danger{% endif %}">
+                            {% if asistencia.presente %}Presente{% else %}Ausente{% endif %}
+                        </span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <span>Hora de Registro:</span>
+                        <span>{{ asistencia.hora_registro.strftime('%H:%M') }}</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Estadísticas del Curso</h5>
+                <div class="progress mb-3">
+                         aria-valuenow="{{ porcentaje_asistencia }}" 
+                         aria-valuemin="0" 
+                         aria-valuemax="100">
+                        {{ porcentaje_asistencia }}%
+                    </div>
+                </div>
+                <p class="card-text">Porcentaje de asistencia en este curso.</p>
+                <p class="card-text"><small class="text-muted">Total de clases: {{ total_clases }}</small></p>
+                <p class="card-text"><small class="text-muted">Asistencias: {{ asistencias_curso }}</small></p>
+                <p class="card-text"><small class="text-muted">Ausencias: {{ ausencias_curso }}</small></p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-3">
+    <div class="col-12">
+        <a href="{{ url_for('estudiante_asistencia.index') }}" class="btn btn-secondary">
+            <i class="bi bi-arrow-left"></i> Volver
+        </a>
+    </div>
+</div>
+{% endblock %}

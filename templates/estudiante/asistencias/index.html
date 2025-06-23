@@ -1,0 +1,66 @@
+{% extends "estudiante/base.html" %}
+{% block title %}Mis Asistencias - Estudiante{% endblock %}
+{% block header %}Mis Asistencias{% endblock %}
+
+{% block content %}
+<div class="row mb-3">
+    <div class="col-md-6">
+        <select class="form-select" onchange="window.location.href=this.value">
+            <option value="{{ url_for('estudiante_asistencia.index') }}">Todos los cursos</option>
+            {% for curso in cursos %}
+            <option value="{{ url_for('estudiante_asistencia.index', curso_id=curso.id) }}"
+                    {% if curso_seleccionado == curso.id|string %}selected{% endif %}>
+                {{ curso.nombre }}
+            </option>
+            {% endfor %}
+        </select>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                {% if asistencias %}
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Fecha</th>
+                                <th>Curso</th>
+                                <th>Estado</th>
+                                <th>Hora Registro</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for asistencia in asistencias %}
+                            <tr>
+                                <td>{{ asistencia.fecha.strftime('%d/%m/%Y') }}</td>
+                                <td>{{ asistencia.curso.nombre }}</td>
+                                <td>
+                                    <span class="badge {% if asistencia.presente %}bg-success{% else %}bg-danger{% endif %}">
+                                        {% if asistencia.presente %}Presente{% else %}Ausente{% endif %}
+                                    </span>
+                                </td>
+                                <td>{{ asistencia.hora_registro.strftime('%H:%M') }}</td>
+                                <td>
+                                    <a href="{{ url_for('estudiante_asistencia.view', id=asistencia.id) }}" class="btn btn-sm btn-primary">
+                                        <i class="bi bi-eye"></i> Detalles
+                                    </a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <div class="alert alert-info">
+                    No hay registros de asistencia.
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

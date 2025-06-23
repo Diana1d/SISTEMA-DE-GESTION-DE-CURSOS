@@ -1,4 +1,5 @@
 from database import db
+from models.evaluacion_model import Evaluacion
 
 class Calificacion(db.Model):
     __tablename__ = 'calificaciones'
@@ -39,6 +40,13 @@ class Calificacion(db.Model):
     @staticmethod
     def get_by_evaluacion(evaluacion_id):
         return Calificacion.query.filter_by(evaluacion_id=evaluacion_id).all()
+    
+    @staticmethod
+    def get_by_estudiante_and_curso(estudiante_id, curso_id):
+        return Calificacion.query.join(Evaluacion).filter(
+            Calificacion.estudiante_id == estudiante_id,
+            Evaluacion.curso_id == curso_id
+        ).all()
 
     def update(self, nota=None, comentarios=None):
         if nota is not None:

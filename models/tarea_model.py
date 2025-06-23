@@ -40,6 +40,10 @@ class Tarea(db.Model):
     @staticmethod
     def get_by_docente(docente_id):
         return Tarea.query.filter_by(docente_id=docente_id).order_by(Tarea.fecha_entrega.asc()).all()
+    
+    @staticmethod
+    def get_by_curso(curso_id):
+        return Tarea.query.filter_by(curso_id=curso_id).all()
 
     def update(self, titulo=None, descripcion=None, fecha_entrega=None, estado=None):
         if titulo:

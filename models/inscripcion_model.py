@@ -1,4 +1,6 @@
 from database import db
+from models.estudiante_model import Estudiante
+from models.curso_model import Curso
 
 class Inscripcion(db.Model):
     __tablename__ = 'inscripciones'
@@ -67,3 +69,10 @@ class Inscripcion(db.Model):
     @staticmethod
     def get_cursos_by_estudiante(estudiante_id):
         return Curso.query.join(Inscripcion).filter(Inscripcion.estudiante_id == estudiante_id).all()
+    
+    @staticmethod
+    def get_curso_by_estudiante(estudiante_id, curso_id):
+        return Curso.query.join(Inscripcion).filter(
+            Inscripcion.estudiante_id == estudiante_id,
+            Inscripcion.curso_id == curso_id
+        ).first()
