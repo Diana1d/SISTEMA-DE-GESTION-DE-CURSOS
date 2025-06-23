@@ -51,6 +51,15 @@ body {
   }
 }
 
+.form-container {
+  max-width: 400px;
+  margin: 80px auto;
+  padding: 30px;
+  background-color: white;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  border-radius: 10px;
+}
+
 /* ESTILOS PARA EL DASHBOARD DEL ADMI */
 
 ::after,

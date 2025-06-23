@@ -5,21 +5,34 @@ from models.turno_modal import Turno
 from models.paralelo_modal import Paralelo
 from models.usuario_model import Usuario
 
+
 from controllers import usuario_controller
 from controllers.admi import docente_controller
 from controllers.admi import estudiante_controller
 from controllers.admi import curso_controller
 from controllers.admi import inscripcion_controller
 from controllers.admi import semestre_controller
-from database import db
+from controllers import reset_password_controller
+from database import db,mail
 
 app = Flask(__name__)
 
-app.config['SECRET_KEY'] = 'claveSecreta'
+
+
+app.config['MAIL_SERVER'] = 'smtp.gmail.com'
+app.config['MAIL_PORT'] = 587
+app.config['MAIL_USE_TLS'] = True
+app.config['MAIL_USERNAME'] = 'admi.prueba432@gmail.com'
+app.config['MAIL_PASSWORD'] = 'tcyiblqjkiayzzgs'
+app.config['MAIL_DEFAULT_SENDER'] = 'admi.prueba432@gmail.com'
+
+app.config['SECRET_KEY'] = 'clave_super_segura_generada'
+
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///cursos.db"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
 db.init_app(app)
+mail.init_app(app)
 
 #CONFIGURAR FLASK-LOGIN
 login_manager = LoginManager()
@@ -72,6 +85,7 @@ app.register_blueprint(estudiante_controller.estudiante_bp)
 app.register_blueprint(curso_controller.curso_bp)
 app.register_blueprint(inscripcion_controller.inscripcion_bp)
 app.register_blueprint(semestre_controller.semestre_bp)
+app.register_blueprint(reset_password_controller.recuperar_bp)
 
 
 @login_manager.user_loader

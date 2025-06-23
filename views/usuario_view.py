@@ -19,10 +19,8 @@ def login():
 def index():
     return render_template('autentica/index.html')
 
-def dashboard(usuario,total_cursos,total_docentes,total_estudiantes):
-    return render_template('admi/dashboard.html',usuario=usuario,total_cursos=total_cursos,
-    total_docentes=total_docentes,
-    total_estudiantes=total_estudiantes)
+def dashboard(usuario,**kwargs):
+    return render_template('admi/dashboard.html',usuario=usuario,**kwargs)
 
 
 

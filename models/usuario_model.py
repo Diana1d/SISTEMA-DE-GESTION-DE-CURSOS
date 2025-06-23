@@ -83,3 +83,8 @@ class Usuario(db.Model, UserMixin):
     def get_by_username(username):
         return Usuario.query.filter_by(username=username).first()   
 
+    def set_password(self, clave):
+        self.password = generate_password_hash(clave)
+
+    def check_password(self, clave):
+        return check_password_hash(self.password, clave)

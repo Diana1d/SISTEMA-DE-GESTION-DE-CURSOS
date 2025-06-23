@@ -1,4 +1,3 @@
-
 document.addEventListener("DOMContentLoaded", function () {
     // 1. Hamburguesa menú lateral
     const hamburger = document.querySelector("#toggle-btn");
@@ -39,20 +38,30 @@ document.addEventListener("DOMContentLoaded", function () {
             modal.show();
         });
     }
+
     // 4. Inicializar DataTable (usa jQuery)
-    $(document).ready(function () {
-        $('#mi-tabla').DataTable({
-            pagingType: 'simple',
-            responsive: true,
-            language: {
-                url: 'https://cdn.datatables.net/plug-ins/2.3.2/i18n/es-ES.json'
-            },
-        });
+    tabla = $('#mi-tabla').DataTable({
+        pagingType: 'simple',
+        responsive: true,
+        language: {
+            url: 'https://cdn.datatables.net/plug-ins/2.3.2/i18n/es-ES.json'
+        },
+
     });
 
-    // 5. Mensaje al quere eliminar
+    $('#filtroEstado').on('change', function () {
+        var valor = $(this).val().toLowerCase();
+        if (valor === "") {
+            tabla.column(2).search('').draw();
+        } else {
+            tabla.column(2).search('^' + valor + '$', true, false).draw();
+        }
+    });
 
 
+
+
+    // 6. Mensaje al quere eliminar
     const modalEliminar = document.getElementById('modalConfirmarEliminar');
     const btnEliminar = document.getElementById('btnEliminar');
 
@@ -62,6 +71,46 @@ document.addEventListener("DOMContentLoaded", function () {
         btnEliminar.setAttribute('href', url);
     });
 
+
+
+    // 7. Configurar gráfico 
+    const graficoData = document.getElementById("grafico-datos");
+
+    if (graficoData) {
+        const labels = JSON.parse(graficoData.dataset.labels);
+        const valores = JSON.parse(graficoData.dataset.valores);
+
+        new Chart(document.getElementById("doughnut-chart"), {
+            type: 'doughnut',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: "Inscritos",
+                    backgroundColor: ["#4e73df", "#1cc88a", "#36b9cc"],
+                    data: valores
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'Estudiantes inscritos por curso'
+                    }
+                }
+            }
+        });
+    }
+
+    const params = new URLSearchParams(window.location.search);
+    const modalId = params.get('abrir_modal');
+    if (modalId) {
+        const modalElement = document.getElementById(modalId);
+        if (modalElement) {
+            const modal = new bootstrap.Modal(modalElement);
+            modal.show();
+        }
+    }
 
 });
 

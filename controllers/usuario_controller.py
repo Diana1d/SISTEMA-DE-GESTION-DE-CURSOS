@@ -44,6 +44,11 @@ def create():
         activo = 'activo' in request.form
         rol_id = request.form['rol_id']
         
+        existe = Usuario.query.filter_by(nombre=nombre, apellido=apellido).first()
+        if existe:
+            flash('Ya existe un usuario con ese nombre y apellido.', 'danger')
+            return redirect(url_for('usuario.index',show_modal='true'))
+        
         # 1) Validación previa
         existente = Usuario.query.filter_by(email=email).first()
         if existente:
@@ -70,17 +75,19 @@ def edit(id):
         activo = 'activo' in request.form
         rol_id = request.form['rol_id']
         
-        # Verificar si el usuario tiene un estudiante asociado
         if usuario.rol and usuario.rol.nombre == 'Estudiante':
             estudiante = Estudiante.query.filter_by(usuario_id=usuario.id).first()
             if estudiante:
-                if not activo:  # Si se está desactivando al usuario
+                tiene_inscripciones = any(ins.activo for ins in estudiante.inscripciones)
+                
+                if not activo and tiene_inscripciones:
                     for ins in estudiante.inscripciones:
                         ins.activo = False
                     db.session.commit()
                     flash("Usuario desactivado. Las inscripciones del estudiante también han sido desactivadas.", "warning")
-                else:
-                    flash("Usuario desactivado. Por favor, revisa las inscripciones del estudiante.", "info")
+                elif activo and tiene_inscripciones:
+                    flash("Usuario activado. Por favor, revisa las inscripciones del estudiante.", "info")
+
             
         # Si el campo password está vacío, pasamos None para no cambiar
         password_cambio = password if password else None
@@ -134,9 +141,22 @@ def logout():
 @usuario_bp.route("/dashboard")
 
 def dashboard():
-    total_cursos = Curso.query.count()
-    total_docentes = Docente.contar_activos()
-    total_estudiantes = Estudiante.query.count()
-    return usuario_view.dashboard(current_user,total_cursos,total_docentes,total_estudiantes)
+    datos = obtener_datos_dashboard()
+    return usuario_view.dashboard(current_user,**datos)
 
 
+def obtener_datos_dashboard():
+    cursos = Curso.query.filter_by(activo=True).all()
+    labels = [curso.nombre for curso in cursos]
+    valores = [sum(1 for ins in curso.inscripciones if ins.activo) for curso in cursos]
+
+    datos = {
+        'labels': labels,
+        'valores': valores,
+        'total_cursos': Curso.contar_activos(),
+        'total_docentes': Docente.contar_activos(),
+        'total_estudiantes': Estudiante.contar_activos(),
+        'docentes_faltantes':Docente.contar_faltantes(),
+        'estudiantes_faltantes':Estudiante.contar_faltantes_est()
+    }
+    return datos
