@@ -37,6 +37,14 @@ from controllers.docente import mis_estudiantes_controller
 from controllers.docente import material_controller
 from controllers.docente import mis_archivos_controller
 from database import db
+# --- ADICIONES PARA ESTUDIANTES (COMIENZO) --- #
+from controllers.estudiante import (
+    inicio_controller as estudiante_inicio_controller,
+    asistencia_controller as estudiante_asistencia_controller,
+    cursos_controller as estudiante_cursos_controller,
+    calificaciones_controller as estudiante_calificaciones_controller,
+    tareas_controller as estudiante_tareas_controller
+)
 
 app = Flask(__name__)
 
@@ -121,6 +129,13 @@ app.register_blueprint(material_controller.material_bp)
 app.register_blueprint(inicio_controller.inicio_bp)
 app.register_blueprint(mis_archivos_controller.mis_archivos_bp)
 
+# --- REGISTRO DE BLUEPRINTS PARA ESTUDIANTES (COMIENZO) --- #
+app.register_blueprint(estudiante_inicio_controller.inicio_bp)          # Panel principal
+app.register_blueprint(estudiante_asistencia_controller.asistencia_bp)  # Gestión de asistencias
+app.register_blueprint(estudiante_cursos_controller.cursos_bp)         # Visualización de cursos
+app.register_blueprint(estudiante_calificaciones_controller.calificaciones_bp)  # Consulta de notas
+app.register_blueprint(estudiante_tareas_controller.tareas_bp)          # Gestión de tareas
+# --- REGISTRO DE BLUEPRINTS PARA ESTUDIANTES (FIN) --- #
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -130,6 +145,18 @@ def load_user(user_id):
 def home():
     return render_template('autentica/index.html')
 
+# --- MODIFICACIÓN EN LA RUTA HOME PARA ESTUDIANTES  --- #
+@app.route('/')
+def home():
+    if current_user.is_authenticated:
+        if current_user.tiene_rol('Administrador'):
+            return redirect(url_for('admin.dashboard'))
+        elif current_user.tiene_rol('Docente'):
+            return redirect(url_for('docente.inicio'))
+        elif current_user.tiene_rol('Estudiante'):  # Redirección añadida para estudiantes
+            return redirect(url_for('estudiante.inicio'))
+    return render_template('autentica/index.html')
+# --- MODIFICACIÓN EN LA RUTA HOME PARA ESTUDIANTES (FIN) --- 
 
 # PUNTO DE ENTRADA
 if __name__ == "__main__":
