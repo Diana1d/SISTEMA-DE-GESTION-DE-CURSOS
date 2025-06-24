@@ -44,6 +44,29 @@ class Tarea(db.Model):
     @staticmethod
     def get_by_curso(curso_id):
         return Tarea.query.filter_by(curso_id=curso_id).all()
+    
+    @staticmethod
+    def get_pendientes(curso_id, estudiante_id):
+        from models.entrega_tarea_model import EntregaTarea
+        
+        # Obtener todas las tareas del curso
+        tareas_curso = Tarea.query.filter_by(curso_id=curso_id).all()
+        
+        # Obtener tareas entregadas por el estudiante
+        tareas_entregadas = db.session.query(EntregaTarea.tarea_id).filter(
+            EntregaTarea.estudiante_id == estudiante_id
+        ).all()
+        tareas_entregadas_ids = [t[0] for t in tareas_entregadas]
+        
+        # Filtrar tareas pendientes (no entregadas y con fecha futura)
+        ahora = datetime.utcnow()
+        tareas_pendientes = [
+            tarea for tarea in tareas_curso 
+            if tarea.id not in tareas_entregadas_ids 
+            and tarea.fecha_entrega > ahora
+        ]
+        
+        return tareas_pendientes
 
     def update(self, titulo=None, descripcion=None, fecha_entrega=None, estado=None):
         if titulo:

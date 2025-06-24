@@ -4,12 +4,12 @@ from datetime import datetime
 import os
 from flask_login import LoginManager
 
-# ADMIN
 from models.rol_model import Rol
 from models.turno_modal import Turno
 from models.paralelo_modal import Paralelo
 from models.usuario_model import Usuario
 
+# ADMIN
 
 from controllers import usuario_controller
 from controllers.admi import docente_controller
@@ -21,17 +21,6 @@ from controllers import reset_password_controller
 from database import db,mail
 
 # DOCENTE
-from models.asignacion_model import Asignacion
-from models.asistencia_model import Asistencia
-from models.calificacion_model import Calificacion
-from models.curso_model import Curso
-from models.docente_model import Docente
-from models.entrega_tarea_model import EntregaTarea
-from models.estudiante_model import Estudiante
-from models.evaluacion_model import Evaluacion
-from models.material_model import Material
-from models.notificacion_model import Notificacion
-from models.tarea_model import Tarea
 
 from controllers.docente import inicio_controller
 from controllers.docente import asistencia_controller
@@ -40,9 +29,13 @@ from controllers.docente import mis_cursos_controller
 from controllers.docente import mis_estudiantes_controller
 from controllers.docente import material_controller
 from controllers.docente import mis_archivos_controller
+from controllers.docente import perfil_docente_controller
+from controllers.docente import ajustes_docente_controller
+from controllers.docente import auth_controller
 from database import db
 
 # ESTUDIANTE
+
 from controllers.estudiante import mi_asistencia_controller
 from controllers.estudiante import mi_calificacion_controller
 from controllers.estudiante import mi_curso_controller
@@ -144,13 +137,16 @@ app.register_blueprint(mis_estudiantes_controller.estudiante_bp)
 app.register_blueprint(material_controller.material_bp) 
 app.register_blueprint(inicio_controller.inicio_bp)
 app.register_blueprint(mis_archivos_controller.mis_archivos_bp)
+app.register_blueprint(perfil_docente_controller.perfil_bp)
+app.register_blueprint(ajustes_docente_controller.ajustes_bp)
+app.register_blueprint(auth_controller.auth_bp)
 
 # BLUEPRINTS ESTUDIANTE
 app.register_blueprint(mi_asistencia_controller.asistencia_bp)
 app.register_blueprint(mi_calificacion_controller.calificacion_bp)
 app.register_blueprint(mi_curso_controller.curso_bp)
 app.register_blueprint(mi_inicio_controller.inicio_bp)
-app.register_blueprint(mi_material_controller.material_bp)
+app.register_blueprint(mi_material_controller.mi_material_bp)
 app.register_blueprint(mi_tarea_controller.tarea_bp)
 
 

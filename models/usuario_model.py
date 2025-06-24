@@ -1,6 +1,7 @@
 from database import db
 from flask_login import UserMixin
 from werkzeug.security import generate_password_hash,check_password_hash
+from datetime import datetime
 
 class Usuario(db.Model, UserMixin):
     __tablename__='usuarios'
@@ -16,8 +17,8 @@ class Usuario(db.Model, UserMixin):
     
     #relacion con la tabla rol
     rol = db.relationship('Rol', back_populates='usuarios')
-    docentes = db.relationship('Docente', back_populates='usuario')
-    estudiantes = db.relationship('Estudiante', back_populates='usuario')
+    docentes = db.relationship('Docente', backref='usuario_rel', lazy=True, cascade='all, delete-orphan')
+    estudiantes = db.relationship('Estudiante', backref='usuario_rel', lazy=True, cascade='all, delete-orphan')
     
     #Pasar los parametros 
     def __init__(self, nombre, apellido, email, username, password, activo,rol_id):
@@ -28,6 +29,23 @@ class Usuario(db.Model, UserMixin):
         self.password = self.hash_password(password)
         self.activo = activo
         self.rol_id = rol_id
+        
+    # Descomenta y actualiza el método obtener_perfil_docente
+    def obtener_perfil_docente(self):
+        from models.docente_model import Docente
+        docente = Docente.query.filter_by(usuario_id=self.id).first()
+        if docente is None:
+            # Crear un perfil básico si no existe
+            docente = Docente(
+                fecha_nac=datetime.now(),
+                genero='',
+                telefono='',
+                ci='',
+                especialidad='',
+                usuario_id=self.id
+            )
+            docente.save()
+        return docente
        
     #devuelve el password encriptado 
     @staticmethod

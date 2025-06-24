@@ -1,5 +1,6 @@
 from database import db
 from datetime import datetime
+from models.clase_model import Clase
 
 class Asistencia(db.Model):
     __tablename__ = 'asistencias'
@@ -54,6 +55,20 @@ class Asistencia(db.Model):
     @staticmethod
     def get_by_estudiante_and_curso(estudiante_id, curso_id):
         return Asistencia.query.filter_by(estudiante_id=estudiante_id, curso_id=curso_id).all()
+    
+    @staticmethod
+    def calcular_porcentaje_asistencia(curso_id, estudiante_id):
+        total_clases = Clase.query.filter_by(curso_id=curso_id).count()
+        if total_clases == 0:
+            return 0.0
+        
+        asistencias = Asistencia.query.filter_by(
+            curso_id=curso_id,
+            estudiante_id=estudiante_id,
+            presente=True
+        ).count()
+        
+        return round((asistencias / total_clases) * 100, 2)
 
     def update(self, presente=None):
         if presente is not None:

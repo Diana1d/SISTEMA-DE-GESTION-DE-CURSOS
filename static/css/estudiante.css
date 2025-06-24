@@ -470,6 +470,12 @@ h3:after, h5:after {
   background-color: rgba(28, 48, 74, 0.85);
   backdrop-filter: blur(8px);
 }
+.card-header,
+.card-body,
+.card-body h5,
+.card-body p {
+  color: var(--text-light);
+}
 
 /* Enhanced stats cards */
 .stats-card {

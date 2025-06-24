@@ -1,5 +1,6 @@
 from database import db
 from models.evaluacion_model import Evaluacion
+from sqlalchemy import func
 
 class Calificacion(db.Model):
     __tablename__ = 'calificaciones'
@@ -47,6 +48,26 @@ class Calificacion(db.Model):
             Calificacion.estudiante_id == estudiante_id,
             Evaluacion.curso_id == curso_id
         ).all()
+        
+    @staticmethod
+    def calcular_promedio_curso(curso_id, estudiante_id=None):
+        # Consulta que une Calificacion -> Evaluacion -> Curso
+        query = db.session.query(
+            func.avg(Calificacion.nota).label('promedio')
+        ).join(
+            Evaluacion,
+            Calificacion.evaluacion_id == Evaluacion.id
+        ).filter(
+            Evaluacion.curso_id == curso_id
+        )
+        
+        if estudiante_id:
+            query = query.filter(
+                Calificacion.estudiante_id == estudiante_id
+            )
+        
+        promedio = query.scalar()
+        return float(promedio) if promedio is not None else 0.0
 
     def update(self, nota=None, comentarios=None):
         if nota is not None:

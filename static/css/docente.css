@@ -425,6 +425,18 @@ h3:after, h5:after {
     padding: 1.5rem;
 }
 
+.card-header,
+.card-body,
+.card-body h5,
+.card-body p {
+  color: var(--text-light);
+}
+
+.text-light-title {
+  color: var(--text-lighter);
+  text-shadow: 0 0 6px var(--accent-turquoise);
+}
+
 /* Estadísticas */
 .stats-card {
     background-color: rgba(23, 42, 69, 0.7);
@@ -606,3 +618,4 @@ td[class*="porcentaje-"] {
     50% { opacity: 0.7; }
     100% { opacity: 1; }
 }
+

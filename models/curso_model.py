@@ -15,6 +15,7 @@ class Curso(db.Model):
     docente = db.relationship('Docente', back_populates='cursos')
     inscripciones = db.relationship('Inscripcion',back_populates='curso')
     inscripciones = db.relationship('Inscripcion', back_populates='curso')
+    clases = db.relationship('Clase', back_populates='curso')
     
     #Pasar los parametros 
     def __init__(self,nombre,descripcion,sigla,carga_horaria,activo,docente_id):

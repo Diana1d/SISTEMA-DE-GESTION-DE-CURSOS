@@ -7,7 +7,7 @@ def listar_materiales(curso, materiales):
     """Muestra todos los materiales de un curso"""
     return render_template('docente/materiales/index.html', 
                          curso=curso, 
-                         materiales=materiales)
+                         materiales=materiales)  # Variable correcta 'materiales'
 
 def subir_material_form(curso):
     """Muestra el formulario para subir material"""

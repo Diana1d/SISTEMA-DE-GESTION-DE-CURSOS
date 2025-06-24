@@ -14,11 +14,6 @@ ALLOWED_EXTENSIONS = {'pdf', 'doc', 'docx', 'ppt', 'pptx', 'xls', 'xlsx', 'txt',
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
-@material_bp.route("/")
-def home():
-    # Redirigir a la lista de cursos del docente o mostrar un mensaje
-    return redirect(url_for('curso_docente.index'))  # Asegúrate de que 'curso_docente.index' sea el nombre correcto del blueprint de cursos
-
 @material_bp.route("/<int:curso_id>")
 def index(curso_id):
     curso = Curso.get_by_id(curso_id)
@@ -27,7 +22,7 @@ def index(curso_id):
         return redirect(url_for('docente_curso.index'))
     
     materiales = Material.get_by_curso(curso_id)
-    return listar_materiales(curso, materiales)
+    return listar_materiales(curso=curso, materiales=materiales)  # Asegúrate de pasar ambos parámetros
 
 @material_bp.route("/subir/<int:curso_id>", methods=['GET', 'POST'])
 def subir(curso_id):

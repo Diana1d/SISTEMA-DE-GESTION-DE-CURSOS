@@ -1,12 +1,15 @@
-from flask import request, Blueprint, send_from_directory
+from flask import request, Blueprint, send_from_directory, current_app, abort
 from models.material_model import Material
 from models.inscripcion_model import Inscripcion
 from views.estudiante.materiales_view import listar_materiales, ver_material
 import os
 
-material_bp = Blueprint('estudiante_material', __name__, url_prefix="/estudiante/materiales")
+mi_material_bp = Blueprint('estudiante_material', __name__, url_prefix="/estudiante/materiales")
 
-@material_bp.route("/")
+# Configuración de la ruta de uploads (ajusta según tu estructura)
+UPLOAD_FOLDER = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), 'static', 'uploads')
+
+@mi_material_bp.route("/")
 def index():
     estudiante_id = 1  # Reemplazar con el ID del estudiante autenticado
     curso_id = request.args.get('curso_id')
@@ -23,11 +26,31 @@ def index():
     
     return listar_materiales(materiales=materiales, cursos=cursos, curso_seleccionado=curso_id)
 
-@material_bp.route("/<int:id>")
+@mi_material_bp.route("/<int:id>")
 def view(id):
     material = Material.get_by_id(id)
     return ver_material(material)
 
-@material_bp.route("/descargar/<nombre_archivo>")
+@mi_material_bp.route("/descargar/<nombre_archivo>")
 def descargar(nombre_archivo):
-    return send_from_directory(nombre_archivo, as_attachment=True)
+    try:
+        # Verificación de seguridad básica
+        if '..' in nombre_archivo or nombre_archivo.startswith('/'):
+            abort(400, description="Nombre de archivo inválido")
+        
+        # Construye la ruta completa al archivo
+        file_path = os.path.join(UPLOAD_FOLDER, nombre_archivo)
+        
+        # Verifica si el archivo existe
+        if not os.path.exists(file_path):
+            abort(404, description="Archivo no encontrado")
+        
+        # Descarga el archivo
+        return send_from_directory(
+            directory=UPLOAD_FOLDER,
+            path=nombre_archivo,
+            as_attachment=True
+        )
+    except Exception as e:
+        current_app.logger.error(f"Error al descargar archivo: {str(e)}")
+        abort(500, description="Error al procesar la descarga")
