@@ -31,7 +31,6 @@ from controllers.docente import material_controller
 from controllers.docente import mis_archivos_controller
 from controllers.docente import perfil_docente_controller
 from controllers.docente import ajustes_docente_controller
-from controllers.docente import auth_controller
 from database import db
 
 # ESTUDIANTE
@@ -44,7 +43,6 @@ from controllers.estudiante import mi_material_controller
 from controllers.estudiante import mi_tarea_controller
 from controllers.estudiante import perfil_estudiante_controller
 from controllers.estudiante import ajustes_estudiante_controller
-from controllers.estudiante import auth_controller
 
 app = Flask(__name__)
 
@@ -83,7 +81,8 @@ app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 16MB límite
 login_manager = LoginManager()
 login_manager.login_message = "Por favor, inicia sesión para acceder a esta página."
 login_manager.login_message_category = "warning"
-login_manager.login_view = 'usuario.login'
+#login_manager.login_view = 'usuario.login'
+login_manager.login_view = 'auth.login'
 login_manager.init_app(app)
 
 def init_db():
@@ -142,7 +141,6 @@ app.register_blueprint(inicio_controller.inicio_bp)
 app.register_blueprint(mis_archivos_controller.mis_archivos_bp)
 app.register_blueprint(perfil_docente_controller.perfil_bp)
 app.register_blueprint(ajustes_docente_controller.ajustes_bp)
-app.register_blueprint(auth_controller.auth_bp)
 
 # BLUEPRINTS ESTUDIANTE
 app.register_blueprint(mi_asistencia_controller.asistencia_bp)
@@ -153,7 +151,6 @@ app.register_blueprint(mi_material_controller.mi_material_bp)
 app.register_blueprint(mi_tarea_controller.tarea_bp)
 app.register_blueprint(perfil_estudiante_controller.perfil_bp)
 app.register_blueprint(ajustes_estudiante_controller.ajustes_bp)
-#app.register_blueprint(auth_controller.auth_bp)
 
 
 @login_manager.user_loader

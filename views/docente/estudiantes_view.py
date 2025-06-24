@@ -5,13 +5,15 @@ def listar_estudiantes(estudiantes, curso=None):
     return render_template(
         'docente/estudiantes/index.html', 
         estudiantes=estudiantes,
-        curso=curso  # Pasar el curso a la plantilla
+        curso=curso
     )
 
-def ver_estudiante(estudiante, cursos_inscritos):
-    """Muestra el perfil de un estudiante con sus cursos"""
+def ver_estudiante(estudiante, cursos, notas, **kwargs):
+    """Muestra el perfil de un estudiante con sus cursos y notas"""
     return render_template(
         'docente/estudiantes/vista.html', 
-        estudiante=estudiante, 
-        cursos=cursos_inscritos
+        estudiante=estudiante,
+        cursos=cursos,
+        notas=notas,
+        **kwargs
     )

@@ -1,4 +1,4 @@
-from flask import Blueprint, request, redirect, url_for, flash, current_app
+from flask import Blueprint, request, redirect, url_for, flash, current_app, render_template
 from flask_login import current_user, login_required
 from models.material_model import Material
 from models.curso_model import Curso
@@ -63,6 +63,47 @@ def subir(curso_id):
         flash('Tipo de archivo no permitido', 'error')
     
     return subir_material_form(curso)
+
+@material_bp.route("/editar/<int:material_id>", methods=['GET', 'POST'])
+def editar(material_id):
+    material = Material.get_by_id(material_id)
+    if not material:
+        flash('Material no encontrado', 'error')
+        return redirect(url_for('docente_curso.index'))
+    
+    if material.docente_id != current_user.id:
+        flash('No tienes permiso para editar este material', 'error')
+        return redirect(url_for('docente_material.index', curso_id=material.curso_id))
+    
+    curso = Curso.get_by_id(material.curso_id)
+    
+    if request.method == 'POST':
+        # Procesar la edición
+        material.titulo = request.form.get('titulo')
+        material.descripcion = request.form.get('descripcion')
+        
+        # Manejar archivo si se subió uno nuevo
+        if 'archivo' in request.files:
+            file = request.files['archivo']
+            if file.filename != '' and allowed_file(file.filename):
+                # Eliminar el archivo antiguo
+                try:
+                    os.remove(os.path.join(current_app.config['UPLOAD_FOLDER'], material.nombre_archivo))
+                except:
+                    pass
+                
+                # Guardar el nuevo archivo
+                file_info = handle_upload(file)
+                if file_info:
+                    material.nombre_archivo = file_info['nombre_archivo']
+                    material.tipo_archivo = file_info['tipo_archivo']
+                    material.tamanio = file_info['tamanio']
+        
+        material.save()
+        flash('Material actualizado correctamente', 'success')
+        return redirect(url_for('docente_material.index', curso_id=material.curso_id))
+    
+    return render_template('docente/materiales/editar.html', curso=curso, material=material)
 
 @material_bp.route("/eliminar/<int:id>", methods=['POST'])
 def eliminar(id):

@@ -113,7 +113,7 @@ def login():
         
         if user and check_password_hash(user.password, password):
             login_user(user)
-            flash('Inicio de sección exitosa','success')
+            flash('Inicio de sesión exitosa','success')
     
             # Redirige según el rol
             if user.rol.nombre == "Administrador":

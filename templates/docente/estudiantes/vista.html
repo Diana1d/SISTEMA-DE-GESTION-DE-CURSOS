@@ -2,26 +2,26 @@
     <div class="col-md-4">
         <div class="card mb-4">
             <div class="card-body text-center">
-                <img src="/static/img/estudiantes/{{ estudiante.foto|default('default-user.png') }}" 
+                <img src="/static/img/estudiantes/{{ estudiante.usuario.foto|default('default-user.png') }}" 
                      class="rounded-circle mb-3" width="150" height="150">
-                <h4>{{ estudiante.nombre_completo }}</h4>
-                <p class="text-muted">{{ estudiante.codigo }}</p>
+                <h4>{{ nombre_completo }}</h4>
+                <p class="text-muted">{{ codigo }}</p>
                 
                 <div class="d-flex justify-content-center mb-3">
-                    <a href="mailto:{{ estudiante.correo }}" class="btn btn-outline-primary me-2">
+                    <a href="mailto:{{ correo }}" class="btn btn-outline-primary me-2">
                         <i class="bi bi-envelope"></i>
                     </a>
-                    <a href="tel:{{ estudiante.telefono }}" class="btn btn-outline-success">
+                    <a href="tel:{{ telefono }}" class="btn btn-outline-success">
                         <i class="bi bi-telephone"></i>
                     </a>
                 </div>
                 
                 <div class="list-group">
                     <div class="list-group-item">
-                        <i class="bi bi-calendar me-2"></i> {{ estudiante.fecha_nacimiento }}
+                        <i class="bi bi-calendar me-2"></i> {{ fecha_nacimiento }}
                     </div>
                     <div class="list-group-item">
-                        <i class="bi bi-geo-alt me-2"></i> {{ estudiante.direccion }}
+                        <i class="bi bi-geo-alt me-2"></i> {{ direccion }}
                     </div>
                 </div>
             </div>
@@ -34,6 +34,7 @@
                 <h5>Rendimiento Académico</h5>
             </div>
             <div class="card-body">
+                {% if cursos %}
                 <div class="table-responsive">
                     <table class="table">
                         <thead>
@@ -45,11 +46,11 @@
                             </tr>
                         </thead>
                         <tbody>
-                            {% for curso in estudiante.cursos %}
+                            {% for curso in cursos %}
                             <tr>
                                 <td>{{ curso.nombre }}</td>
-                                <td>{{ curso.asistencia }}%</td>
-                                <td>{{ curso.promedio }}</td>
+                                <td>{{ "%.2f"|format(curso['asistencia']) }}%</td>
+                                <td>{{ "%.2f"|format(curso['promedio']) }}</td>
                                 <td>
                                     {% if curso.aprobado %}
                                     <span class="badge bg-success">Aprobado</span>
@@ -62,14 +63,18 @@
                         </tbody>
                     </table>
                 </div>
+                {% else %}
+                <div class="alert alert-info">No hay cursos registrados para este estudiante.</div>
+                {% endif %}
             </div>
         </div>
         
         <div class="card">
             <div class="card-header bg-primary text-white">
-                <h5>Notas del Curso Actual</h5>
+                <h5>Notas</h5>
             </div>
             <div class="card-body">
+                {% if notas %}
                 <div class="table-responsive">
                     <table class="table">
                         <thead>
@@ -81,17 +86,20 @@
                             </tr>
                         </thead>
                         <tbody>
-                            {% for nota in estudiante.notas %}
+                            {% for nota in notas %}
                             <tr>
                                 <td>{{ nota.evaluacion }}</td>
-                                <td>{{ nota.valor }}</td>
-                                <td>{{ nota.porcentaje }}%</td>
+                                <td>{{ "%.2f"|format(nota.valor) }}</td>
+                                <td>{{ "%.2f"|format(nota.porcentaje) }}%</td>
                                 <td>{{ nota.fecha }}</td>
                             </tr>
                             {% endfor %}
                         </tbody>
                     </table>
                 </div>
+                {% else %}
+                <div class="alert alert-info">No hay notas registradas para este estudiante.</div>
+                {% endif %}
             </div>
         </div>
     </div>

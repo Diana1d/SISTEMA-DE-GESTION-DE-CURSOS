@@ -11,14 +11,14 @@ def ver_perfil():
     # Verificar si el usuario tiene rol de docente
     if not current_user.rol.nombre == 'Docente':
         flash('No tienes permiso para acceder a esta sección', 'danger')
-        return redirect(url_for('usuario.login'))
+        return redirect(url_for('auth.login'))
     
     # Obtener el perfil del docente
     docente = current_user.obtener_perfil_docente()
     # Verificar si se encontró/creó el perfil
     if docente is None:
         flash('No se pudo cargar tu perfil de docente', 'error')
-        return redirect(url_for('docente.inicio'))
+        return redirect(url_for('docente_inicio.dashboard'))
     
     return render_template('docente/perfil/ver.html', docente=docente)
 

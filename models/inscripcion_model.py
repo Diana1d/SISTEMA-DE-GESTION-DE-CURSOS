@@ -12,11 +12,13 @@ class Inscripcion(db.Model):
     turno_id = db.Column(db.Integer, db.ForeignKey('turnos.id'), nullable=False)
     activo = True
    
-    curso = db.relationship('Curso', back_populates='inscripciones')
-    estudiante = db.relationship('Estudiante', back_populates='inscripciones')
+    #curso = db.relationship('Curso', back_populates='inscripciones')
+    curso = db.relationship('Curso', back_populates='inscripciones', lazy='joined')
+    estudiante = db.relationship('Estudiante', back_populates='inscripciones', lazy='joined')
     semestre = db.relationship('Semestre', back_populates='inscripciones')
     paralelo = db.relationship('Paralelo', back_populates='inscripciones')
     turno = db.relationship('Turno', back_populates='inscripciones')
+    estudiante = db.relationship('Estudiante', back_populates='inscripciones')
     
     def __init__(self, curso_id, estudiante_id, semestre_id, paralelo_id, turno_id,activo):
         self.curso_id = curso_id
@@ -63,9 +65,11 @@ class Inscripcion(db.Model):
 
     @staticmethod
     def get_estudiantes_by_curso(curso_id):
-        """Obtiene todos los estudiantes inscritos en un curso específico"""
-        return Estudiante.query.join(Inscripcion).filter(Inscripcion.curso_id == curso_id).all()
-    
+        """Obtiene todos los estudiantes inscritos en un curso específico con sus usuarios"""
+        return Estudiante.query.options(db.joinedload(Estudiante.usuario)).join(Inscripcion).filter(
+            Inscripcion.curso_id == curso_id
+        ).all()
+        
     @staticmethod
     def get_cursos_by_estudiante(estudiante_id):
         return Curso.query.join(Inscripcion).filter(Inscripcion.estudiante_id == estudiante_id).all()

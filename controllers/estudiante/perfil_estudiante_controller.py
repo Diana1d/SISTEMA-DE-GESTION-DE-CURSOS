@@ -11,13 +11,13 @@ def ver_perfil():
     # Verificar si el usuario tiene rol de estudiante
     if not current_user.rol.nombre == 'Estudiante':
         flash('No tienes permiso para acceder a esta sección', 'danger')
-        return redirect(url_for('usuario.login'))
+        return redirect(url_for('auth.login'))
     
     # Obtener el perfil del estudiante
     estudiante = Estudiante.get_by_usuario_id(current_user.id)
     if not estudiante:
         flash('No se encontró tu perfil de estudiante', 'error')
-        return redirect(url_for('estudiante.inicio'))
+        return redirect(url_for('estudiante_inicio.dashboard'))
     
     return render_template('estudiante/perfil/ver.html', estudiante=estudiante)
 

@@ -36,38 +36,38 @@
                     <tr>
                         <th>#</th>
                         <th>Estudiante</th>
-                        <th>Código</th>
+                        <th>Matrícula</th>
                         <th>Correo</th>
                         <th>Teléfono</th>
                         <th>Acciones</th>
                     </tr>
                 </thead>
-                <tbody>
-                    {% for estudiante in estudiantes %}
-                    <tr>
-                        <td>{{ loop.index }}</td>
-                        <td>
-                            <img src="/static/img/estudiantes/{{ estudiante.foto|default('default-user.png') }}" 
-                                 class="rounded-circle me-2" width="30" height="30">
-                            {{ estudiante.nombre_completo }}
-                        </td>
-                        <td>{{ estudiante.codigo }}</td>
-                        <td>{{ estudiante.correo }}</td>
-                        <td>{{ estudiante.telefono }}</td>
-                        <td>
-                            <div class="btn-group btn-group-sm">
-                                <a href="/docente/estudiantes/{{ estudiante.id }}" class="btn btn-primary">
-                                    <i class="bi bi-eye"></i>
-                                </a>
-                                <a href="/docente/cursos/{{ curso.id }}/calificaciones/{{ estudiante.id }}" 
-                                   class="btn btn-success">
-                                    <i class="bi bi-journal-check"></i>
-                                </a>
-                            </div>
-                        </td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
+                    <tbody>
+                        {% for estudiante in estudiantes %}
+                        <tr>
+                            <td>{{ loop.index }}</td>
+                            <td>
+                                <img src="/static/img/estudiantes/{{ estudiante.usuario.foto|default('default-user.png') }}" 
+                                    class="rounded-circle me-2" width="30" height="30">
+                                {{ estudiante.usuario.nombre }} {{ estudiante.usuario.apellido if estudiante.usuario.apellido else '' }}
+                            </td>
+                            <td>{{ estudiante.matricula }}</td>
+                            <td>{{ estudiante.usuario.email if estudiante.usuario else 'Sin email' }}</td>
+                            <td>{{ estudiante.telefono }}</td>
+                            <td>
+                                <div class="btn-group btn-group-sm">
+                                    <a href="/docente/estudiantes/{{ estudiante.id }}" class="btn btn-primary">
+                                        <i class="bi bi-eye"></i>
+                                    </a>
+                                    <a href="/docente/cursos/{{ curso.id }}/calificaciones/{{ estudiante.id }}" 
+                                    class="btn btn-success">
+                                        <i class="bi bi-journal-check"></i>
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
             </table>
         </div>
     </div>

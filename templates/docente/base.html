@@ -110,8 +110,6 @@
                     <ul class="navbar-nav ms-auto">
                         <li class="nav-item dropdown">
                             <a href="#" class="nav-icon pe-md-0" data-bs-toggle="dropdown">
-                                <img src="{{ url_for('static', filename='img/teacher-avatar.png') }}" class="avatar img-fluid rounded-circle"
-                                    alt="docente">
                                 <span class="ms-2 d-none d-md-inline">{{ current_user.nombre }}</span>
                             </a>
                             <div class="dropdown-menu dropdown-menu-end rounded">
@@ -124,7 +122,7 @@
                                     <span>Ajustes</span>
                                 </a>
                                 <div class="dropdown-divider"></div>
-                                <a href="/docente/logout" class="dropdown-item">
+                                <a href="/usuarios/login" class="dropdown-item">
                                     <i class="bi bi-box-arrow-right"></i>
                                     <span>Cerrar Sesión</span>
                                 </a>
