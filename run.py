@@ -42,6 +42,9 @@ from controllers.estudiante import mi_curso_controller
 from controllers.estudiante import mi_inicio_controller
 from controllers.estudiante import mi_material_controller
 from controllers.estudiante import mi_tarea_controller
+from controllers.estudiante import perfil_estudiante_controller
+from controllers.estudiante import ajustes_estudiante_controller
+from controllers.estudiante import auth_controller
 
 app = Flask(__name__)
 
@@ -148,6 +151,9 @@ app.register_blueprint(mi_curso_controller.curso_bp)
 app.register_blueprint(mi_inicio_controller.inicio_bp)
 app.register_blueprint(mi_material_controller.mi_material_bp)
 app.register_blueprint(mi_tarea_controller.tarea_bp)
+app.register_blueprint(perfil_estudiante_controller.perfil_bp)
+app.register_blueprint(ajustes_estudiante_controller.ajustes_bp)
+#app.register_blueprint(auth_controller.auth_bp)
 
 
 @login_manager.user_loader

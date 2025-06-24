@@ -78,6 +78,17 @@ class Estudiante(db.Model):
             query = query.filter(~Usuario.id.in_(ids_registrados))
 
         return query.count()
+    
+    # Añade estos métodos si no los tienes
+    def obtener_perfil_estudiante(self):
+        """Obtiene o crea un perfil básico si no existe"""
+        if not hasattr(self, 'usuario'):
+            from models.usuario_model import Usuario
+            self.usuario = Usuario.query.get(self.usuario_id)
+        return self
 
-# Modificado
+    @staticmethod
+    def get_by_usuario_id(usuario_id):
+        return Estudiante.query.filter_by(usuario_id=usuario_id).first()
+
     

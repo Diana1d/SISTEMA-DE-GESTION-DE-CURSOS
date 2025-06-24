@@ -1,0 +1,43 @@
+{% extends 'estudiante/base.html' %}
+
+{% block title %}Ajustes{% endblock %}
+
+{% block header %}Configuración de Ajustes{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="card-header bg-primary text-white">
+        <h5>Notificaciones</h5>
+    </div>
+    <div class="card-body">
+        {% if notificaciones %}
+        <div class="list-group">
+            {% for notificacion in notificaciones %}
+            <div class="list-group-item {% if not notificacion.leido %}bg-light{% endif %}">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <h6>{{ notificacion.titulo }}</h6>
+                        <p class="mb-1">{{ notificacion.mensaje }}</p>
+                        <small class="text-muted">{{ notificacion.fecha_creacion.strftime('%d/%m/%Y %H:%M') }}</small>
+                    </div>
+                    <div class="btn-group">
+                        <form method="POST" action="{{ url_for('estudiante_ajustes.gestionar_notificaciones') }}" class="d-inline">
+                            <input type="hidden" name="notificacion_id" value="{{ notificacion.id }}">
+                            <button type="submit" name="accion" value="marcar_leido" class="btn btn-sm btn-outline-primary">
+                                Marcar como leído
+                            </button>
+                            <button type="submit" name="accion" value="eliminar" class="btn btn-sm btn-outline-danger">
+                                Eliminar
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <p class="text-muted">No tienes notificaciones</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

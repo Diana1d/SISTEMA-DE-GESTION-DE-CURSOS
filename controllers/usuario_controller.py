@@ -121,7 +121,7 @@ def login():
             elif user.rol.nombre == "Docente":
                 return redirect(url_for("docente_inicio.dashboard"))
             elif user.rol.nombre == "Estudiante":
-                return redirect(url_for("usuario.dashboard_estudiante"))
+                return redirect(url_for("estudiante_inicio.dashboard"))
             else:
                 logout_user()
                 flash("Rol desconocido.", "danger")             
