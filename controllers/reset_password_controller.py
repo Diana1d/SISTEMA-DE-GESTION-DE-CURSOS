@@ -44,7 +44,7 @@ def nueva_contrasena(token):
     email = verificar_token(token)
     if not email:
         flash('El enlace es inválido o ha expirado', 'danger')
-        return redirect(url_for('usuario.recuperar'))
+        return redirect(url_for('recuperar.recuperar'))
 
     if request.method == 'POST':
         nueva = request.form['password']
@@ -56,6 +56,6 @@ def nueva_contrasena(token):
             return redirect(url_for('usuario.login'))
         else:
             flash('Usuario no encontrado.', 'danger')
-            return redirect(url_for('usuario.recuperar'))
+            return redirect(url_for('recuperar.recuperar'))
 
     return reset_password_view.nueva_contrasena()

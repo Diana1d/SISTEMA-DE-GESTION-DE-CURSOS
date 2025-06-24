@@ -43,11 +43,56 @@ document.addEventListener("DOMContentLoaded", function () {
     tabla = $('#mi-tabla').DataTable({
         pagingType: 'simple',
         responsive: true,
+        dom: `
+        <'row mt-3'
+            <'col-md-6 mb-2' l>
+            <'col-md-6 mb-2 text-end' f>
+        >
+        <'row mb-3'
+            <'col-md-12 d-flex flex-wrap gap-2' B>
+        >
+        rt
+        <'row align-items-center mt-2'
+            <'col-md-6' i>
+            <'col-md-6 d-flex justify-content-end' p>
+        >
+    `,
+        buttons: [
+            {
+                extend: 'copy',
+                text:'<i class="bi bi-clipboard-check-fill"></i>',
+                titleAttr:'Copiar',
+                className:'btn btn-secondary',
+                exportOptions: { columns: ':visible' }
+            },
+            {
+                extend: 'excel',
+                text:'<i class="bi bi-file-earmark-excel-fill"></i>',
+                titleAttr:'Exportar a excel',
+                className:'btn btn-success',
+                exportOptions: { columns: ':visible' }
+            },
+            {
+                extend: 'pdf',
+                text:'<i class="bi bi-file-earmark-pdf-fill"></i>',
+                titleAttr:'Exportar a pdf',
+                className:'btn btn-danger',
+                exportOptions: { columns: ':visible' }
+            },
+            {
+                extend: 'colvis',
+                text: 'Visibilidad'
+            }
+        ],
         language: {
             url: 'https://cdn.datatables.net/plug-ins/2.3.2/i18n/es-ES.json'
-        },
+        }
 
     });
+
+    tabla.buttons().container().appendTo('#mi-tabla_wrapper .col-md-12.d-flex.flex-wrap.gap-2');
+
+
 
     $('#filtroEstado').on('change', function () {
         var valor = $(this).val().toLowerCase();
@@ -113,7 +158,4 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
 });
-
-/* DOCENTE */
-
 

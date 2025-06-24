@@ -7,12 +7,13 @@ from models.material_model import Material
 from models.curso_model import Curso
 from models.tarea_model import Tarea
 from views.estudiante.cursos_view import listar_cursos, ver_curso
+from flask_login import login_required, current_user
 
 curso_bp = Blueprint('estudiante_curso', __name__, url_prefix="/estudiante/cursos")
 
 @curso_bp.route("/")
 def index():
-    estudiante_id = 1  # Reemplazar con el ID del estudiante autenticado
+    estudiante_id=current_user.id   # Reemplazar con el ID del estudiante autenticado
     cursos = Inscripcion.get_cursos_by_estudiante(estudiante_id)
     return listar_cursos(cursos)
 

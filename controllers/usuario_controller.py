@@ -160,3 +160,6 @@ def obtener_datos_dashboard():
         'estudiantes_faltantes':Estudiante.contar_faltantes_est()
     }
     return datos
+
+
+

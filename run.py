@@ -159,7 +159,7 @@ def load_user(user_id):
 
 @app.route('/')
 def home():
-    return render_template('autentica/index.html')
+    return render_template('autentica/login.html')
 
 # PUNTO DE ENTRADA
 if __name__ == "__main__":
