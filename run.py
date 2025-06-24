@@ -44,128 +44,123 @@ from controllers.estudiante import mi_tarea_controller
 from controllers.estudiante import perfil_estudiante_controller
 from controllers.estudiante import ajustes_estudiante_controller
 
-def crear_app():
+app = Flask(__name__)
 
-    app = Flask(__name__)
+app.config['MAIL_SERVER'] = 'smtp.gmail.com'
+app.config['MAIL_PORT'] = 587
+app.config['MAIL_USE_TLS'] = True
+app.config['MAIL_USERNAME'] = 'admi.prueba432@gmail.com'
+app.config['MAIL_PASSWORD'] = 'tcyiblqjkiayzzgs'
+app.config['MAIL_DEFAULT_SENDER'] = 'admi.prueba432@gmail.com'
 
-    app.config['MAIL_SERVER'] = 'smtp.gmail.com'
-    app.config['MAIL_PORT'] = 587
-    app.config['MAIL_USE_TLS'] = True
-    app.config['MAIL_USERNAME'] = 'admi.prueba432@gmail.com'
-    app.config['MAIL_PASSWORD'] = 'tcyiblqjkiayzzgs'
-    app.config['MAIL_DEFAULT_SENDER'] = 'admi.prueba432@gmail.com'
+app.config['SECRET_KEY'] = 'clave_super_segura_generada'
 
-    app.config['SECRET_KEY'] = 'clave_super_segura_generada'
+app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///cursos.db"
+app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
-    app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///cursos.db"
-    app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+db.init_app(app)
+mail.init_app(app)
 
-    db.init_app(app)
-    mail.init_app(app)
+# Registrar filtro de fecha
+@app.template_filter('date')
+def format_date(value, format='%d/%m/%Y'):
+    if value is None:
+        return ""
+    if isinstance(value, str):
+        # Si es string, convertir a datetime primero
+        value = datetime.strptime(value, '%Y-%m-%d')
+    return value.strftime(format)
 
-    # Registrar filtro de fecha
-    @app.template_filter('date')
-    def format_date(value, format='%d/%m/%Y'):
-        if value is None:
-            return ""
-        if isinstance(value, str):
-            # Si es string, convertir a datetime primero
-            value = datetime.strptime(value, '%Y-%m-%d')
-        return value.strftime(format)
+# Configuración para subida de archivos
+app.config['UPLOAD_FOLDER'] = os.path.join(app.root_path, 'static', 'uploads')
+app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 16MB límite
 
-    # Configuración para subida de archivos
-    app.config['UPLOAD_FOLDER'] = os.path.join(app.root_path, 'static', 'uploads')
-    app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 16MB límite
+#CONFIGURAR FLASK-LOGIN
+login_manager = LoginManager()
+login_manager.login_message = "Por favor, inicia sesión para acceder a esta página."
+login_manager.login_message_category = "warning"
+#login_manager.login_view = 'usuario.login'
+login_manager.login_view = 'auth.login'
+login_manager.init_app(app)
 
-    #CONFIGURAR FLASK-LOGIN
-    login_manager = LoginManager()
-    login_manager.login_message = "Por favor, inicia sesión para acceder a esta página."
-    login_manager.login_message_category = "warning"
-    #login_manager.login_view = 'usuario.login'
-    login_manager.login_view = 'auth.login'
-    login_manager.init_app(app)
+def init_db():
+    with app.app_context():
+        db.create_all()  # Crea la base de datos y las tablas
 
-    def init_db():
-        with app.app_context():
-            db.create_all()  # Crea la base de datos y las tablas
+        # Insertar roles si no existen
+        if not Rol.query.filter_by(nombre="Administrador").first():
+            rol1 = Rol(nombre="Administrador")
+            rol2 = Rol(nombre="Docente")
+            rol3 = Rol(nombre="Estudiante")
+            db.session.add_all([rol1, rol2, rol3])
+            db.session.commit()
+            print("Roles insertados.")
+        else:
+            print("Roles ya existen.")
 
-            # Insertar roles si no existen
-            if not Rol.query.filter_by(nombre="Administrador").first():
-                rol1 = Rol(nombre="Administrador")
-                rol2 = Rol(nombre="Docente")
-                rol3 = Rol(nombre="Estudiante")
-                db.session.add_all([rol1, rol2, rol3])
-                db.session.commit()
-                print("Roles insertados.")
-            else:
-                print("Roles ya existen.")
+        # Insertar turnos si no existen
+        if not Turno.query.first():
+            turno1 = Turno(tipo_turno="Mañana")
+            turno2 = Turno(tipo_turno="Tarde")
+            turno3 = Turno(tipo_turno="Noche")
+            db.session.add_all([turno1, turno2, turno3])
+            db.session.commit()
+            print("Turnos insertados.")
+        else:
+            print("Turnos ya existen.")
+        
+         # Insertar turnos si no existen
+        if not Paralelo.query.first():
+            paralelo1 = Paralelo(paralelo="A")
+            paralelo2 = Paralelo(paralelo="B")
+            paralelo3= Paralelo(paralelo="C")
+            db.session.add_all([paralelo1,paralelo2, paralelo3])
+            db.session.commit()
+            print("Paralelos  insertados.")
+        else:
+            print("Paralelos  ya existen.")
 
-            # Insertar turnos si no existen
-            if not Turno.query.first():
-                turno1 = Turno(tipo_turno="Mañana")
-                turno2 = Turno(tipo_turno="Tarde")
-                turno3 = Turno(tipo_turno="Noche")
-                db.session.add_all([turno1, turno2, turno3])
-                db.session.commit()
-                print("Turnos insertados.")
-            else:
-                print("Turnos ya existen.")
-            
-            # Insertar turnos si no existen
-            if not Paralelo.query.first():
-                paralelo1 = Paralelo(paralelo="A")
-                paralelo2 = Paralelo(paralelo="B")
-                paralelo3= Paralelo(paralelo="C")
-                db.session.add_all([paralelo1,paralelo2, paralelo3])
-                db.session.commit()
-                print("Paralelos  insertados.")
-            else:
-                print("Paralelos  ya existen.")
+# BLUEPRINTS ADMI
+app.register_blueprint(usuario_controller.usuario_bp)
+app.register_blueprint(docente_controller.docente_bp)
+app.register_blueprint(estudiante_controller.estudiante_bp)
+app.register_blueprint(curso_controller.curso_bp)
+app.register_blueprint(inscripcion_controller.inscripcion_bp)
+app.register_blueprint(semestre_controller.semestre_bp)
+app.register_blueprint(reset_password_controller.recuperar_bp)
 
-        # BLUEPRINTS ADMI
-        app.register_blueprint(usuario_controller.usuario_bp)
-        app.register_blueprint(docente_controller.docente_bp)
-        app.register_blueprint(estudiante_controller.estudiante_bp)
-        app.register_blueprint(curso_controller.curso_bp)
-        app.register_blueprint(inscripcion_controller.inscripcion_bp)
-        app.register_blueprint(semestre_controller.semestre_bp)
-        app.register_blueprint(reset_password_controller.recuperar_bp)
+# BLUEPRINTS DOCENTE
+app.register_blueprint(asistencia_controller.asistencia_bp)
+app.register_blueprint(calificacion_controller.calificacion_bp)
+app.register_blueprint(mis_cursos_controller.curso_docente_bp)
+app.register_blueprint(mis_estudiantes_controller.estudiante_bp)
+app.register_blueprint(material_controller.material_bp) 
+app.register_blueprint(inicio_controller.inicio_bp)
+app.register_blueprint(mis_archivos_controller.mis_archivos_bp)
+app.register_blueprint(perfil_docente_controller.perfil_bp)
+app.register_blueprint(ajustes_docente_controller.ajustes_bp)
 
-        # BLUEPRINTS DOCENTE
-        app.register_blueprint(asistencia_controller.asistencia_bp)
-        app.register_blueprint(calificacion_controller.calificacion_bp)
-        app.register_blueprint(mis_cursos_controller.curso_docente_bp)
-        app.register_blueprint(mis_estudiantes_controller.estudiante_bp)
-        app.register_blueprint(material_controller.material_bp) 
-        app.register_blueprint(inicio_controller.inicio_bp)
-        app.register_blueprint(mis_archivos_controller.mis_archivos_bp)
-        app.register_blueprint(perfil_docente_controller.perfil_bp)
-        app.register_blueprint(ajustes_docente_controller.ajustes_bp)
-
-        # BLUEPRINTS ESTUDIANTE
-        app.register_blueprint(mi_asistencia_controller.asistencia_bp)
-        app.register_blueprint(mi_calificacion_controller.calificacion_bp)
-        app.register_blueprint(mi_curso_controller.curso_bp)
-        app.register_blueprint(mi_inicio_controller.inicio_bp)
-        app.register_blueprint(mi_material_controller.mi_material_bp)
-        app.register_blueprint(mi_tarea_controller.tarea_bp)
-        app.register_blueprint(perfil_estudiante_controller.perfil_bp)
-        app.register_blueprint(ajustes_estudiante_controller.ajustes_bp)
+# BLUEPRINTS ESTUDIANTE
+app.register_blueprint(mi_asistencia_controller.asistencia_bp)
+app.register_blueprint(mi_calificacion_controller.calificacion_bp)
+app.register_blueprint(mi_curso_controller.curso_bp)
+app.register_blueprint(mi_inicio_controller.inicio_bp)
+app.register_blueprint(mi_material_controller.mi_material_bp)
+app.register_blueprint(mi_tarea_controller.tarea_bp)
+app.register_blueprint(perfil_estudiante_controller.perfil_bp)
+app.register_blueprint(ajustes_estudiante_controller.ajustes_bp)
 
 
-        @login_manager.user_loader
-        def load_user(user_id):
-            return Usuario.get_by_id(user_id)
+@login_manager.user_loader
+def load_user(user_id):
+    return Usuario.get_by_id(user_id)
 
-        @app.route('/')
-        def home():
-            return render_template('autentica/login.html')
-    
-    init_db()
-    return app
+@app.route('/')
+def home():
+    return render_template('autentica/login.html')
 
 # PUNTO DE ENTRADA
 if __name__ == "__main__":
-    app = crear_app()
+    init_db()
 
     app.run(debug=True)

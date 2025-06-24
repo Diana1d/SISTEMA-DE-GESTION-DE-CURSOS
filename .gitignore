@@ -4,4 +4,4 @@ __pycache__/
 
 # Ignorar base de datos SQLite y la carpeta instance
 instance/
-*.sqlite
+cursos.db
