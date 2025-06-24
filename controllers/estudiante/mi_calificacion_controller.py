@@ -35,6 +35,4 @@ def index():
 @calificacion_bp.route("/<int:id>")
 def view(id):
     calificacion = Calificacion.get_by_id(id)
-    if not calificacion:
-        abort(404)  # Importar abort desde flask si no está importado
     return ver_calificacion(calificacion)

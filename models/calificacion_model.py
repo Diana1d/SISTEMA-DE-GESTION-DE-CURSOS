@@ -1,5 +1,7 @@
 from database import db
+from flask import render_template
 from models.evaluacion_model import Evaluacion
+from models.estudiante_model import Estudiante
 from sqlalchemy import func
 
 class Calificacion(db.Model):

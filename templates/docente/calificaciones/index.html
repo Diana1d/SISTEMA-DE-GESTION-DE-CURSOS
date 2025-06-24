@@ -1,92 +1,186 @@
 {% extends 'docente/base.html' %}
-{% block title %}Calificaciones - {{ curso.nombre }}{% endblock %}
+{% block title %}Calificaciones - {{ curso.nombre if curso else 'Todos los cursos' }}{% endblock %}
 
 {% block content %}
-<div class="d-flex justify-content-between align-items-center mb-3">
-    <h3 class="fw-bold fs-4">Calificaciones - {{ curso.nombre }}</h3>
-    <div>
-        <a href="/docente/cursos/{{ curso.id }}" class="btn btn-secondary">
-            <i class="bi bi-arrow-left"></i> Volver
-        </a>
-        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalNuevaEvaluacion">
-            <i class="bi bi-plus-circle"></i> Nueva Evaluación
-        </button>
-    </div>
-</div>
-
-<div class="card">
-    <div class="card-body">
-        <div class="table-responsive">
-            <table class="table table-bordered table-hover">
-                <thead class="table-primary">
-                    <tr>
-                        <th rowspan="2">Estudiante</th>
-                        {% for evaluacion in evaluaciones %}
-                        <th colspan="2" class="text-center">{{ evaluacion.nombre }}</th>
-                        {% endfor %}
-                        <th rowspan="2" class="text-center">Promedio</th>
-                    </tr>
-                    <tr>
-                        {% for evaluacion in evaluaciones %}
-                        <th class="text-center">Nota</th>
-                        <th class="text-center">%</th>
-                        {% endfor %}
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for estudiante in estudiantes %}
-                    <tr>
-                        <td>
-                            <img src="/static/img/estudiantes/{{ estudiante.foto|default('default-user.png') }}" 
-                                 class="rounded-circle me-2" width="25" height="25">
-                            {{ estudiante.nombre_completo }}
-                        </td>
-                        {% for evaluacion in evaluaciones %}
-                        <td class="text-center">
-                            <a href="/docente/cursos/{{ curso.id }}/calificaciones/editar/{{ estudiante.id }}/{{ evaluacion.id }}">
-                                {{ estudiante.notas[evaluacion.id]|default('-') }}
-                            </a>
-                        </td>
-                        <td class="text-center">{{ evaluacion.porcentaje }}%</td>
-                        {% endfor %}
-                        <td class="text-center fw-bold">{{ estudiante.promedio }}</td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+<div class="container mt-4">
+    <!-- Encabezado y selección de curso -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="mb-0">
+            <i class="bi bi-journal-bookmark-fill text-primary"></i>
+            Calificaciones - {{ curso.nombre if curso else 'Todos los cursos' }}
+        </h2>
+        
+        <div>
+            <a href="{{ url_for('docente_calificacion.index') }}" class="btn btn-outline-secondary me-2">
+                <i class="bi bi-arrow-left"></i> Volver
+            </a>
+            {% if curso %}
+            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalNuevaEvaluacion">
+                <i class="bi bi-plus-circle"></i> Nueva Evaluación
+            </button>
+            {% endif %}
         </div>
     </div>
+
+    <!-- Selector de cursos -->
+    {% if cursos %}
+    <div class="card mb-4">
+        <div class="card-body">
+            <form method="get" class="row g-3 align-items-center">
+                <div class="col-md-6">
+                    <label for="cursoSelect" class="form-label">Seleccionar curso:</label>
+                    <select id="cursoSelect" class="form-select" name="curso_id" onchange="this.form.submit()">
+                        <option value="">Todos los cursos</option>
+                        {% for c in cursos %}
+                        <option value="{{ c.id }}" {% if curso and c.id == curso.id %}selected{% endif %}>
+                            {{ c.nombre }} ({{ c.codigo }})
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-6">
+                    {% if curso %}
+                    <div class="d-flex align-items-center">
+                        <span class="badge bg-info text-dark me-2">
+                            <i class="bi bi-info-circle"></i> Promedio general: {{ promedios.get(curso.id, 0.0)|round(2) }}
+                        </span>
+                        <span class="badge bg-light text-dark">
+                            <i class="bi bi-people-fill"></i> {{ estudiantes|length }} estudiantes
+                        </span>
+                    </div>
+                    {% endif %}
+                </div>
+            </form>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Tabla de calificaciones -->
+    {% if curso and evaluaciones and estudiantes %}
+    <div class="card">
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th style="width: 25%;">Estudiante</th>
+                            {% for evaluacion in evaluaciones %}
+                            <th colspan="2" class="text-center">
+                                {{ evaluacion.nombre }}
+                                <small class="d-block text-muted">{{ evaluacion.fecha.strftime('%d/%m/%Y') }}</small>
+                            </th>
+                            {% endfor %}
+                            <th class="text-center">Promedio</th>
+                        </tr>
+                        <tr>
+                            <th></th>
+                            {% for evaluacion in evaluaciones %}
+                            <th class="text-center">Nota</th>
+                            <th class="text-center">{{ evaluacion.porcentaje }}%</th>
+                            {% endfor %}
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for estudiante in estudiantes %}
+                        <tr>
+                            <td class="align-middle">
+                                <div class="d-flex align-items-center">
+                                    <img src="{{ url_for('static', filename='img/estudiantes/' + (estudiante.foto if estudiante.foto else 'default-user.png')) }}" 
+                                         class="rounded-circle me-3" width="40" height="40" alt="{{ estudiante.nombre_completo }}">
+                                    <div>
+                                        <h6 class="mb-0">{{ estudiante.nombre_completo }}</h6>
+                                        <small class="text-muted">{{ estudiante.codigo }}</small>
+                                    </div>
+                                </div>
+                            </td>
+                            
+                            {% for evaluacion in evaluaciones %}
+                            <td class="text-center align-middle">
+                                <a href="{{ url_for('docente_calificacion.edit', id=get_calificacion_id(estudiante.id, evaluacion.id)) }}" 
+                                   class="text-decoration-none" 
+                                   title="Editar calificación">
+                                    {{ estudiante.notas.get(evaluacion.id, '-') }}
+                                </a>
+                            </td>
+                            <td class="text-center align-middle text-muted">
+                                {{ evaluacion.porcentaje }}%
+                            </td>
+                            {% endfor %}
+                            
+                            <td class="text-center align-middle fw-bold">
+                                <span class="badge bg-{{ 'success' if estudiante.promedio >= 13 else 'warning' if estudiante.promedio >= 10.5 else 'danger' }}">
+                                    {{ estudiante.promedio|round(2) }}
+                                </span>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    
+    {% elif curso %}
+    <div class="alert alert-info mt-4">
+        <i class="bi bi-info-circle-fill me-2"></i>
+        No hay calificaciones registradas para este curso.
+    </div>
+    {% else %}
+    <div class="alert alert-primary mt-4">
+        <i class="bi bi-exclamation-triangle-fill me-2"></i>
+        Seleccione un curso del menú desplegable para ver las calificaciones.
+    </div>
+    {% endif %}
 </div>
 
 <!-- Modal para nueva evaluación -->
-<div class="modal fade" id="modalNuevaEvaluacion" tabindex="-1">
+{% if curso %}
+<div class="modal fade" id="modalNuevaEvaluacion" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Nueva Evaluación</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title">
+                    <i class="bi bi-plus-circle"></i> Nueva Evaluación
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form action="/docente/cursos/{{ curso.id }}/evaluaciones" method="POST">
+            <form action="{{ url_for('docente_calificacion.crear_evaluacion', curso_id=curso.id) }}" method="POST">
                 <div class="modal-body">
                     <div class="mb-3">
                         <label class="form-label">Nombre de la Evaluación</label>
                         <input type="text" class="form-control" name="nombre" required>
                     </div>
-                    <div class="mb-3">
-                        <label class="form-label">Porcentaje</label>
-                        <input type="number" class="form-control" name="porcentaje" min="1" max="100" required>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Porcentaje</label>
+                            <div class="input-group">
+                                <input type="number" class="form-control" name="porcentaje" min="1" max="100" required>
+                                <span class="input-group-text">%</span>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Fecha</label>
+                            <input type="date" class="form-control" name="fecha" required>
+                        </div>
                     </div>
                     <div class="mb-3">
-                        <label class="form-label">Fecha</label>
-                        <input type="date" class="form-control" name="fecha" required>
+                        <label class="form-label">Descripción (Opcional)</label>
+                        <textarea class="form-control" name="descripcion" rows="2"></textarea>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                    <button type="submit" class="btn btn-primary">Guardar</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        <i class="bi bi-x-circle"></i> Cancelar
+                    </button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="bi bi-save"></i> Guardar Evaluación
+                    </button>
                 </div>
             </form>
         </div>
     </div>
 </div>
+{% endif %}
+
 {% endblock %}
