@@ -1,0 +1,135 @@
+{% extends 'docente/base.html' %}
+{% block title %}Entregas - {{ tarea.titulo }}{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Entregas - {{ tarea.titulo }}</h2>
+        <a href="{{ url_for('curso_docente.ver_tareas', curso_id=curso.id) }}" class="btn btn-outline-secondary">
+            <i class="bi bi-arrow-left"></i> Volver a Tareas
+        </a>
+    </div>
+
+    <div class="card shadow mb-4">
+        <div class="card-header bg-primary text-white">
+            <h4 class="mb-0">Información de la Tarea</h4>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <h5><i class="bi bi-card-heading"></i> Descripción</h5>
+                    <p>{{ tarea.descripcion }}</p>
+                </div>
+                <div class="col-md-6">
+                    <h5><i class="bi bi-calendar-check"></i> Fecha de Entrega</h5>
+                    <p>{{ tarea.fecha_entrega.strftime('%d/%m/%Y %H:%M') }}</p>
+                    <h5><i class="bi bi-file-earmark"></i> Archivo Adjunto</h5>
+                    <p>
+                        <td>
+                            {% if tarea.archivo_adjunto %}
+                            <a href="{{ url_for('curso_docente.descargar_archivo', nombre_archivo=tarea.archivo_adjunto) }}" 
+                            target="_blank" class="btn btn-sm btn-outline-primary">
+                                <i class="bi bi-download"></i> Descargar
+                            </a>
+                            {% else %}
+                            No hay archivo adjunto
+                            {% endif %}
+                        </td>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card shadow">
+        <div class="card-header bg-primary text-white">
+            <h4 class="mb-0">Entregas de Estudiantes</h4>
+        </div>
+        <div class="card-body">
+            {% if entregas %}
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Estudiante</th>
+                            <th>Fecha Entrega</th>
+                            <th>Archivo</th>
+                            <th>Calificación</th>
+                            <th>Comentarios</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for entrega in entregas %}
+                        <tr>
+                            <td>{{ entrega.estudiante.usuario.nombre }} {{ entrega.estudiante.usuario.apellido }}</td>
+                            <td>{{ entrega.fecha_entrega.strftime('%d/%m/%Y %H:%M') }}</td>
+                                <td>
+                                    <a href="{{ url_for('curso_docente.descargar_archivo', nombre_archivo=entrega.archivo_entregado) }}" 
+                                    target="_blank" class="btn btn-sm btn-outline-primary">
+                                        <i class="bi bi-download"></i>
+                                    </a>
+                                </td>
+                            <td>
+                                {% if entrega.calificacion is not none %}
+                                {{ entrega.calificacion }}
+                                {% else %}
+                                <span class="badge bg-warning">Pendiente</span>
+                                {% endif %}
+                            </td>
+                            <td>{{ entrega.comentarios_docente|truncate(30) if entrega.comentarios_docente else '-' }}</td>
+                            <td>
+                                <button type="button" class="btn btn-sm btn-outline-primary" 
+                                        data-bs-toggle="modal" data-bs-target="#modalCalificar{{ entrega.id }}">
+                                    <i class="bi bi-check-circle"></i> Calificar
+                                </button>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+            <div class="alert alert-info">No hay entregas para esta tarea.</div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<!-- Modales para calificar -->
+{% for entrega in entregas %}
+<div class="modal fade" id="modalCalificar{{ entrega.id }}" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Calificar Entrega</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form method="POST" 
+                  action="{{ url_for('curso_docente.calificar_entrega', 
+                                    curso_id=curso.id, 
+                                    tarea_id=tarea.id, 
+                                    entrega_id=entrega.id) }}">
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="calificacion{{ entrega.id }}" class="form-label">Calificación (0-10)</label>
+                        <input type="number" step="0.1" min="0" max="10" class="form-control" 
+                               id="calificacion{{ entrega.id }}" name="calificacion" 
+                               value="{{ entrega.calificacion if entrega.calificacion is not none else '' }}" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="comentarios{{ entrega.id }}" class="form-label">Comentarios</label>
+                        <textarea class="form-control" id="comentarios{{ entrega.id }}" 
+                                  name="comentarios" rows="3">{{ entrega.comentarios_docente or '' }}</textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Guardar Calificación</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endfor %}
+{% endblock %}

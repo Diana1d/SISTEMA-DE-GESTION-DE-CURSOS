@@ -3,6 +3,7 @@ from models.tarea_model import Tarea
 from models.entrega_tarea_model import EntregaTarea
 from models.inscripcion_model import Inscripcion
 from views.estudiante.tareas_view import listar_tareas, ver_tarea, entregar_tarea_form
+from datetime import datetime
 
 tarea_bp = Blueprint('estudiante_tarea', __name__, url_prefix="/estudiante/tareas")
 
@@ -34,7 +35,7 @@ def index():
 def view(id):
     tarea = Tarea.get_by_id(id)
     entrega = EntregaTarea.get_by_estudiante_and_tarea(1, id)  # ID de estudiante
-    return ver_tarea(tarea, entrega)
+    return ver_tarea(tarea, entrega, datetime.utcnow())  # Pasar la fecha actual
 
 @tarea_bp.route("/<int:id>/entregar", methods=['GET', 'POST'])
 def entregar(id):

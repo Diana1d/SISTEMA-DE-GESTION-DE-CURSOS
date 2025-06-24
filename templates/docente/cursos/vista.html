@@ -74,4 +74,50 @@
         </div>
     </div>
 </div>
+<!-- Añade esto después de la sección de estudiantes -->
+<div class="card shadow mt-4">
+    <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+        <h4 class="mb-0">Tareas del Curso</h4>
+        <a href="{{ url_for('curso_docente.crear_tarea', curso_id=curso.id) }}" class="btn btn-sm btn-light">
+            <i class="bi bi-plus-circle"></i> Nueva Tarea
+        </a>
+    </div>
+    <div class="card-body">
+        {% if tareas %}
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead class="table-light">
+                    <tr>
+                        <th>Título</th>
+                        <th>Fecha Entrega</th>
+                        <th>Estado</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for tarea in tareas %}
+                    <tr>
+                        <td>{{ tarea.titulo }}</td>
+                        <td>{{ tarea.fecha_entrega.strftime('%d/%m/%Y %H:%M') }}</td>
+                        <td>
+                            <span class="badge bg-{{ 'success' if tarea.estado == 'completada' else 'warning' }}">
+                                {{ tarea.estado }}
+                            </span>
+                        </td>
+                        <td>
+                            <a href="{{ url_for('curso_docente.ver_tareas', curso_id=curso.id) }}" 
+                               class="btn btn-sm btn-outline-primary">
+                                <i class="bi bi-eye"></i> Ver
+                            </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div class="alert alert-info">No hay tareas asignadas para este curso.</div>
+        {% endif %}
+    </div>
+</div>
 {% endblock %}
