@@ -25,11 +25,13 @@ body {
 }
 
 .left-box {
-  min-height: 100px; /* puedes ajustar esto */
+  min-height: 100px;
+  /* puedes ajustar esto */
   min-width: 250px;
   position: relative;
   overflow: hidden;
-  border-radius: 2rem; /* si quieres bordes redondeados */
+  border-radius: 2rem;
+  /* si quieres bordes redondeados */
 }
 
 .object-fit-cover {
@@ -56,7 +58,7 @@ body {
   margin: 80px auto;
   padding: 30px;
   background-color: white;
-  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   border-radius: 10px;
 }
 
@@ -78,7 +80,7 @@ li {
 }
 
 .wrapper {
-  
+
   display: flex;
 }
 
@@ -231,7 +233,7 @@ a.sidebar-link:hover {
   width: 40px;
 }
 
-.table>thead tr{
+.table>thead tr {
   color: #FFF;
   text-align: left;
 }
@@ -261,16 +263,21 @@ tr.highlight th {
 }
 
 /* Iconos con color inicial diferente */
-.card-1 i { 
-  color: #0d6efd;  /* verde */
+.card-1 i {
+  color: #0d6efd;
+  /* verde */
   transition: color 0.4s;
 }
+
 .card-2 i {
-  color: #ffc107; /* azul */
+  color: #ffc107;
+  /* azul */
   transition: color 0.4s;
 }
+
 .card-3 i {
-  color: #28a745;/* amarillo */
+  color: #28a745;
+  /* amarillo */
   transition: color 0.4s;
 }
 
@@ -288,9 +295,45 @@ tr.highlight th {
   .navbar-expand .navbar-nav .dropdown-menu {
     box-sizing: 0 .1rem .2rem rgba(0, 0, 0, .05);
   }
-  
- 
 
+
+}
+
+@media (max-width: 992px) {
+  #sidebar {
+    width: 70px;
+    min-width: 70px;
+    z-index: 1050;
+    height: 100vh;
+    top: 0;
+    left: 0;
+    position: fixed;
+  }
+
+  .main {
+    margin-left: 70px;
+  }
+
+  #sidebar.expand {
+    width: 260px;
+    min-width: 260px;
+  }
+
+}
+
+@media  (min-height: 1000px) and (max-height: 1380px) {
+  .mi-seccion-responsive .row {
+    flex-direction: column;
+    align-items: center;
+    /* ← Esto centra horizontalmente las columnas */
+  }
+
+  .mi-seccion-responsive .col-12 {
+    width: 80%;
+    /* opcional: ajusta si quieres que ocupen todo */
+    max-width: 700px;
+    /* o el ancho máximo que desees */
+  }
 }
 
 
@@ -309,4 +352,5 @@ td button i {
   color: #FFF;
 }
 
-/* ESTILOS PARA EL DASHBOARD DEL DOCENTE */
+
+

@@ -11,6 +11,7 @@ class Inscripcion(db.Model):
     paralelo_id = db.Column(db.Integer, db.ForeignKey('paralelos.id'), nullable=False)
     turno_id = db.Column(db.Integer, db.ForeignKey('turnos.id'), nullable=False)
     activo = True
+    #activo = db.Column(db.Boolean, default=True,nullable=False)
    
     curso = db.relationship('Curso', back_populates='inscripciones')
     estudiante = db.relationship('Estudiante', back_populates='inscripciones')
