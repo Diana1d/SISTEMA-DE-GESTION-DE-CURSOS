@@ -15,6 +15,14 @@ curso_docente_bp = Blueprint('curso_docente', __name__, url_prefix="/docente/cur
 def index():
     docente_id = 1  # Cambiar por current_user.id cuando tengas login
     cursos = Curso.query.filter_by(docente_id=docente_id).all()
+    
+    # Agregar conteo de estudiantes a cada curso
+    for curso in cursos:
+        curso.num_estudiantes = Inscripcion.query.filter_by(
+            curso_id=curso.id, 
+            activo=True
+        ).count()
+    
     return listar_cursos(cursos=cursos)
 
 @curso_docente_bp.route("/vista/<int:id>")
@@ -179,3 +187,28 @@ def descargar_archivo(nombre_archivo):
         abort(404)
     
     return send_from_directory(directorio_uploads, nombre_archivo, as_attachment=True)
+
+@curso_docente_bp.route("/<int:curso_id>/tareas/<int:tarea_id>/eliminar", methods=['POST'])
+def eliminar_tarea(curso_id, tarea_id):
+    try:
+        tarea = Tarea.get_by_id(tarea_id)
+        
+        if not tarea or tarea.curso_id != curso_id:
+            abort(404)
+        
+        # Eliminar archivos adjuntos si existen
+        if tarea.archivo_adjunto:
+            try:
+                os.remove(os.path.join(current_app.config['UPLOAD_FOLDER'], tarea.archivo_adjunto))
+            except OSError:
+                pass  # Si el archivo no existe, continuamos igual
+        
+        # Eliminar la tarea y sus entregas asociadas
+        EntregaTarea.query.filter_by(tarea_id=tarea_id).delete()
+        tarea.delete()
+        
+        flash('Tarea eliminada exitosamente', 'success')
+    except Exception as e:
+        flash(f'Error al eliminar la tarea: {str(e)}', 'danger')
+    
+    return redirect(url_for('curso_docente.ver_tareas', curso_id=curso_id))

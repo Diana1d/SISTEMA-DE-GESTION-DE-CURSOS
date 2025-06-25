@@ -66,8 +66,14 @@
                             <th style="width: 25%;">Estudiante</th>
                             {% for evaluacion in evaluaciones %}
                             <th colspan="2" class="text-center">
-                                {{ evaluacion.nombre }}
+                                {{ evaluacion.nombre }} (Eval)
                                 <small class="d-block text-muted">{{ evaluacion.fecha.strftime('%d/%m/%Y') }}</small>
+                            </th>
+                            {% endfor %}
+                            {% for tarea in tareas %}
+                            <th class="text-center">
+                                {{ tarea.titulo }} (Tarea)
+                                <small class="d-block text-muted">Entregada: {{ tarea.fecha_entrega.strftime('%d/%m/%Y') }}</small>
                             </th>
                             {% endfor %}
                             <th class="text-center">Promedio</th>
@@ -77,6 +83,9 @@
                             {% for evaluacion in evaluaciones %}
                             <th class="text-center">Nota</th>
                             <th class="text-center">{{ evaluacion.porcentaje }}%</th>
+                            {% endfor %}
+                            {% for tarea in tareas %}
+                            <th class="text-center">Nota</th>
                             {% endfor %}
                             <th></th>
                         </tr>
@@ -98,13 +107,26 @@
                             {% for evaluacion in evaluaciones %}
                             <td class="text-center align-middle">
                                 <a href="{{ url_for('docente_calificacion.edit', id=get_calificacion_id(estudiante.id, evaluacion.id)) }}" 
-                                   class="text-decoration-none" 
-                                   title="Editar calificación">
-                                    {{ estudiante.notas.get(evaluacion.id, '-') }}
+                                class="text-decoration-none" 
+                                title="Editar calificación">
+                                    {{ estudiante.notas.get(evaluacion.id, {}).get('valor', '-') }}
                                 </a>
                             </td>
                             <td class="text-center align-middle text-muted">
                                 {{ evaluacion.porcentaje }}%
+                            </td>
+                            {% endfor %}
+
+                            {% for tarea in tareas %}
+                            <td class="text-center align-middle">
+                                {% if estudiante.notas.get(tarea.id, {}).get('tipo') == 'tarea' %}
+                                <a href="#" class="text-decoration-none" 
+                                title="Ver entrega de tarea">
+                                    {{ estudiante.notas.get(tarea.id, {}).get('valor', '-') }}
+                                </a>
+                                {% else %}
+                                -
+                                {% endif %}
                             </td>
                             {% endfor %}
                             

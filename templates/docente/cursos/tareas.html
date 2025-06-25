@@ -49,6 +49,12 @@
                                 class="btn btn-sm btn-outline-secondary" title="Editar">
                                     <i class="bi bi-pencil"></i>
                                 </a>
+                                <form action="{{ url_for('curso_docente.eliminar_tarea', curso_id=curso.id, tarea_id=tarea.id) }}" method="POST" class="d-inline">
+                                    <button type="submit" class="btn btn-sm btn-outline-danger" title="Eliminar"
+                                            onclick="return confirm('¿Estás seguro de que deseas eliminar esta tarea? Todas las entregas asociadas también se eliminarán.')">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
+                                </form>
                             </td>
                         </tr>
                         {% endfor %}
